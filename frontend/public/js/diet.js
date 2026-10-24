@@ -69,9 +69,13 @@
     dailyMeals.forEach((meal, index) => {
       const row = el('div', 'meal');
       if (index === dailyMeals.length - 1) row.style.border = 'none';
-      row.appendChild(el('b', 'meal-title', `${meal.slot}: ${meal.title || ''}`));
-      row.appendChild(el('p', 'meal-items', Array.isArray(meal.items) ? meal.items.join(' · ') : ''));
-      row.appendChild(el('small', 'meal-meta', `${meal.approxKcal || 0} kcal · ${meal.approxProteinG || 0} g protein`));
+      row.appendChild(el('b', '', `${meal.slot}: ${meal.title || ''}`));
+      const items = el('p', '', Array.isArray(meal.items) ? meal.items.join(' · ') : '');
+      items.style.margin = '2px 0';
+      row.appendChild(items);
+      const meta = el('small', '', `${meal.approxKcal || 0} kcal · ${meal.approxProteinG || 0} g protein`);
+      meta.style.opacity = '0.8';
+      row.appendChild(meta);
       mealsEl.appendChild(row);
     });
     const total = (plan.dailyTotals || []).find(entry => entry.day === day);
