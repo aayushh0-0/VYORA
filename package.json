@@ -3,9 +3,31 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "scripts": {"start":"node backend/src/server.js", "dev":"node --watch backend/src/server.js", "db:init":"node backend/src/db-init.js", "test":"node --test backend/test/*.test.js"},
-  "engines": {"node":">=20"},
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:backend": "node --watch backend/src/server.js",
+    "dev:frontend": "vite",
+    "build": "vite build",
+    "start": "node backend/src/server.js",
+    "db:init": "node backend/src/db-init.js",
+    "test": "node --test backend/test/*.test.js"
+  },
   "dependencies": {
-    "better-sqlite3":"^11.8.1", "bcryptjs":"^2.4.3", "cors":"^2.8.5", "dotenv":"^16.4.7", "express":"^4.21.2", "express-rate-limit":"^7.5.0", "helmet":"^8.0.0", "jsonwebtoken":"^9.0.2", "node-cron":"^3.0.3", "nodemailer":"^6.10.0", "twilio":"^5.4.0"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.0",
+    "twilio": "^5.4.0"
+  },
+  "devDependencies": {
+    "vite": "^6.4.5"
   }
 }

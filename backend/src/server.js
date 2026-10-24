@@ -9,6 +9,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'node:path';
+import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { requestContext, errorHandler } from './middleware/requestContext.js';
 import { registerApiRoutes } from './routes/api.js';
@@ -54,9 +55,15 @@ app.use('/api/', rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: true
 registerHealthRoutes(app);
 registerApiRoutes(app);
 
-// Static frontend
-app.use(express.static(path.join(root, 'frontend/public')));
-app.get('*', (_req, res) => res.sendFile(path.join(root, 'frontend/public/index.html')));
+// Static frontend: prefer Vite production build when present, else source public/
+const distDir = path.join(root, 'dist');
+const publicDir = path.join(root, 'frontend/public');
+const staticDir = fs.existsSync(path.join(distDir, 'index.html')) ? distDir : publicDir;
+app.use(express.static(staticDir));
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  res.sendFile(path.join(staticDir, 'index.html'));
+});
 
 // Safe error handler (never leaks stack traces)
 app.use(errorHandler);

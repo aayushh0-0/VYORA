@@ -40,4 +40,4 @@ build/
 
 
 render.yaml
-DockerFile
+DockerFile.vite/
