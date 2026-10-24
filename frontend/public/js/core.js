@@ -7,7 +7,7 @@ function addMsg(logId, cls, text){
 }
 function speakWithOrb(text, orb, status){
   if(!orb) return;
-  orb.classList.remove("think"); orb.classList.add("talk"); if(status) status.textContent="Speaking…";
+  orb.classList.remove("think","listen"); orb.classList.add("talk"); if(status) status.textContent="Speaking…";
   const done=()=>{ orb.classList.remove("talk"); if(status) status.textContent="Ready"; };
   try{
     if("speechSynthesis" in window){
@@ -23,14 +23,18 @@ function wireChat(inputId, sendId, logId, orbId, replyFn){
   function send(){
     const val=input.value.trim(); if(!val) return;
     addMsg(logId,"user",val); input.value="";
-    orb.classList.add("think"); if(status) status.textContent="Thinking…";
+    orb.classList.remove("talk","listen");
+    orb.classList.add("think"); if(status) status.textContent="Processing…";
     setTimeout(async ()=>{
       try {
         const reply=await replyFn(val);
+        orb.classList.remove("think");
         addMsg(logId,"bot",reply);
         speakWithOrb(reply, orb, status);
       } catch(e) {
-        const reply="I couldn't connect to the AI service right now. Check the backend configuration or try again shortly.";
+        orb.classList.remove("think");
+        if(status) status.textContent="Error";
+        const reply="I couldn't connect to the AI service right now. Check the backend configuration or API key.";
         addMsg(logId,"bot",reply); speakWithOrb(reply, orb, status);
       }
     },120);
@@ -48,7 +52,16 @@ function wireMic(btnId, inputId, orbId, onVoice){
   let on=false;
   btn.addEventListener("click",()=>{
     if(on){ rec.stop(); return; }
-    try{ rec.start(); on=true; btn.classList.add("on"); orb.classList.add("listen"); if(status) status.textContent="Listening…"; }catch(e){}
+    try{
+      rec.start();
+      on=true;
+      btn.classList.add("on");
+      orb.classList.remove("talk","think");
+      orb.classList.add("listen");
+      if(status) status.textContent="Listening…";
+    }catch(e){
+      if(status) status.textContent="Mic error or blocked";
+    }
   });
   rec.onresult=(e)=>{
     const transcript=e.results[0][0].transcript.trim();
@@ -56,7 +69,16 @@ function wireMic(btnId, inputId, orbId, onVoice){
     if(typeof onVoice==='function') onVoice(transcript);
   };
   rec.onend=()=>{ on=false; btn.classList.remove("on"); orb.classList.remove("listen"); if(status) status.textContent="Ready"; };
-  rec.onerror=()=>{ on=false; btn.classList.remove("on"); orb.classList.remove("listen"); if(status) status.textContent="Ready"; };
+  rec.onerror=(e)=>{
+    on=false; btn.classList.remove("on"); orb.classList.remove("listen");
+    if(status) {
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        status.textContent = "Mic permission denied. Enable mic in browser settings.";
+      } else {
+        status.textContent = "Voice error (" + (e.error || 'unknown') + "). Type below instead.";
+      }
+    }
+  };
 }
 function triggerWave(id){
   const el=document.getElementById(id); if(!el) return;

@@ -65,3 +65,13 @@ button.btn:hover,.hero-cta:hover{box-shadow:0 9px 22px rgba(239,35,60,.2)}
 @media(max-width:820px){.vyora-quickbar{right:10px;bottom:calc(66px + env(safe-area-inset-bottom,0px));gap:5px}.vyora-quickbar button{width:38px;height:38px}.vyora-top{right:12px;bottom:calc(113px + env(safe-area-inset-bottom,0px))}}
 @media(pointer:coarse){.vyora-cursor{display:none!important}.vyora-spotlight{display:none}.card,.stat{transform:none!important}}
 @media(prefers-reduced-motion:reduce){.reveal-ready{opacity:1;transform:none;transition:none}.vyora-ripple{display:none}.vyora-cursor,.vyora-spotlight{display:none!important}.card,.stat,.feature-visual,.training-card,button{transition:none!important;transform:none!important}}
+
+/* ---------- Demo Login Screen ---------- */
+.demo-login-overlay{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+.demo-login-card{width:min(500px,100%);background:var(--paper);border:2px solid #111;padding:40px;box-shadow:0 24px 64px rgba(0,0,0,0.18);text-align:center}
+.demo-login-card h1{font-family:'Barlow Condensed',sans-serif;font-size:46px;text-transform:uppercase;margin:0 0 12px;letter-spacing:1px}
+.demo-login-card h1 span{color:var(--red)}
+.demo-login-card p{color:var(--muted);font-size:14px;line-height:1.55;margin-bottom:30px}
+.demo-login-actions{display:flex;flex-direction:column;gap:12px}
+.demo-login-actions button{width:100%;padding:14px 20px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+

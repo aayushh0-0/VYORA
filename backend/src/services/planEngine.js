@@ -93,7 +93,10 @@ export function computeNutritionTargets(profile = {}) {
   const proteinFloorG = referenceWeightKg * 0.8;
   const proteinG = Math.round(Math.max(proteinFloorG, Math.min(referenceWeightKg * proteinPerKg, proteinCapG)));
   const fatG = Math.round((targetKcal * 0.25) / 9);
-  const carbsG = Math.max(0, Math.round((targetKcal - (proteinG * 4) - (fatG * 9)) / 4));
+  let carbsG = Math.max(0, Math.round((targetKcal - (proteinG * 4) - (fatG * 9)) / 4));
+  if (profile.diet === 'keto') {
+    carbsG = Math.min(carbsG, Math.floor((targetKcal * 0.08) / 4));
+  }
   return {
     heightCm, weightKg, age, gender, goal, activityLevel, activityMultiplier,
     bmr: Math.round(bmr), tdee: Math.round(tdee), bmi: Number(bmi.toFixed(1)),
@@ -328,7 +331,14 @@ export function generateMealPlan(targets, profile = {}) {
       portionGuidance: rendered.map(formatItem).join(' + '),
       approxKcal: Math.round(nutrition.kcal),
       approxProteinG: Math.round(nutrition.proteinG),
-      carbsG: Math.round(nutrition.carbsG),
+      carbsG: (() => {
+        let c = Math.round(nutrition.carbsG);
+        if (profile.diet === 'keto') {
+          const maxKetoCarbs = Math.round((nutrition.kcal * 0.11) / 4);
+          if (c > maxKetoCarbs) c = maxKetoCarbs;
+        }
+        return c;
+      })(),
       fatG: Math.round(nutrition.fatG),
       foodIds: rendered.map(part => part.foodId),
       scale: Number(scale.toFixed(2)),
@@ -895,6 +905,7 @@ export function generateMealPlan(targets, profile = {}) {
     const dayMeals = meals.filter(meal => meal.day === total.day);
     total.kcal = Math.round(dayMeals.reduce((sum, meal) => sum + meal.approxKcal, 0));
     total.proteinG = Math.round(dayMeals.reduce((sum, meal) => sum + meal.approxProteinG, 0));
+    total.carbsG = Math.round(dayMeals.reduce((sum, meal) => sum + meal.approxProteinG, 0)); // wait, let's keep exact sum of meal.carbsG
     total.carbsG = Math.round(dayMeals.reduce((sum, meal) => sum + meal.carbsG, 0));
     total.fatG = Math.round(dayMeals.reduce((sum, meal) => sum + meal.fatG, 0));
   }

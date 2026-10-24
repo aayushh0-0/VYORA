@@ -7,8 +7,20 @@
 <title>VYORA — Fitness Copilot</title>
 <link rel="stylesheet" href="styles.css">
 </head>
+<body>
 
-<div class="app">
+<div id="demoLoginScreen" class="demo-login-overlay" style="display:none;">
+  <div class="demo-login-card">
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--red);margin-bottom:12px;">VYORA FITNESS INTELLIGENCE · DEMO LOGIN</div>
+    <h1>WELCOME TO <span>VYORA</span></h1>
+    <p>Select your demo role to explore the AI Fitness Copilot, nutrition planner, workout engine, and trainer sharing features.</p>
+    <div class="demo-login-actions">
+      <button class="btn" id="loginClientBtn">Continue as Client</button>
+      <button class="btn ghost" id="loginTrainerBtn">Continue as Trainer</button>
+    </div>
+    <p style="margin-top:20px;font-size:11px;color:var(--muted);letter-spacing:.5px;">Demo mode · Lightweight session state · No external auth required</p>
+  </div>
+</div>
   <nav class="rail" aria-label="Main navigation">
     <div class="brand">VY<span>O</span>RA</div>
     <button class="navbtn active" data-target="home"><span class="dot"></span>Home</button>
@@ -617,4 +629,55 @@
 <script src="js/account.js"></script>
 <script src="js/pro.js"></script>
 <script src="js/interactions.js"></script>
+
+<script>
+(function() {
+  const loginScreen = document.getElementById('demoLoginScreen');
+
+  function showLogin() {
+    if (loginScreen) loginScreen.style.display = 'flex';
+  }
+
+  function showApp() {
+    if (loginScreen) loginScreen.style.display = 'none';
+  }
+
+  // Always show Demo Login as the initial screen on app launch
+  showLogin();
+
+  document.getElementById('loginClientBtn')?.addEventListener('click', () => {
+    sessionStorage.setItem('vyora_demo_role', 'client');
+    showApp();
+  });
+
+  document.getElementById('loginTrainerBtn')?.addEventListener('click', () => {
+    sessionStorage.setItem('vyora_demo_role', 'trainer');
+    showApp();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const rail = document.querySelector('.rail');
+    if (rail && !document.getElementById('switchRoleNavBtn')) {
+      const btn = document.createElement('button');
+      btn.className = 'navbtn';
+      btn.id = 'switchRoleNavBtn';
+      const curRole = sessionStorage.getItem('vyora_demo_role') || 'client';
+      btn.innerHTML = `<span class="dot"></span>🔒 Demo Login (${curRole})`;
+      btn.style.marginLeft = 'auto';
+      btn.title = 'Return to Demo Login / Switch Role';
+      btn.addEventListener('click', () => {
+        sessionStorage.removeItem('vyora_demo_role');
+        showLogin();
+      });
+      const foot = rail.querySelector('.rail-foot');
+      if (foot) {
+        rail.insertBefore(btn, foot);
+      } else {
+        rail.appendChild(btn);
+      }
+    }
+  });
+})();
+</script>
+</body>
 </html>

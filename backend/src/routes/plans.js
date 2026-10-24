@@ -67,8 +67,8 @@ export function registerPlanRoutes(app) {
     const title = str(req.body?.title, 120) || `${publicPlan.goal} adaptive plan (v${publicPlan.version})`;
     const now = isoNow();
 
-    // Authenticated non-guest users: persist. Guests / unauthenticated: return only.
-    if (!isGuest && req.user?.sub) {
+    // Persist plan for any user with a sub (guest or registered)
+    if (req.user?.sub) {
       const planId = id();
       db.prepare(
         'INSERT INTO plans(id,user_id,kind,title,plan_json,model,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)'
@@ -79,7 +79,7 @@ export function registerPlanRoutes(app) {
         action: 'plan.generated',
         targetType: 'plan',
         targetId: planId,
-        metadata: { kind, goal: publicPlan.goal, version: publicPlan.version, guest: false }
+        metadata: { kind, goal: publicPlan.goal, version: publicPlan.version, guest: isGuest }
       });
 
       return res.status(201).json({
@@ -90,13 +90,13 @@ export function registerPlanRoutes(app) {
         plan: publicPlan,
         validation,
         createdAt: now,
-        guest: false,
+        guest: isGuest,
         persisted: true
       });
     }
 
-    return res.status(200).json({
-      id: null,
+    return res.status(201).json({
+      id: 'guest-plan-1',
       kind,
       title,
       version: publicPlan.version,

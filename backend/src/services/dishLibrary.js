@@ -650,7 +650,7 @@ for (const base of [...dishLibrary]) {
 const curatedExtreme = [
   dish('curated-greek-yogurt-bowl', 'Greek Yogurt Protein Bowl', ['Breakfast', 'Snack'], ['veg', 'nonveg'], ['dairy'], 'international', 'dairy',
     [['greekyogurt', 1.5], ['berries', 0.5], ['pumpkinseeds', 0.25]], { scaleMin: 0.7, scaleMax: 1.8 }),
-  dish('curated-egg-white-omelette', 'Egg White Omelette with Spinach', ['Breakfast'], ['nonveg', 'keto'], ['egg'], 'international', 'egg',
+  dish('curated-egg-white-omelette', 'Egg White Omelette with Spinach', ['Breakfast'], ['nonveg', 'keto'], ['egg'], 'international', 'eggwhite',
     [['eggwhite', 3], ['spinach', 1], ['paneer', 0.25]], { scaleMin: 0.75, scaleMax: 2.0 }),
   dish('curated-soya-chunk-salad', 'Soya Chunk Salad Bowl', ['Lunch', 'Dinner'], ['veg', 'vegan'], [], 'north-indian', 'soya',
     [['soya', 1.25], ['cucumber', 1], ['tomato', 0.5], ['cucumber', 0.5]], { scaleMin: 0.75, scaleMax: 1.9 }),
