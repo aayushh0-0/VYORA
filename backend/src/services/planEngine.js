@@ -10,6 +10,7 @@ import { str } from '../utils/helpers.js';
 import { foodDatabase } from './foodDatabase.js';
 import { dishLibrary } from './dishLibrary.js';
 import { exerciseLibrary, matchesEquipment, isContraindicated, exercisesById } from './exerciseLibrary.js';
+import { getTutorialUrl } from './exerciseTutorials.js';
 
 const PLAN_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const MEAL_SLOTS = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
@@ -1323,35 +1324,35 @@ export function buildWorkoutPlan(profile = {}) {
 
   const prescriptionFor = (exercise, goalKey, experienceKey) => {
     if (exercise.pattern === 'conditioning') {
-      if (goalKey === 'endurance') return { prescription: '12–20 min steady or easy intervals', rest: '—', intensityRpe: 'RPE 5–6' };
-      if (goalKey === 'fatloss') return { prescription: '8–12 min easy effort', rest: '—', intensityRpe: 'RPE 5–6' };
-      return { prescription: '6–10 min easy effort', rest: '—', intensityRpe: 'RPE 5' };
+      if (goalKey === 'endurance') return { prescription: '12–20 min steady or easy intervals', sets: null, reps: '12–20 min', rest: '—', intensityRpe: 'RPE 5–6' };
+      if (goalKey === 'fatloss') return { prescription: '8–12 min easy effort', sets: null, reps: '8–12 min', rest: '—', intensityRpe: 'RPE 5–6' };
+      return { prescription: '6–10 min easy effort', sets: null, reps: '6–10 min', rest: '—', intensityRpe: 'RPE 5' };
     }
     if (exercise.pattern === 'mobility') {
-      return { prescription: '2 sets × 45–60s', rest: '20s', intensityRpe: 'RPE 3–4' };
+      return { prescription: '2 sets × 45–60s', sets: 2, reps: '45–60s', rest: '20s', intensityRpe: 'RPE 3–4' };
     }
     if (exercise.pattern === 'anti_extension' || exercise.pattern === 'anti_rotation' || exercise.pattern === 'anti_lateral') {
       return experienceKey === 'beginner'
-        ? { prescription: '3 sets × 20–30s or 8/side', rest: '45s', intensityRpe: 'RPE 6' }
-        : { prescription: '3 sets × 30–40s or 10/side', rest: '45s', intensityRpe: 'RPE 6–7' };
+        ? { prescription: '3 sets × 20–30s or 8/side', sets: 3, reps: '20–30s or 8/side', rest: '45s', intensityRpe: 'RPE 6' }
+        : { prescription: '3 sets × 30–40s or 10/side', sets: 3, reps: '30–40s or 10/side', rest: '45s', intensityRpe: 'RPE 6–7' };
     }
     if (exercise.pattern === 'carry') {
-      return { prescription: '3 sets × 40–60s', rest: '45s', intensityRpe: 'RPE 6' };
+      return { prescription: '3 sets × 40–60s', sets: 3, reps: '40–60s', rest: '45s', intensityRpe: 'RPE 6' };
     }
     if (goalKey === 'musclegain') {
       return experienceKey === 'beginner'
-        ? { prescription: '3 sets × 8–10 reps', rest: '75s', intensityRpe: 'RPE 7' }
-        : { prescription: '3–4 sets × 6–10 reps', rest: '90s', intensityRpe: 'RPE 7–8' };
+        ? { prescription: '3 sets × 8–10 reps', sets: 3, reps: '8–10', rest: '75s', intensityRpe: 'RPE 7' }
+        : { prescription: '3–4 sets × 6–10 reps', sets: '3–4', reps: '6–10', rest: '90s', intensityRpe: 'RPE 7–8' };
     }
     if (goalKey === 'endurance') {
-      return { prescription: '2–3 sets × 12–15 reps', rest: '45s', intensityRpe: 'RPE 6' };
+      return { prescription: '2–3 sets × 12–15 reps', sets: '2–3', reps: '12–15', rest: '45s', intensityRpe: 'RPE 6' };
     }
     if (goalKey === 'fatloss') {
-      return { prescription: '3 sets × 10–12 reps', rest: '60s', intensityRpe: 'RPE 6–7' };
+      return { prescription: '3 sets × 10–12 reps', sets: 3, reps: '10–12', rest: '60s', intensityRpe: 'RPE 6–7' };
     }
     return experienceKey === 'beginner'
-      ? { prescription: '3 sets × 8–12 reps', rest: '60s', intensityRpe: 'RPE 6–7' }
-      : { prescription: '3 sets × 8–12 reps', rest: '75s', intensityRpe: 'RPE 7' };
+      ? { prescription: '3 sets × 8–12 reps', sets: 3, reps: '8–12', rest: '60s', intensityRpe: 'RPE 6–7' }
+      : { prescription: '3 sets × 8–12 reps', sets: 3, reps: '8–12', rest: '75s', intensityRpe: 'RPE 7' };
   };
 
   const templatesByDays = {
@@ -1432,15 +1433,21 @@ export function buildWorkoutPlan(profile = {}) {
       const rx = prescriptionFor(exercise, goal, experience);
       const sub = resolveSub(exercise);
       exercises.push({
+        id: exercise.id,
         name: exercise.name,
         prescription: rx.prescription,
+        sets: rx.sets ?? null,
+        reps: rx.reps ?? null,
         rest: rx.rest,
         intensityRpe: rx.intensityRpe,
         formCue: exercise.cue,
         substitution: sub.id !== exercise.id ? sub.name : (exercise.substitutions[0] ? byId.get(exercise.substitutions[0])?.name : exercise.name),
         muscleGroup: exercise.muscleGroup,
         pattern: exercise.pattern,
-        videoQuery: exercise.videoQuery
+        equipment: exercise.equipment,
+        videoQuery: exercise.videoQuery,
+        tutorialUrl: getTutorialUrl(exercise.id),
+        tutorialAvailable: Boolean(getTutorialUrl(exercise.id))
       });
     }
     const durationMin = slot.recovery

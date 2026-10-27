@@ -80,7 +80,7 @@
   }
 
   function clearPlanResults() {
-    ['rDietSummary', 'rMeals', 'rWorkoutSummary', 'rWorkoutDays', 'rSupps', 'rVideos', 'rGyms', 'aiPlanText']
+    ['rDietSummary', 'rMeals', 'rWorkoutSummary', 'rWorkoutDays', 'rSupps', 'rVideos', 'rGyms', 'aiPlanText', 'weeklyPlanSummary', 'weeklyAiNotes', 'planModStatus']
       .forEach(id => document.getElementById(id)?.replaceChildren());
   }
 
@@ -178,37 +178,113 @@
       flags.join(' '),
       plan.weeklyProgressionNote || ''
     ].filter(Boolean).join(' ');
+
+    // Weekly plan summary chips from actual plan/profile
+    const snap = plan.profileSnapshot || {};
+    const weeklySummary = document.getElementById('weeklyPlanSummary');
+    const weeklyIntro = document.getElementById('weeklyPlanIntro');
+    if (weeklyIntro) {
+      weeklyIntro.textContent = 'Based on your goals, experience, equipment, and schedule — not a medical prescription.';
+    }
+    if (weeklySummary) {
+      weeklySummary.replaceChildren();
+      const chips = [
+        ['Primary goal', snap.goal || plan.goal || '—'],
+        ['Days / week', String(plan.daysPerWeek || snap.daysPerWeek || (plan.days || []).filter(d => !/rest|recovery/i.test(d.focus || '')).length || '—')],
+        ['Experience', plan.experience || snap.experience || '—'],
+        ['Equipment', plan.equipmentLevel || snap.equipment || '—'],
+        ['Session', (plan.sessionMinutes || snap.sessionMinutes) ? `${plan.sessionMinutes || snap.sessionMinutes} min` : '—']
+      ];
+      chips.forEach(([label, value]) => {
+        const stat = el('div', 'plan-summary-stat');
+        stat.append(el('small', '', label), el('strong', '', String(value)));
+        weeklySummary.appendChild(stat);
+      });
+    }
+
+    const notesEl = document.getElementById('weeklyAiNotes');
+    if (notesEl) {
+      const trainingDays = (plan.days || []).filter(d => !/rest|recovery/i.test(String(d.focus || ''))).length;
+      notesEl.textContent = [
+        plan.explanation || '',
+        plan.weeklyProgressionNote || '',
+        trainingDays
+          ? `This week schedules about ${trainingDays} training session(s) to match your availability.`
+          : '',
+        'Rest and technique matter — stop if you feel sharp pain and seek professional care when needed.'
+      ].filter(Boolean).join(' ');
+    }
+
     workoutDaysBox.replaceChildren();
-    (plan.days || []).forEach((d, idx) => {
-      const row = el('div', 'exrow');
-      if (idx === plan.days.length - 1) row.style.border = 'none';
-      const dayLabel = el('div', 'exname', `${d.day} · ${d.focus || ''} (${d.durationMin || 30}m · ${d.environment || 'flexible'})`);
-      const warm = d.warmUp ? el('div', 'exmeta', `Warm-up: ${d.warmUp}`) : null;
-      const cool = d.coolDown ? el('div', 'exmeta', `Cool-down: ${d.coolDown}`) : null;
-      row.append(dayLabel);
-      if (warm) row.appendChild(warm);
-      if (Array.isArray(d.exercises)) {
-        d.exercises.forEach(exercise => {
-          const line = el('div', 'exmeta');
-          const label = document.createElement('span');
-          const rx = [exercise.prescription, exercise.intensityRpe].filter(Boolean).join(' · ');
-          label.textContent = rx ? `${exercise.name} [${rx}]` : String(exercise.name || '');
-          line.appendChild(label);
-          const demo = document.createElement('a');
-          demo.textContent = ' Watch demo ↗';
-          demo.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(exercise.videoQuery || exercise.name || 'exercise form')}`;
-          demo.target = '_blank';
-          demo.rel = 'noopener noreferrer';
-          demo.style.marginLeft = '6px';
-          demo.style.fontSize = '12px';
-          line.appendChild(demo);
-          row.appendChild(line);
+    const scheduleDays = Array.isArray(plan.days) ? plan.days : [];
+    if (!scheduleDays.length) {
+      workoutDaysBox.appendChild(el('p', 'bottom-note', 'No workout sessions were generated for this plan.'));
+    }
+    scheduleDays.forEach((d) => {
+      const card = el('div', 'weekly-day-card');
+      const title = el('h4', '', `${d.day || 'Session'} — ${d.focus || 'Training'}`);
+      const muscles = Array.isArray(d.exercises)
+        ? [...new Set(d.exercises.map(e => e.muscleGroup).filter(Boolean))].join(', ')
+        : '';
+      const meta = el(
+        'div',
+        'weekly-day-meta',
+        [
+          d.durationMin ? `${d.durationMin} min` : null,
+          d.environment || null,
+          muscles ? `Focus: ${muscles}` : null
+        ].filter(Boolean).join(' · ')
+      );
+      card.append(title, meta);
+      if (d.warmUp) card.appendChild(el('div', 'ex-muted', `Warm-up: ${d.warmUp}`));
+
+      if (Array.isArray(d.exercises) && d.exercises.length) {
+        d.exercises.forEach((exercise) => {
+          const row = el('div', 'ex-row');
+          const nameCell = document.createElement('div');
+          nameCell.className = 'ex-name';
+          nameCell.textContent = exercise.name || 'Exercise';
+          if (exercise.formCue) {
+            const cue = document.createElement('div');
+            cue.className = 'ex-muted';
+            cue.textContent = exercise.formCue;
+            nameCell.appendChild(cue);
+          }
+          const sets = document.createElement('div');
+          sets.textContent = exercise.sets != null ? `Sets: ${exercise.sets}` : (exercise.prescription || '—');
+          const reps = document.createElement('div');
+          reps.textContent = exercise.reps != null ? `Reps: ${exercise.reps}` : (exercise.intensityRpe || '');
+          const rest = document.createElement('div');
+          rest.className = 'ex-muted';
+          rest.textContent = exercise.rest ? `Rest ${exercise.rest}` : '';
+
+          const action = document.createElement('div');
+          const hasUrl = Boolean(exercise.tutorialUrl || exercise.tutorialAvailable);
+          if (hasUrl && exercise.tutorialUrl) {
+            const a = document.createElement('a');
+            a.className = 'btn ghost btn-tutorial';
+            a.textContent = 'Watch Tutorial';
+            a.href = exercise.tutorialUrl;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            action.appendChild(a);
+          } else {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn ghost btn-tutorial';
+            btn.disabled = true;
+            btn.textContent = 'Tutorial coming soon';
+            btn.title = 'A YouTube URL has not been configured for this exercise yet.';
+            action.appendChild(btn);
+          }
+          row.append(nameCell, sets, reps, rest, action);
+          card.appendChild(row);
         });
       } else {
-        row.appendChild(el('div', 'exmeta', String(d.focus || d)));
+        card.appendChild(el('div', 'ex-muted', 'Rest / recovery focus'));
       }
-      if (cool) row.appendChild(cool);
-      workoutDaysBox.appendChild(row);
+      if (d.coolDown) card.appendChild(el('div', 'ex-muted', `Cool-down: ${d.coolDown}`));
+      workoutDaysBox.appendChild(card);
     });
 
     const aiStatus = document.getElementById('aiPlanStatus');
@@ -224,6 +300,54 @@
     }
 
     ensurePartialAdaptationBar();
+    wireWeeklyPlanActions();
+  }
+
+  function wireWeeklyPlanActions() {
+    if (window.__vyoraWeeklyPlanWired) return;
+    window.__vyoraWeeklyPlanWired = true;
+
+    document.getElementById('btnEditPreferences')?.addEventListener('click', () => {
+      document.getElementById('pHeight')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('pHeight')?.focus();
+    });
+
+    document.getElementById('btnRegeneratePlan')?.addEventListener('click', () => {
+      document.getElementById('pGenerate')?.click();
+    });
+
+    document.getElementById('btnAskVyoraPlan')?.addEventListener('click', () => {
+      const chat = document.getElementById('orbChat') || document.getElementById('chatInput');
+      chat?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      chat?.focus?.();
+    });
+
+    document.getElementById('btnPlanModify')?.addEventListener('click', async () => {
+      const status = document.getElementById('planModStatus');
+      const input = document.getElementById('planModInput');
+      const instruction = (input?.value || '').trim();
+      if (!instruction) {
+        if (status) status.textContent = 'Describe the change you want (e.g. make Monday easier).';
+        return;
+      }
+      if (!currentPlanId || !window.VyoraAPI?.patchPlan) {
+        if (status) status.textContent = 'Generate and save a plan first, then try again.';
+        return;
+      }
+      try {
+        if (status) status.textContent = 'Applying change…';
+        const updated = await window.VyoraAPI.patchPlan(currentPlanId, { instruction });
+        renderStructuredPlan(updated);
+        if (status) {
+          status.textContent = updated.whatChanged
+            ? `Updated (v${updated.version}): ${updated.whatChanged}`
+            : `Plan updated (v${updated.version || '—'}).`;
+        }
+        if (input) input.value = '';
+      } catch (err) {
+        if (status) status.textContent = 'Could not modify plan: ' + (err.message || 'Unknown error');
+      }
+    });
   }
 
   function ensurePartialAdaptationBar() {
@@ -274,6 +398,124 @@
 
     card.append(h, desc, btnRow, status);
     resultsBox.prepend(card);
+  }
+
+
+  /** Offline / API-down fallback so Generate always returns a usable weekly plan from form values. */
+  function buildClientFallbackPlan(input) {
+    const goal = input.goal || 'general';
+    const daysPerWeek = Math.max(2, Math.min(6, Number(input.daysPerWeek) || 4));
+    const sessionMinutes = Math.max(15, Math.min(90, Number(input.sessionMinutes) || 35));
+    const experience = input.experience || 'beginner';
+    const equipment = String(input.equipment || 'minimal').toLowerCase();
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const templates = {
+      2: ['Full Body A', 'Full Body B'],
+      3: ['Full Body A', 'Conditioning', 'Full Body B'],
+      4: ['Lower Body', 'Upper Body', 'Conditioning', 'Full Body'],
+      5: ['Lower', 'Upper Push', 'Conditioning', 'Upper Pull', 'Full Body'],
+      6: ['Lower A', 'Upper A', 'Conditioning', 'Lower B', 'Upper B', 'Mobility']
+    };
+    const focuses = templates[daysPerWeek] || templates[4];
+    // Spread training days across the week
+    const trainIdx = [];
+    const step = Math.max(1, Math.floor(7 / focuses.length));
+    let cursor = 0;
+    focuses.forEach(() => {
+      trainIdx.push(cursor % 7);
+      cursor += step;
+    });
+    const catalog = {
+      lower: [
+        { id: 'bw-squat', name: 'Bodyweight Squat', sets: 3, reps: '10–12', rest: '60s', muscleGroup: 'legs' },
+        { id: 'glute-bridge', name: 'Glute Bridge', sets: 3, reps: '12', rest: '45s', muscleGroup: 'glutes' },
+        { id: 'reverse-lunge', name: 'Reverse Lunge', sets: 3, reps: '8/side', rest: '60s', muscleGroup: 'legs' }
+      ],
+      upper: [
+        { id: 'push-up', name: 'Push-Up (or incline)', sets: 3, reps: '8–12', rest: '60s', muscleGroup: 'chest' },
+        { id: 'bw-row', name: 'Backpack / Band Row', sets: 3, reps: '10/side', rest: '60s', muscleGroup: 'back' },
+        { id: 'overhead-press', name: 'Overhead Press (band/DB)', sets: 3, reps: '8–10', rest: '60s', muscleGroup: 'shoulders' }
+      ],
+      full: [
+        { id: 'bw-squat', name: 'Bodyweight Squat', sets: 3, reps: '10', rest: '60s', muscleGroup: 'legs' },
+        { id: 'push-up', name: 'Push-Up', sets: 3, reps: '8–12', rest: '60s', muscleGroup: 'chest' },
+        { id: 'dead-bug', name: 'Dead Bug', sets: 3, reps: '8/side', rest: '45s', muscleGroup: 'core' }
+      ],
+      conditioning: [
+        { id: 'brisk-walk', name: 'Brisk Walk or March in Place', sets: null, reps: '12–15 min', rest: '—', muscleGroup: 'conditioning' },
+        { id: 'side-plank', name: 'Side Plank', sets: 3, reps: '20–30s/side', rest: '45s', muscleGroup: 'core' }
+      ],
+      mobility: [
+        { id: 'cat-cow', name: 'Cat-Cow Mobility', sets: 2, reps: '8 breaths', rest: '20s', muscleGroup: 'mobility' },
+        { id: 'hip-openers', name: 'Hip Openers', sets: 2, reps: '45s', rest: '20s', muscleGroup: 'mobility' }
+      ]
+    };
+    function pickBucket(focus) {
+      const f = focus.toLowerCase();
+      if (f.includes('lower')) return catalog.lower;
+      if (f.includes('upper') || f.includes('push') || f.includes('pull')) return catalog.upper;
+      if (f.includes('condition')) return catalog.conditioning;
+      if (f.includes('mobil')) return catalog.mobility;
+      return catalog.full;
+    }
+    const trainSet = new Set(trainIdx);
+    const days = dayNames.map((day, i) => {
+      if (!trainSet.has(i)) {
+        return {
+          day,
+          focus: 'Rest / Recovery',
+          durationMin: 15,
+          environment: equipment.includes('gym') ? 'gym' : 'home',
+          warmUp: 'Optional easy walk',
+          exercises: [],
+          coolDown: 'Light stretching'
+        };
+      }
+      const focus = focuses[trainIdx.indexOf(i)] || 'Full Body';
+      const exercises = pickBucket(focus).map((ex) => ({
+        ...ex,
+        prescription: ex.sets != null ? `${ex.sets} sets × ${ex.reps}` : ex.reps,
+        intensityRpe: 'RPE 6–7',
+        formCue: 'Move with control; stop if you feel sharp pain.',
+        tutorialUrl: null,
+        tutorialAvailable: false
+      }));
+      return {
+        day,
+        focus,
+        durationMin: sessionMinutes,
+        environment: equipment.includes('gym') ? 'gym' : (equipment.includes('none') ? 'home' : 'flexible'),
+        warmUp: '5 min easy cardio + joint circles',
+        exercises,
+        coolDown: '2–3 min breathing and stretch'
+      };
+    });
+    return {
+      id: 'local-plan-' + Date.now(),
+      kind: 'combined',
+      planType: 'combined',
+      version: 1,
+      goal,
+      daysPerWeek,
+      sessionMinutes,
+      experience,
+      equipmentLevel: equipment,
+      weeklyProgressionNote: 'Progress by adding 1–2 reps when sets feel easy before increasing difficulty.',
+      explanation: 'Client-side plan built from your form inputs (API was unavailable). Not medical advice.',
+      profileSnapshot: { ...input, goal, experience, daysPerWeek, sessionMinutes, equipment },
+      estimateMetadata: {
+        bmi: input.heightCm && input.weightKg
+          ? (input.weightKg / ((input.heightCm / 100) ** 2)).toFixed(1)
+          : undefined,
+        disclaimer: 'Estimates are approximate. Consult a professional for health conditions.'
+      },
+      days,
+      meals: [],
+      dailyTotals: [],
+      safetyFlags: [],
+      guest: true,
+      persisted: false
+    };
   }
 
   document.getElementById('pGenerate')?.addEventListener('click', async () => {
@@ -370,54 +612,65 @@
     const gymNote = el('p', 'bottom-note', 'Prototype link only — not live listings. Save verified places under Gyms & Cafés when a maps provider is configured.');
     gymBox.append(gymIntro, gymLink, gymNote);
 
-    if (window.VyoraAPI?.generatePlan) {
+    const formPayload = {
+      heightCm: h,
+      weightKg: w,
+      age,
+      gender,
+      diet,
+      goal,
+      activityLevel,
+      experience,
+      daysPerWeek,
+      equipment,
+      sessionMinutes,
+      allergies,
+      cuisine,
+      planType: 'combined'
+    };
+
+    const applyGenerated = (generated, note) => {
+      const planPayload = generated.plan || generated;
       try {
-        const generated = await window.VyoraAPI.generatePlan({
-          heightCm: h,
-          weightKg: w,
-          age,
-          gender,
-          diet,
-          goal,
-          activityLevel,
-          experience,
-          daysPerWeek,
-          equipment,
-          sessionMinutes,
-          allergies,
-          cuisine,
-          planType: 'combined'
-        });
-        const planPayload = generated.plan || generated;
-        try {
-          localStorage.setItem('vyora_active_plan', JSON.stringify({
-            ...generated,
-            plan: planPayload,
-            guest: generated.guest === true || generated.persisted === false,
-            savedAt: new Date().toISOString()
-          }));
-        } catch (storageError) {
-          console.warn('Could not cache plan locally', storageError);
-        }
-        renderStructuredPlan(generated);
-        showGuestBanner(generated.guest === true || generated.persisted === false);
-        window.dispatchEvent(new CustomEvent('vyora:plan-updated'));
-      } catch (e) {
-        clearPlanResults();
-        const message = e.message || 'Please try again.';
-        const prefix = /401|unauthorized|login/i.test(message)
-          ? 'Please sign in before generating a plan.'
-          : /422|safety/i.test(message)
-            ? `This profile needs a safety review before a plan can be generated: ${message}`
-            : `Could not generate your plan: ${message}`;
-        document.getElementById('rDietSummary').textContent = prefix;
-      } finally {
-        generateButton.disabled = false;
-        generateButton.textContent = 'Generate my plan';
+        localStorage.setItem('vyora_active_plan', JSON.stringify({
+          ...generated,
+          plan: planPayload,
+          guest: generated.guest === true || generated.persisted === false,
+          savedAt: new Date().toISOString()
+        }));
+      } catch (storageError) {
+        console.warn('Could not cache plan locally', storageError);
       }
-    } else {
+      renderStructuredPlan(generated);
+      showGuestBanner(generated.guest === true || generated.persisted === false);
+      if (note) {
+        const status = document.getElementById('planModStatus');
+        if (status) status.textContent = note;
+      }
+      window.dispatchEvent(new CustomEvent('vyora:plan-updated'));
+    };
+
+    try {
+      if (window.VyoraAPI?.generatePlan) {
+        try {
+          const generated = await window.VyoraAPI.generatePlan(formPayload);
+          applyGenerated(generated);
+        } catch (e) {
+          console.warn('API plan generate failed, using offline plan', e);
+          const local = buildClientFallbackPlan(formPayload);
+          applyGenerated({ id: local.id, plan: local, guest: true, persisted: false },
+            'Server unavailable — showing an offline plan from your form inputs.');
+        }
+      } else {
+        const local = buildClientFallbackPlan(formPayload);
+        applyGenerated({ id: local.id, plan: local, guest: true, persisted: false },
+          'Offline plan generated from your form inputs.');
+      }
+    } catch (e) {
       clearPlanResults();
-      document.getElementById('rDietSummary').textContent = 'The plan service is unavailable. Please try again later.';
+      document.getElementById('rDietSummary').textContent =
+        'Could not generate your plan: ' + (e.message || 'Unknown error');
+    } finally {
       generateButton.disabled = false;
       generateButton.textContent = 'Generate my plan';
     }

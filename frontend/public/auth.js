@@ -151,15 +151,28 @@ loginForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  // Demo session — no backend
-  const demoToken = "demo-" + selectedRole + "-" + Date.now();
-  localStorage.setItem("vyoraSessionToken", demoToken);
+  // Demo identity for UI routing + real guest JWT so API plan routes work
   localStorage.setItem("vyora_role", selectedRole);
   localStorage.setItem("vyora_demo_name", expected.name);
   if (remember) {
     localStorage.setItem("vyora_remember", "1");
   } else {
     sessionStorage.setItem("vyora_demo_role", selectedRole);
+  }
+  try {
+    const res = await fetch("/api/session/guest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ displayName: expected.name })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.token) {
+      localStorage.setItem("vyoraSessionToken", data.token);
+    } else {
+      localStorage.setItem("vyoraSessionToken", "demo-" + selectedRole + "-" + Date.now());
+    }
+  } catch {
+    localStorage.setItem("vyoraSessionToken", "demo-" + selectedRole + "-" + Date.now());
   }
 
   formMessage.textContent = "Login successful. Redirecting...";

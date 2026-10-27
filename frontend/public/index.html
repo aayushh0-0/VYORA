@@ -169,6 +169,19 @@
       </div>
 
       <div id="planResults" style="display:none;margin-bottom:20px;">
+        <div class="card weekly-plan-header" id="weeklyPlanHeader" style="margin-bottom:14px;">
+          <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;">
+            <div>
+              <h2 style="margin:0 0 6px;font-size:28px;">Your Personalized Weekly Plan</h2>
+              <p id="weeklyPlanIntro" class="bottom-note" style="margin:0;">Based on your goals, experience, equipment, and schedule.</p>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <button type="button" class="btn ghost" id="btnEditPreferences">Edit Preferences</button>
+              <button type="button" class="btn" id="btnRegeneratePlan">Regenerate Plan</button>
+            </div>
+          </div>
+          <div id="weeklyPlanSummary" class="plan-summary" style="margin-top:14px;"></div>
+        </div>
         <div class="grid cols-2">
           <div class="card">
             <h3 style="margin-top:0;">Your diet plan</h3>
@@ -176,10 +189,20 @@
             <div id="rMeals"></div>
           </div>
           <div class="card">
-            <h3 style="margin-top:0;">Your workout split</h3>
+            <h3 style="margin-top:0;">Weekly workout schedule</h3>
             <p id="rWorkoutSummary" style="margin-top:0;"></p>
             <div id="rWorkoutDays"></div>
           </div>
+        </div>
+        <div class="card" id="vyoraPlanNotes" style="margin-top:14px;">
+          <h3 style="margin-top:0;">VYORA AI notes</h3>
+          <p id="weeklyAiNotes" class="bottom-note">Generate a plan to see why this schedule fits your profile.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+            <input id="planModInput" type="text" maxlength="240" placeholder="Ask VYORA to modify this plan…" style="flex:1;min-width:200px;"/>
+            <button type="button" class="btn" id="btnPlanModify">Apply change</button>
+            <button type="button" class="btn ghost" id="btnAskVyoraPlan">Open Copilot</button>
+          </div>
+          <p id="planModStatus" class="bottom-note" aria-live="polite"></p>
         </div>
         <div class="grid cols-2" style="margin-top:14px;">
           <div class="card">

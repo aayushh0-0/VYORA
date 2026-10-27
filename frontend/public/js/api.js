@@ -1,6 +1,11 @@
 /* VYORA API client — Stage 9: adds reminder opt-out/opt-in, OVULA cycle export/delete, community reports, progress & integration connect/disconnect. */
 (function(){
   let token=localStorage.getItem('vyoraSessionToken');
+  // Demo login placeholders are not JWTs — force a real guest session
+  if (token && String(token).startsWith('demo-')) {
+    localStorage.removeItem('vyoraSessionToken');
+    token = null;
+  }
   let sessionPromise=null;
   async function createSession(){
     if(sessionPromise) return sessionPromise;
