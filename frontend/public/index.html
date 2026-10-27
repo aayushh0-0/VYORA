@@ -252,7 +252,7 @@
           </div>
           <div>
             <h3 style="margin:0 0 4px;">Talk to VYORA</h3>
-            <p style="margin:0;">Pick a coaching personality, then type or use the mic — VYORA reacts as she listens, thinks, and replies.</p>
+            <p style="margin:0;">Pick a coaching personality, then type your question. VYORA replies with general fitness and wellness tips (not medical advice).</p>
           </div>
         </div>
         <div class="persona-row" id="personaRow">
@@ -266,13 +266,13 @@
             <div class="msg bot">Hey — I'm VYORA. Ask me about today's workout, your diet, or just say you're tired and I'll adjust things.</div>
           </div>
           <div class="chat-row">
-            <button class="mic" id="vyoraMic" title="Voice input">🎙</button>
-            <input id="vyoraInput" placeholder="Type or speak to VYORA…" />
+            <button class="mic" id="vyoraMic" title="Voice input" hidden style="display:none" aria-hidden="true">🎙</button>
+            <input id="vyoraInput" placeholder="Type a message to VYORA…" autocomplete="off" />
             <button class="btn" id="vyoraSend">Send</button>
           </div>
         </div>
       </div>
-      <p class="bottom-note">Voice uses your browser's built-in speech APIs when available; otherwise use text — everything still works.</p>
+      <p class="bottom-note">Text chat only for now. Tips are general wellness guidance — not a diagnosis. Confirm important health decisions with a physician or qualified professional.</p>
     </section>
 
     <!-- WORKOUT -->
@@ -411,8 +411,8 @@
       <div class="section-banner"><span>03</span><strong>FIND YOUR PLACE</strong><em>GYMS & CAFÉS</em></div>
       <p class="eyebrow">Nearby</p>
       <h1 class="title">Gyms &amp; healthy cafés</h1>
-      <p class="sub">Discovery is location-based in the full build; this demo shows sample listings near you.</p>
-      <div class="filter-row" id="placeFilter">
+      <p class="sub">Search an area for gyms and cafés, open Google Maps directions, and save places you want — or add a place manually.</p>
+      <div class="filter-row" id="placeFilter" hidden>
         <button class="active" data-f="all">All</button>
         <button data-f="gym">Gyms</button>
         <button data-f="cafe">Cafés</button>
@@ -496,15 +496,15 @@
             </div>
             <div class="voicebar"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div><p class="orb-status" id="orbOStatus">Ready</p></div>
           </div>
-          <div><h3 style="margin:0 0 4px;">Talk to OVULA</h3><p style="margin:0;">Ask about cramps, energy, or hygiene — general support only.</p></div>
+          <div><h3 style="margin:0 0 4px;">Chat with OVULA</h3><p style="margin:0;">Ask about cramps, energy, or hygiene — general self-care only, never a diagnosis.</p></div>
         </div>
         <div class="chat">
           <div class="chat-log" id="ovulaLog">
             <div class="msg bot">Hi, I'm OVULA. Tell me what you're feeling and I'll share some general self-care ideas.</div>
           </div>
           <div class="chat-row">
-            <button class="mic" id="ovulaMic" title="Voice input">🎙</button>
-            <input id="ovulaInput" placeholder="e.g. bad cramps today…" />
+            <button class="mic" id="ovulaMic" title="Voice input" hidden style="display:none" aria-hidden="true">🎙</button>
+            <input id="ovulaInput" placeholder="e.g. mild cramps today…" autocomplete="off" />
             <button class="btn" id="ovulaSend">Send</button>
           </div>
         </div>

@@ -300,6 +300,134 @@ export function registerEcosystemRoutes(app) {
 
   // ===== Local Discovery: Saved Places, Inaccuracy Reporting & Location History Control (PRD Prompt 16) =====
 
+
+  // ===== Place discovery (OSM/Overpass — no invented business listings) =====
+  app.get('/api/places/discover', async (req, res) => {
+    try {
+      const q = str(req.query?.q, 120).trim();
+      const type = str(req.query?.type, 20).toLowerCase() || 'both';
+      const limit = Math.min(10, Math.max(1, Number(req.query?.limit) || 10));
+      if (!q || q.length < 2) {
+        return res.status(400).json({ error: 'Enter a place or area name (at least 2 characters).' });
+      }
+      if (!['gym', 'cafe', 'both'].includes(type)) {
+        return res.status(400).json({ error: 'type must be gym, cafe, or both.' });
+      }
+
+      const nomUrl = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(q)}`;
+      const nomRes = await fetch(nomUrl, {
+        headers: { 'User-Agent': 'VYORA-WellnessApp/1.0 (place-discovery; contact: local-dev)', Accept: 'application/json' }
+      });
+      if (!nomRes.ok) {
+        return res.status(502).json({ error: 'Could not geocode that place name. Try a clearer area (e.g. "Koramangala Bangalore").' });
+      }
+      const nom = await nomRes.json();
+      if (!Array.isArray(nom) || !nom.length) {
+        return res.json({
+          query: q,
+          type,
+          center: null,
+          results: [],
+          source: 'openstreetmap',
+          message: 'No matching area found. Try a city or neighborhood name.',
+          mapsSearchUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((type === 'cafe' ? 'healthy cafes' : type === 'gym' ? 'gyms' : 'gyms and cafes') + ' in ' + q)}`
+        });
+      }
+      const lat = Number(nom[0].lat);
+      const lon = Number(nom[0].lon);
+      const displayName = nom[0].display_name || q;
+      const radius = 3500;
+
+      const gymFilters = `
+        node["leisure"="fitness_centre"](around:${radius},${lat},${lon});
+        node["leisure"="sports_centre"](around:${radius},${lat},${lon});
+        node["amenity"="gym"](around:${radius},${lat},${lon});
+        way["leisure"="fitness_centre"](around:${radius},${lat},${lon});
+        way["leisure"="sports_centre"](around:${radius},${lat},${lon});
+      `;
+      const cafeFilters = `
+        node["amenity"="cafe"](around:${radius},${lat},${lon});
+        node["amenity"="restaurant"]["cuisine"~"healthy|salad|vegan|vegetarian",i](around:${radius},${lat},${lon});
+        way["amenity"="cafe"](around:${radius},${lat},${lon});
+      `;
+      let filters = '';
+      if (type === 'gym') filters = gymFilters;
+      else if (type === 'cafe') filters = cafeFilters;
+      else filters = gymFilters + cafeFilters;
+
+      const overpassQuery = `[out:json][timeout:25];(${filters});out center ${limit * 3};`;
+      const overRes = await fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'VYORA-WellnessApp/1.0' },
+        body: `data=${encodeURIComponent(overpassQuery)}`
+      });
+
+      let elements = [];
+      if (overRes.ok) {
+        const data = await overRes.json();
+        elements = Array.isArray(data?.elements) ? data.elements : [];
+      }
+
+      const seen = new Set();
+      const results = [];
+      for (const el of elements) {
+        const tags = el.tags || {};
+        const name = tags.name || tags['name:en'];
+        if (!name) continue;
+        const key = name.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+
+        let category = 'other';
+        if (tags.leisure === 'fitness_centre' || tags.leisure === 'sports_centre' || tags.amenity === 'gym') category = 'gym';
+        else if (tags.amenity === 'cafe' || tags.amenity === 'restaurant') category = 'cafe';
+
+        if (type === 'gym' && category !== 'gym') continue;
+        if (type === 'cafe' && category !== 'cafe') continue;
+
+        const plat = el.lat != null ? Number(el.lat) : (el.center?.lat != null ? Number(el.center.lat) : lat);
+        const plon = el.lon != null ? Number(el.lon) : (el.center?.lon != null ? Number(el.center.lon) : lon);
+        const addressParts = [tags['addr:street'], tags['addr:suburb'], tags['addr:city']].filter(Boolean);
+        const address = addressParts.join(', ') || displayName.split(',').slice(0, 2).join(',').trim();
+
+        const mapsUrl = Number.isFinite(plat) && Number.isFinite(plon)
+          ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(plat + ',' + plon)}`
+          : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + q)}`;
+
+        results.push({
+          name,
+          category,
+          address,
+          lat: Number.isFinite(plat) ? plat : null,
+          lng: Number.isFinite(plon) ? plon : null,
+          mapsUrl,
+          source: 'openstreetmap'
+        });
+        if (results.length >= limit) break;
+      }
+
+      res.json({
+        query: q,
+        type,
+        center: { lat, lng: lon, label: displayName },
+        results,
+        source: 'openstreetmap',
+        message: results.length
+          ? `Showing up to ${results.length} listings near ${displayName.split(',')[0]} from OpenStreetMap. Verify hours and details on the map.`
+          : 'No named gyms/cafés found in OSM near that area. Try a broader place name, or open the Google Maps search link.',
+        mapsSearchUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((type === 'cafe' ? 'cafes' : type === 'gym' ? 'gyms' : 'gyms or cafes') + ' near ' + q)}`
+      });
+    } catch (err) {
+      console.error('places/discover', err);
+      res.status(502).json({
+        error: 'Discovery service temporarily unavailable. You can still save places manually or open Google Maps.',
+        mapsSearchUrl: req.query?.q
+          ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('gyms cafes ' + String(req.query.q))}`
+          : undefined
+      });
+    }
+  });
+
   app.get('/api/places', authOnly, (req, res) => res.json(
     db.prepare('SELECT id,name,category,address,lat,lng,created_at AS createdAt FROM saved_places WHERE user_id=? ORDER BY created_at DESC')
       .all(req.user.sub)
