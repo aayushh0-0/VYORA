@@ -106,11 +106,11 @@
         const searchQuery = (exercise.videoQuery || `${exercise.name || 'exercise form'} proper form`).trim();
         const demo = document.createElement('a');
         demo.className = 'yt-link';
-        demo.textContent = 'Watch Tutorial ↗';
+        demo.textContent = 'Search on YouTube ↗';
         demo.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
         demo.target = '_blank';
         demo.rel = 'noopener noreferrer';
-        demo.title = `Watch Tutorial for "${exercise.name || 'exercise form'}"`;
+        demo.title = `Search YouTube for "${exercise.name || 'exercise form'}"`;
         linkCell.appendChild(demo);
         row.appendChild(linkCell);
 

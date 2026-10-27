@@ -262,11 +262,11 @@
           const searchQuery = (exercise.videoQuery || `${exercise.name || 'exercise form'} proper form`).trim();
           const yt = document.createElement('a');
           yt.className = 'btn ghost btn-tutorial';
-          yt.textContent = 'Watch Tutorial ↗';
+          yt.textContent = 'Search on YouTube ↗';
           yt.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
           yt.target = '_blank';
           yt.rel = 'noopener noreferrer';
-          yt.title = `Watch Tutorial for "${exercise.name || 'exercise form'}"`;
+          yt.title = `Search YouTube for "${exercise.name || 'exercise form'}"`;
           action.appendChild(yt);
           if (exercise.tutorialUrl) {
             const a = document.createElement('a');
