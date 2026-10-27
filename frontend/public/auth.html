@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080808" />
+  <meta name="description" content="Sign in to VYORA, your personal fitness copilot." />
+  <title>Sign in | VYORA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-left">
+      <a href="index.html" class="brand" aria-label="VYORA home">
+        <span class="brand-symbol">V</span>
+        <span>VYORA<span class="brand-dot">.</span></span>
+      </a>
+
+      <div class="form-wrap">
+        <span class="eyebrow">YOUR PERSONAL FITNESS COPILOT</span>
+        <h1>Welcome<br />back<span class="accent">.</span></h1>
+        <p class="subtitle">Your next level starts with one sign in.</p>
+
+        <div class="role-switch" role="group" aria-label="Choose account type">
+          <button type="button" class="role-btn active" data-role="client" aria-pressed="true">
+            <span aria-hidden="true">◉</span> Client
+          </button>
+          <button type="button" class="role-btn" data-role="trainer" aria-pressed="false">
+            <span aria-hidden="true">✳</span> Trainer
+          </button>
+        </div>
+
+        <div class="role-description" id="roleDescription">Sign in to access your personal fitness journey.</div>
+
+        <form id="loginForm">
+          <label for="email">Email address</label>
+          <div class="input-wrap">
+            <span class="input-icon" aria-hidden="true">@</span>
+            <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+
+          <div class="label-row">
+            <label for="password">Password</label>
+            <a href="forgot-password.html" id="forgotPassword">Forgot password?</a>
+          </div>
+          <div class="input-wrap">
+            <span class="input-icon" aria-hidden="true">●</span>
+            <input id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required minlength="8" />
+            <button class="show-password" type="button" id="togglePassword" aria-label="Show password">Show</button>
+          </div>
+
+          <div class="form-options">
+            <label class="remember">
+              <input type="checkbox" id="remember" name="remember" />
+              <span>Remember me</span>
+            </label>
+            <span class="secure-label">Secure sign in</span>
+          </div>
+
+          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span id="submitLabel">Sign in as Client</span><span aria-hidden="true">↗</span>
+          </button>
+        </form>
+
+        
+        <div class="demo-hint" style="margin-top:1rem;padding:0.85rem 1rem;border-radius:12px;border:1px dashed rgba(0,0,0,0.15);background:rgba(0,0,0,0.03);font-size:0.8rem;line-height:1.45;color:#555;">
+          <strong style="display:block;margin-bottom:0.35rem;color:#111;">Demo login (no signup needed)</strong>
+          <div><strong>Client</strong> — <code>client@vyora.app</code> / <code>client123</code></div>
+          <div><strong>Trainer</strong> — <code>trainer@vyora.app</code> / <code>trainer123</code></div>
+        </div>
+
+        <div class="signup-line">New to VYORA? <a href="signup.html">Create an account</a></div>
+        <p class="legal">By continuing, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+      </div>
+    </section>
+
+    <aside class="auth-right">
+      <div class="visual-top">
+        <span class="live-dot"></span>
+        <span>BUILT AROUND YOU</span>
+        <span class="visual-version">VYORA / 01</span>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="hero-v">V</div>
+        <div class="hero-line"></div>
+        <span class="float-tag tag-one">AI POWERED</span>
+        <span class="float-tag tag-two">MOVE BETTER.</span>
+      </div>
+
+      <div class="visual-copy">
+        <span class="eyebrow">MORE THAN A FITNESS APP</span>
+        <h2 id="panelHeading">Build strength.<br />Build <span class="accent">yourself.</span></h2>
+        <p id="panelDescription">Your AI fitness copilot for smarter workouts, personalized nutrition and measurable progress.</p>
+        <div class="feature-list" id="featureList">
+          <div class="feature-item"><span class="feature-check">✓</span><span>Personalized AI workout plans</span></div>
+          <div class="feature-item"><span class="feature-check">✓</span><span>Nutrition designed around your goals</span></div>
+          <div class="feature-item"><span class="feature-check">✓</span><span>Progress that keeps you motivated</span></div>
+        </div>
+      </div>
+
+      <div class="visual-footer">
+        <span>TRAIN SMARTER. LIVE STRONGER.</span>
+        <span>© VYORA</span>
+      </div>
+    </aside>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html>

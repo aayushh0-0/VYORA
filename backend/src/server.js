@@ -41,12 +41,18 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 
-const origins = (process.env.CORS_ORIGIN || 'http://localhost:3000').split(',').map((x) => x.trim());
+// Dev defaults include Vite (:5173) and Express (:3000)
+const origins = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://localhost:3000')
+  .split(',')
+  .map((x) => x.trim())
+  .filter(Boolean);
 app.use(cors({
   origin: (origin, cb) => {
+    // Allow same-origin / non-browser / listed origins — never throw (throws became opaque 500s)
     if (!origin || origins.includes('*') || origins.includes(origin)) return cb(null, true);
-    cb(new Error('Origin not allowed by CORS'));
-  }
+    return cb(null, false);
+  },
+  credentials: true
 }));
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/', rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: true, legacyHeaders: false }));

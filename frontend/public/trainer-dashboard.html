@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080808" />
+  <title>Trainer Dashboard | VYORA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="auth.css" />
+  <style>
+    .trainer-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #080808;
+      color: #f2f2f2;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .trainer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .trainer-top a.brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .trainer-top .actions { display: flex; gap: 0.75rem; align-items: center; }
+    .badge {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .btn-out {
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: inherit;
+      border-radius: 10px;
+      padding: 0.5rem 0.9rem;
+      font: 600 0.85rem Inter, system-ui, sans-serif;
+      cursor: pointer;
+    }
+    .trainer-main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1.25rem;
+    }
+    .coming-card {
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      background: #121212;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 2.5rem 1.75rem;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    }
+    .coming-card h1 {
+      font-size: 1.6rem;
+      margin: 0 0 0.75rem;
+    }
+    .coming-card p {
+      margin: 0;
+      color: rgba(242,242,242,0.65);
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="trainer-page">
+    <header class="trainer-top">
+      <a class="brand" href="auth.html"><span class="brand-symbol" style="display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#ef233c;color:#fff;font-weight:800;">V</span> VYORA</a>
+      <div class="actions">
+        <span class="badge">Trainer</span>
+        <button type="button" class="btn-out" id="signOut">Sign out</button>
+      </div>
+    </header>
+    <main class="trainer-main">
+      <div class="coming-card">
+        <h1>Still working on this Dashboard</h1>
+        <p>The trainer experience is under construction. You will manage clients, programs, and check-ins here soon — in the same VYORA theme.</p>
+      </div>
+    </main>
+  </div>
+  <script>
+    (function () {
+      const token = localStorage.getItem("vyoraSessionToken");
+      const role = localStorage.getItem("vyora_role") || sessionStorage.getItem("vyora_demo_role");
+      if (!token) {
+        window.location.replace("/auth.html");
+        return;
+      }
+      if (role && role !== "trainer") {
+        window.location.replace("/index.html");
+        return;
+      }
+      document.getElementById("signOut").addEventListener("click", function () {
+        localStorage.removeItem("vyoraSessionToken");
+        localStorage.removeItem("vyora_role");
+        sessionStorage.removeItem("vyora_demo_role");
+        window.location.replace("/auth.html");
+      });
+    })();
+  </script>
+</body>
+</html>
