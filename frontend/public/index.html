@@ -277,61 +277,15 @@
 
     <!-- WORKOUT -->
     <section id="workout" class="view">
-      <div class="wp-shell">
-        <header class="wp-header">
-          <div class="wp-header-text">
-            <p class="wp-kicker"><span class="wp-kicker-dot"></span> WORKOUT ENGINE</p>
-            <h1 class="wp-title">This Week's Plan</h1>
-            <p class="wp-sub">Auto-built from your goal, equipment, and recent adherence. Check off sets as you go.</p>
-          </div>
-          <div class="wp-header-art" aria-hidden="true">
-            <img src="assets/hero-warrior.png" alt="" class="wp-hero-img" width="520" height="320" />
-            <div class="wp-header-art-fade"></div>
-          </div>
-        </header>
-
-        <div class="wp-chips" id="workoutChips" aria-label="Plan summary"></div>
-        <p id="workoutPlanStatus" class="bottom-note" role="status"></p>
-
-        <div class="wp-daytabs" id="dayTabs" role="tablist" aria-label="Workout days"></div>
-
-        <div class="wp-grid">
-          <div class="wp-main">
-            <div class="wp-session card" id="exList">
-              <!-- filled by workout.js -->
-            </div>
-          </div>
-          <aside class="wp-side">
-            <div class="wp-panel card" id="wpCoach">
-              <h3 class="wp-panel-title"><span class="wp-spark">✦</span> VYORA AI Coach</h3>
-              <div class="wp-why">
-                <div class="wp-why-label">💡 Why this plan?</div>
-                <p id="workoutAiWhy" class="wp-why-body">Generate a plan on Home to see coaching notes for your goal and schedule.</p>
-              </div>
-            </div>
-            <div class="wp-panel card" id="wpProgress">
-              <h3 class="wp-panel-title"><span class="wp-spark">◆</span> Weekly Progress</h3>
-              <div class="wp-progress-row">
-                <div class="wp-progress-ring" id="workoutProgressRing" aria-hidden="true">
-                  <span id="workoutProgressCount">0/0</span>
-                </div>
-                <div>
-                  <div class="wp-progress-label">Workouts completed</div>
-                  <div class="wp-progress-dots" id="workoutProgressDots"></div>
-                </div>
-              </div>
-            </div>
-            <div class="wp-panel card" id="wpActions">
-              <h3 class="wp-panel-title"><span class="wp-spark">⚡</span> Quick Actions</h3>
-              <button type="button" class="wp-action" data-wp-action="swap">⇄ Swap an exercise</button>
-              <button type="button" class="wp-action" data-wp-action="easier">↓ Make it easier</button>
-              <button type="button" class="wp-action" data-wp-action="harder">↑ Increase intensity</button>
-              <p id="workoutActionStatus" class="bottom-note" aria-live="polite"></p>
-            </div>
-          </aside>
-        </div>
-        <p id="workoutProgression" class="bottom-note wp-progression"></p>
-      </div>
+      <div class="section-banner"><span>01</span><strong>TRAIN HARDER</strong><em>WORKOUT ENGINE</em></div>
+      <p class="eyebrow">Workout Engine</p>
+      <h1 class="title">This week's plan</h1>
+      <p class="sub">Auto-built from your goal, equipment, and recent adherence. Check off sets as you go.</p>
+      <p id="workoutPlanStatus" class="bottom-note" role="status"></p>
+      <p id="workoutProgression" class="bottom-note"></p>
+      <div id="workoutGeminiReview" class="card" style="margin-top:12px;display:none;"></div>
+      <div class="daytabs" id="dayTabs" role="tablist" aria-label="Workout days"></div>
+      <div class="card"><div id="exList"></div></div>
     </section>
 
     <!-- SPECIAL TRAINING -->

@@ -259,23 +259,24 @@
           rest.textContent = exercise.rest ? `Rest ${exercise.rest}` : '';
 
           const action = document.createElement('div');
-          const hasUrl = Boolean(exercise.tutorialUrl || exercise.tutorialAvailable);
-          if (hasUrl && exercise.tutorialUrl) {
+          const searchQuery = (exercise.videoQuery || `${exercise.name || 'exercise form'} proper form`).trim();
+          const yt = document.createElement('a');
+          yt.className = 'btn ghost btn-tutorial';
+          yt.textContent = 'Watch Tutorial ↗';
+          yt.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
+          yt.target = '_blank';
+          yt.rel = 'noopener noreferrer';
+          yt.title = `Watch Tutorial for "${exercise.name || 'exercise form'}"`;
+          action.appendChild(yt);
+          if (exercise.tutorialUrl) {
             const a = document.createElement('a');
             a.className = 'btn ghost btn-tutorial';
             a.textContent = 'Watch Tutorial';
             a.href = exercise.tutorialUrl;
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
+            a.style.marginLeft = '8px';
             action.appendChild(a);
-          } else {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'btn ghost btn-tutorial';
-            btn.disabled = true;
-            btn.textContent = 'Tutorial coming soon';
-            btn.title = 'A YouTube URL has not been configured for this exercise yet.';
-            action.appendChild(btn);
           }
           row.append(nameCell, sets, reps, rest, action);
           card.appendChild(row);
