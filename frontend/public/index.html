@@ -293,7 +293,8 @@
       <div class="section-banner"><span>02</span><strong>TRAIN / EXPLORE / COMPETE</strong><em>SPECIAL TRAINING</em></div>
       <p class="eyebrow">VYORA Special Training</p>
       <h1 class="title">Train beyond the workout</h1>
-      <p class="sub">Performance intelligence, personalized routes, challenges and local discovery — all controlled by voice through VYORA Copilot.</p>
+      <p class="sub">Athlete dashboard, simulated recording, segments, challenges and leaderboards — demo data stays on this device.</p>
+      <p class="bottom-note st-disclaimer">Simulated tracking only. No live GPS. Rankings and segments use demo data unless you connect real services later.</p>
 
       <div class="training-tabs" role="tablist" aria-label="Special training categories">
         <button class="active" data-training-tab="train">TRAIN</button>
@@ -302,91 +303,84 @@
       </div>
 
       <div class="training-feature-index" aria-label="Special Training features">
-        <span><b>03</b> Performance Predictions</span>
-        <span><b>04</b> Progress Comparison</span>
-        <span><b>05</b> Athlete Intelligence</span>
-        <span><b>06</b> Personalized Routes</span>
-        <span><b>07</b> 3D Terrain + Elevation</span>
-        <span><b>08</b> Stops + Destinations</span>
-        <span><b>09</b> Leaderboards</span>
-        <span><b>10</b> Group Challenges</span>
-        <span><b>11</b> Local Legend + Segments</span>
+        <span><b>01</b> Dashboard</span>
+        <span><b>02</b> Record (sim)</span>
+        <span><b>03</b> Activities</span>
+        <span><b>04</b> Segments</span>
+        <span><b>05</b> Leaderboards</span>
+        <span><b>06</b> Challenges</span>
+        <span><b>07</b> Predictions API</span>
       </div>
 
       <div class="training-panel active" data-training-panel="train">
-        <div class="training-grid">
+        <div id="stTrainHub" class="st-hub"></div>
+        <div class="training-grid st-api-grid" style="margin-top:18px;">
           <article class="training-card">
-            <div class="feature-visual performance-visual">
-              <div class="mini-window"><b>Performance Predictions</b><div class="prediction-grid"><strong>5K<br><small>28:29</small></strong><strong>10K<br><small>59:27</small></strong><strong>13.1 MI<br><small>2:12:08</small></strong><strong>26.2 MI<br><small>4:33:05</small></strong></div></div>
-            </div>
-            <h2>Predict your performance</h2><p>Estimate race times from your recent training, recovery and effort trends.</p>
-            <button class="btn ghost training-action" data-action="predict">Run prediction</button>
+            <h2>Predict your performance</h2>
+            <p>Advisory race-time estimates from logged VYORA workouts when enough history exists.</p>
+            <button class="btn ghost training-action" type="button" data-action="predict">Run prediction</button>
           </article>
           <article class="training-card">
-            <div class="feature-visual chart-visual"><div class="chart-line"></div><div class="chart-dot d1"></div><div class="chart-dot d2"></div><div class="chart-dot d3"></div><div class="chart-label">Progress Comparison</div></div>
-            <h2>Compare your progress</h2><p>See current training load and performance against your personal baseline.</p>
-            <button class="btn ghost training-action" data-action="compare">Compare progress</button>
+            <h2>Compare your progress</h2>
+            <p>Training load vs your personal baseline from saved logs.</p>
+            <button class="btn ghost training-action" type="button" data-action="compare">Compare progress</button>
           </article>
           <article class="training-card">
-            <div class="feature-visual intel-visual"><div class="intel-copy"><b>Athlete Intelligence</b><span>Your pace was 13 seconds faster than your 30-day average.</span></div></div>
-            <h2>Get athlete intelligence</h2><p>VYORA turns your activity patterns into clear, useful coaching insights.</p>
-            <button class="btn ghost training-action" data-action="intelligence">Show insights</button>
+            <h2>Athlete intelligence</h2>
+            <p>Short insights from recent sessions — not medical advice.</p>
+            <button class="btn ghost training-action" type="button" data-action="intelligence">Show insights</button>
           </article>
         </div>
+        <div id="trainingResult" class="card st-api-result" hidden></div>
       </div>
 
       <div class="training-panel" data-training-panel="explore">
-        <div class="training-grid">
+        <div id="stExploreHub" class="st-hub"></div>
+        <div class="training-grid st-api-grid" style="margin-top:18px;">
           <article class="training-card">
-            <div class="feature-visual map-visual route-map"><span class="route-path"></span><span class="route-pin">◎</span><div class="map-label">MADE FOR YOU</div></div>
-            <h2>Get routes made for you</h2><p>Personalized running, walking and cycling routes based on your goal and training history.</p>
-            <button class="btn ghost training-action" data-action="routes">Build my route</button>
+            <h2>Personalized routes</h2>
+            <p>Prototype placeholder — live maps need a configured provider. Not invented listings.</p>
+            <button class="btn ghost training-action" type="button" data-action="routes">Build my route</button>
           </article>
           <article class="training-card">
-            <div class="feature-visual terrain-visual"><div class="terrain-lines"></div><div class="terrain-layer">3D LAYERS</div></div>
-            <h2>Plan smarter with new layers</h2><p>Preview elevation, terrain, steep climbs and route conditions before you train.</p>
-            <button class="btn ghost training-action" data-action="layers">Show route layers</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual poi-visual"><div class="poi-map"></div><span class="poi-marker">●</span><div class="poi-card"><b>Royal Arch</b><small>1.94 mi away · viewpoint</small></div></div>
-            <h2>Add a stop or destination</h2><p>Add a viewpoint, water stop, café or recovery destination directly to your training route.</p>
-            <button class="btn ghost training-action" data-action="destination">Add destination</button>
+            <h2>Stops &amp; destinations</h2>
+            <p>Add a café or recovery stop in a future maps build.</p>
+            <button class="btn ghost training-action" type="button" data-action="destination">Add destination</button>
           </article>
         </div>
       </div>
 
       <div class="training-panel" data-training-panel="compete">
-        <div class="training-grid">
-          <article class="training-card">
-            <div class="feature-visual leaderboard-visual"><div class="leader-row"><b>1</b><span>Arby</span><em>♛</em></div><div class="leader-row"><b>2</b><span>You</span><em>↗</em></div><div class="leader-row"><b>3</b><span>Hannah</span><em>—</em></div><div class="leader-row"><b>4</b><span>Brian</span><em>—</em></div></div>
-            <h2>Climb the leaderboards</h2><p>Compare your pace, distance and consistency with your local training community.</p>
-            <button class="btn ghost training-action" data-action="leaderboard">Open leaderboard</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual challenge-visual"><div><b>You</b><span><i style="width:88%"></i></span><small>46h / 50h</small></div><div><b>Maya</b><span><i style="width:70%"></i></span><small>36h / 50h</small></div><div><b>Alex</b><span><i style="width:44%"></i></span><small>22h / 50h</small></div><div><b>John</b><span><i style="width:26%"></i></span><small>13h / 50h</small></div></div>
-            <h2>Challenge your friends</h2><p>Turn motivation into a group activity and compete on shared goals.</p>
-            <button class="btn ghost training-action" data-action="challenge">Create challenge</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual legend-visual"><div class="legend-badge">27</div><b>LOCAL LEGEND</b><span>Own your local segment.</span></div>
-            <h2>Become a local legend</h2><p>Chase your strongest local segments and earn status through consistent performance.</p>
-            <button class="btn ghost training-action" data-action="legend">Find my segments</button>
-          </article>
-        </div>
+        <div id="stCompeteHub" class="st-hub"></div>
       </div>
 
       <div class="card" style="margin:14px 0;">
-        <h3 style="margin-top:0;">Create a personal challenge</h3>
-        <div class="grid cols-2"><div class="field"><label for="challengeTitle">Challenge title</label><input id="challengeTitle" placeholder="e.g. 30 km this week"/></div><div class="field"><label for="challengeGoal">Goal</label><input id="challengeGoal" placeholder="Walk or run consistently"/></div><div class="field"><label for="challengeTarget">Target number</label><input id="challengeTarget" type="number" min="1" step="0.1" placeholder="30"/></div><div class="field"><label for="challengeUnit">Unit</label><select id="challengeUnit"><option value="km">km</option><option value="minutes">minutes</option><option value="sessions">sessions</option><option value="litres">litres</option></select></div><div class="field"><label for="challengeStart">Start date</label><input id="challengeStart" type="date"/></div><div class="field"><label for="challengeEnd">End date</label><input id="challengeEnd" type="date"/></div></div>
-        <button class="btn" id="challengeCreate">Create challenge</button><p id="challengeStatus" class="bottom-note" aria-live="polite"></p><div id="challengeList" style="margin-top:10px;"></div>
+        <h3 style="margin-top:0;">Create a personal challenge (account)</h3>
+        <p class="bottom-note">Synced via VYORA API when signed in. Demo challenges above stay on-device.</p>
+        <div class="grid cols-2">
+          <div class="field"><label for="challengeTitle">Challenge title</label><input id="challengeTitle" placeholder="e.g. 30 km this week"/></div>
+          <div class="field"><label for="challengeGoal">Goal</label><input id="challengeGoal" placeholder="Walk or run consistently"/></div>
+          <div class="field"><label for="challengeTarget">Target number</label><input id="challengeTarget" type="number" min="1" step="0.1" placeholder="30"/></div>
+          <div class="field"><label for="challengeUnit">Unit</label><select id="challengeUnit"><option value="km">km</option><option value="minutes">minutes</option><option value="sessions">sessions</option><option value="litres">litres</option></select></div>
+          <div class="field"><label for="challengeStart">Start date</label><input id="challengeStart" type="date"/></div>
+          <div class="field"><label for="challengeEnd">End date</label><input id="challengeEnd" type="date"/></div>
+        </div>
+        <button class="btn" id="challengeCreate" type="button">Create challenge</button>
+        <p id="challengeStatus" class="bottom-note" aria-live="polite"></p>
+        <div id="challengeList" style="margin-top:10px;"></div>
       </div>
       <div class="card voice-command-card">
-        <div><span class="eyebrow">Voice-first control</span><h3 style="margin:4px 0 5px;font-size:28px;">Just tell VYORA what to do.</h3><p style="margin:0;">“VYORA, predict my 5K.” · “Build a route with a café stop.” · “Open the leaderboard.” · “Start a group challenge.”</p></div>
-        <button class="btn" data-target="home">Talk to VYORA ↗</button>
+        <div>
+          <span class="eyebrow">Voice-first control</span>
+          <h3 style="margin:4px 0 5px;font-size:28px;">Just tell VYORA what to do.</h3>
+          <p style="margin:0;">“VYORA, predict my 5K.” · “Open the leaderboard.” · “Start a group challenge.”</p>
+        </div>
+        <button class="btn" data-target="home" type="button">Talk to VYORA ↗</button>
       </div>
     </section>
 
-    <!-- DIET -->
+    
+<!-- DIET -->
     <section id="diet" class="view">
       <div class="section-banner"><span>02</span><strong>FUEL BETTER</strong><em>NUTRITION ENGINE</em></div>
       <p class="eyebrow">Nutrition Engine</p>
@@ -629,6 +623,7 @@
 <script src="js/copilot.js"></script>
 <script src="js/workout.js"></script>
 <script src="js/diet.js"></script>
+<script src="js/trainingStore.js"></script>
 <script src="js/training.js"></script>
 <script src="js/locator.js"></script>
 <script src="js/community.js"></script>

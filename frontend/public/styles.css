@@ -115,3 +115,41 @@ button.btn:hover,.hero-cta:hover{box-shadow:0 9px 22px rgba(239,35,60,.2)}
   .wk-link{grid-column:1/-1}
   .wk-link .yt-link{width:100%}
 }
+
+/* ========== Special Training athlete hub (scoped) ========== */
+#training .st-disclaimer{margin:8px 0 14px;font-size:13px}
+#training .st-hub{display:flex;flex-direction:column;gap:16px}
+#training .st-panel{background:var(--paper,#fff);border:1px solid var(--line,#d9d7d3);padding:20px 18px}
+#training .st-heading{margin:0 0 12px;font-size:20px;font-weight:800;letter-spacing:-0.4px}
+#training .st-subhead{margin:16px 0 8px;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+#training .st-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+#training .st-stat{background:var(--surface2,#f0efec);padding:12px 10px;border:1px solid var(--line,#d9d7d3)}
+#training .st-stat small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+#training .st-stat strong{font-size:16px;font-weight:700}
+#training .st-progress{height:8px;background:rgba(0,0,0,.08);border-radius:99px;overflow:hidden;margin:6px 0 12px}
+#training .st-progress>i{display:block;height:100%;width:0;background:var(--red,#ef233c);border-radius:99px}
+#training .st-list{display:flex;flex-direction:column;gap:0}
+#training .st-list-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line,#d9d7d3)}
+#training .st-list-row:last-child{border-bottom:none}
+#training .st-muted{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:2px}
+#training .st-pills{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+#training .st-pill{all:unset;cursor:pointer;padding:8px 12px;border:1px solid #bbb;font-size:12px;font-weight:600;text-transform:uppercase}
+#training .st-pill.selected{background:#111;color:#fff;border-color:#111}
+#training .st-timer{font-size:42px;font-weight:800;letter-spacing:-1px;margin:8px 0 14px;font-variant-numeric:tabular-nums}
+#training .st-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#training .st-challenge{padding:14px 0;border-bottom:1px solid var(--line,#d9d7d3)}
+#training .st-challenge:last-child{border-bottom:none}
+#training .st-api-result{margin-top:14px}
+#training .st-api-grid{gap:14px}
+@media(max-width:800px){
+  #training .st-stats{grid-template-columns:1fr 1fr}
+  #training .st-timer{font-size:34px}
+}
+
+/* Hide only the spotlight glow on Special Training; keep cursor + click ripple */
+body:has(#training.view.active) .vyora-spotlight {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
