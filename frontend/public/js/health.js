@@ -1,10 +1,26 @@
 (function(){
 const condNotes={diabetes:"Noted. Keep meal timing and exercise aligned with your clinician's advice; VYORA cannot adjust medication.",bp:"Noted. Prefer gradual exercise progression and follow your clinician's sodium/activity advice.",thyroid:"Noted. Track energy changes and follow your clinician's treatment plan.",none:"No conditions selected — plans will use general fitness guidance."};
 const condNote=document.getElementById('condNote'); if(condNote) condNote.textContent=condNotes.none;
+function persistConditions(){
+  const active=[...document.querySelectorAll('#condRow button.active')].map(x=>x.dataset.c).filter(c=>c&&c!=='none');
+  try{ localStorage.setItem('vyora_health_conditions', JSON.stringify(active)); }catch(e){}
+  if(window.VyoraNotifications&&VyoraNotifications.refresh) VyoraNotifications.refresh();
+  return active;
+}
+// restore
+try{
+  const saved=JSON.parse(localStorage.getItem('vyora_health_conditions')||'[]');
+  if(Array.isArray(saved)&&saved.length){
+    document.querySelectorAll('#condRow button').forEach(x=>x.classList.remove('active'));
+    saved.forEach(c=>{const b=document.querySelector('#condRow [data-c="'+c+'"]'); if(b) b.classList.add('active');});
+    if(condNote) condNote.textContent=saved.map(c=>condNotes[c]||'').filter(Boolean).join(' ')||condNotes.none;
+  }
+}catch(e){}
 document.querySelectorAll('#condRow button').forEach(b=>b.addEventListener('click',()=>{
   if(b.dataset.c==='none'){document.querySelectorAll('#condRow button').forEach(x=>x.classList.remove('active'));b.classList.add('active');}
   else {document.querySelector('#condRow [data-c="none"]').classList.remove('active');b.classList.toggle('active');}
-  const active=[...document.querySelectorAll('#condRow button.active')].map(x=>x.dataset.c);condNote.textContent=active.length?active.map(c=>condNotes[c]).join(' '):condNotes.none;
+  const active=persistConditions();
+  if(condNote) condNote.textContent=active.length?active.map(c=>condNotes[c]).join(' '):condNotes.none;
 }));
 const medList=document.getElementById('medList'), status=document.getElementById('medStatus');
 const channel=document.getElementById('medChannel'), emailField=document.getElementById('medEmailField'), phoneField=document.getElementById('medPhoneField');
