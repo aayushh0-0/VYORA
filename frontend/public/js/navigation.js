@@ -61,6 +61,17 @@
       b.classList.toggle("active", b.dataset.target === target);
     });
     document.body.dataset.section = target;
+    // Unlock page scroll when leaving VYORA chat
+    if (target === "vyora") {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      const stage = document.querySelector(".stage");
+      if (stage) {
+        stage.style.height = "";
+        stage.style.overflow = "";
+      }
+    }
     try {
       window.scrollTo({ top: 0, behavior: "instant" });
     } catch (_) {

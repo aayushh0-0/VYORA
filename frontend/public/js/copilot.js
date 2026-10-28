@@ -2,6 +2,33 @@
 (function(){
 const {addMsg,wireChat,wireMic,triggerWave,navigate,speakWithOrb}=window.VyoraCore;
 let persona = "calm";
+
+// Provided VYORA energy orb (assets/orb/orb.js)
+let vyoraOrbEmpty = null;
+let vyoraOrbChat = null;
+function initVyoraOrbs(){
+  if(!window.VyoraOrb || typeof window.VyoraOrb.create !== "function") return;
+  const emptyHost = document.getElementById("vyoraOrbEmpty");
+  const chatHost = document.getElementById("vyoraOrbChat");
+  try {
+    if(emptyHost && !vyoraOrbEmpty){
+      vyoraOrbEmpty = window.VyoraOrb.create(emptyHost, {});
+      vyoraOrbEmpty.setState("idle");
+    }
+    if(chatHost && !vyoraOrbChat){
+      vyoraOrbChat = window.VyoraOrb.create(chatHost, {});
+      vyoraOrbChat.setState("idle");
+    }
+  } catch(e) { console.warn("VyoraOrb init:", e); }
+}
+function setVyoraOrbState(state){
+  try {
+    vyoraOrbEmpty?.setState?.(state);
+    vyoraOrbChat?.setState?.(state);
+  } catch(_){}
+}
+initVyoraOrbs();
+
 let lastUserMsg = "";
 let lastBotReply = "";
 
@@ -177,7 +204,8 @@ function commandAction(msg){
   if(m.includes('compare')||m.includes('progress')){navigate('training'); window.VyoraTraining?.showTab('train'); window.VyoraTraining?.runAction('compare'); return 'Opening Progress Comparison.';}
   if(m.includes('intelligence')||m.includes('insight')){navigate('training'); window.VyoraTraining?.showTab('train'); window.VyoraTraining?.runAction('intelligence'); return 'Opening Athlete Intelligence.';}
   if(m.includes('route')||m.includes('map')){navigate('training'); window.VyoraTraining?.showTab('explore'); window.VyoraTraining?.runAction('routes'); return 'Opening personalized route planning.';}
-  if(m.includes('layer')||m.includes('elevation')||m.includes('terrain')){navigate('training'); window.VyoraTraining?.showTab('explore'); window.VyoraTraining?.runAction('layers'); return 'Opening route layers.';}
+  if(m.includes('terrain')||m.includes('trail')){navigate('training'); window.VyoraTraining?.showTab('explore'); window.VyoraTraining?.runAction('terrain'); return 'Opening terrain exploration.';}
+  if(m.includes('poi')||m.includes('point of interest')){navigate('training'); window.VyoraTraining?.showTab('explore'); window.VyoraTraining?.runAction('poi'); return 'Opening points of interest.';}
   if(m.includes('destination')||m.includes('stop')||m.includes('café')||m.includes('cafe')){navigate('training'); window.VyoraTraining?.showTab('explore'); window.VyoraTraining?.runAction('destination'); return 'Opening destination and stop planning.';}
   if(m.includes('leaderboard')||m.includes('ranking')){navigate('training'); window.VyoraTraining?.showTab('compete'); window.VyoraTraining?.runAction('leaderboard'); return 'Opening the leaderboard.';}
   if(m.includes('challenge')||m.includes('friends')){navigate('training'); window.VyoraTraining?.showTab('compete'); window.VyoraTraining?.runAction('challenge'); return 'Opening Group Challenge.';}
@@ -185,34 +213,174 @@ function commandAction(msg){
   const sections=[
     ['workout',['workout','exercise']],['training',['special training','training intelligence','special workout']],['diet',['diet','nutrition','meal']],['locator',['gym','gyms','cafe','nearby','near me']],
     ['community',['community','blog','vlog','reel']],['ovula',['ovula','cycle','cramp']],['business',['business','partner','campaign']],
-    ['health',['health','condition','diabetes','thyroid','blood pressure','medication','medicine','vital','blood sugar']],['pro',['pro','trainer','book trainer']],['home',['home','dashboard','copilot','plan']]
+    ['health',['health','condition','diabetes','thyroid','blood pressure','medication','medicine','vital','blood sugar']],['pro',['pro','trainer','book trainer']],['vyora',['copilot','talk to vyora']],['home',['home','dashboard','plan']]
   ];
-  for(const [id,words] of sections){if(words.some(w=>m.includes(w))){navigate(id); return 'Opening '+id.replace('locator','Gyms and Cafés').replace('pro','VYORA Pro')+'.';}}
+  for(const [id,words] of sections){if(words.some(w=>m.includes(w))){navigate(id); return 'Opening '+id.replace('locator','Gyms and Cafés').replace('pro','VYORA Pro').replace('vyora','VYORA Chat')+'.';}}
   return null;
 }
 
-wireChat("vyoraInput","vyoraSend","vyoraLog","orbChat",vyoraReply);
-
-// Initial welcome bubble (matches modern chat layout)
-(function seedWelcome(){
+function showVyoraEmpty(){
+  document.getElementById("vyora")?.classList.remove("is-chatting");
+  document.getElementById("vyoraEmpty")?.removeAttribute("hidden");
+  document.getElementById("vyoraChatPanel")?.setAttribute("hidden","");
+  document.getElementById("vyoraBottomComposer")?.setAttribute("hidden","");
+  document.getElementById("vyoraJumpLatest")?.classList.remove("is-visible");
+  requestAnimationFrame(() => {
+    initVyoraOrbs();
+    setVyoraOrbState("idle");
+  });
+}
+function showVyoraChat(){
+  const empty = document.getElementById("vyoraEmpty");
+  const chat = document.getElementById("vyoraChatPanel");
+  const bar = document.getElementById("vyoraBottomComposer");
+  const page = document.getElementById("vyora");
+  page?.classList.add("is-chatting");
+  if(empty) empty.setAttribute("hidden","");
+  if(chat) chat.removeAttribute("hidden");
+  if(bar) bar.removeAttribute("hidden");
+  requestAnimationFrame(() => {
+    initVyoraOrbs();
+    setVyoraOrbState("idle");
+    scrollVyoraLogToBottom(false);
+    updateVyoraJumpBtn();
+  });
+}
+function resetVyoraChat(){
+  chatHistory = [];
+  lastUserMsg = "";
+  lastBotReply = "";
   const log = document.getElementById("vyoraLog");
-  if (!log || log.children.length) return;
-  const welcome = "Hey — I'm VYORA 👋\nAsk me about today's workout, your diet, recovery, or anything fitness-related.\nI'll give you practical, easy-to-follow guidance.";
-  if (typeof addMsg === "function") addMsg("vyoraLog", "bot", welcome);
-  else if (window.VyoraCore?.addMsg) window.VyoraCore.addMsg("vyoraLog", "bot", welcome);
+  if(log) log.innerHTML = "";
+  showVyoraEmpty();
+  const emptyInput = document.getElementById("vyoraInputEmpty");
+  if(emptyInput) emptyInput.value = "";
+  const input = document.getElementById("vyoraInput");
+  if(input) input.value = "";
+}
+
+function sendVyoraMessage(raw){
+  const msg = String(raw || "").trim();
+  if(!msg) return;
+  showVyoraChat();
+  // Prefer the wired send path via input
+  const input = document.getElementById("vyoraInput");
+  if(input){
+    input.value = msg;
+    document.getElementById("vyoraSend")?.click();
+  }
+}
+
+// Primary chat composer (bottom bar)
+wireChat("vyoraInput","vyoraSend","vyoraLog","orbChat",vyoraReply);
+// Ensure chat panel visible when sending from bottom bar
+document.getElementById("vyoraSend")?.addEventListener("click", () => {
+  if(document.getElementById("vyoraInput")?.value.trim()) showVyoraChat();
+}, true);
+
+
+// Empty-state composer → first message
+(function wireEmptyComposer(){
+  const input = document.getElementById("vyoraInputEmpty");
+  const send = document.getElementById("vyoraSendEmpty");
+  if(!input || !send) return;
+  const go = () => {
+    const v = input.value.trim();
+    if(!v) return;
+    input.value = "";
+    sendVyoraMessage(v);
+  };
+  send.addEventListener("click", go);
+  input.addEventListener("keydown", e => { if(e.key === "Enter") go(); });
 })();
 
-wireMic("vyoraMic","vyoraInput","orbChat",async (transcript)=>{
-  const action=commandAction(transcript);
-  addMsg("vyoraLog","user",transcript);
-  const reply=action || await vyoraReply(transcript);
-  addMsg("vyoraLog","bot",reply);
-  speakWithOrb(reply,document.getElementById('orbChat'),document.getElementById('orbChatStatus'));
-  document.getElementById('vyoraInput').value='';
+// Mic on empty state
+wireMic("vyoraMicEmpty","vyoraInputEmpty","orbChat", async (transcript) => {
+  sendVyoraMessage(transcript);
 });
-setTimeout(()=>triggerWave("orbWave"),700);
-let ovulaWaved=false;
-document.querySelectorAll('[data-target="ovula"]').forEach(b=>b.addEventListener("click",()=>{
-  if(!ovulaWaved){ ovulaWaved=true; setTimeout(()=>triggerWave("orbOWave"),400); }
-}));
+
+// Mic on chat bar
+wireMic("vyoraMic","vyoraInput","orbChat", async (transcript) => {
+  showVyoraChat();
+  addMsg("vyoraLog","user",transcript);
+  try {
+    const reply = await vyoraReply(transcript);
+    addMsg("vyoraLog","bot",reply);
+    speakWithOrb(reply, document.getElementById("orbChat"), document.getElementById("orbChatStatus"));
+  } catch(e) {
+    addMsg("vyoraLog","bot", e?.message || "Could not reach VYORA.");
+  }
+  const input = document.getElementById("vyoraInput");
+  if(input) input.value = "";
+});
+
+// Suggestion cards
+document.getElementById("vyoraSuggestions")?.addEventListener("click", e => {
+  const btn = e.target.closest("[data-prompt]");
+  if(!btn) return;
+  sendVyoraMessage(btn.getAttribute("data-prompt"));
+});
+
+// Persona select → legacy personaRow + variable
+const personaSelect = document.getElementById("vyoraPersonaSelect");
+personaSelect?.addEventListener("change", () => {
+  persona = personaSelect.value || "calm";
+  document.querySelectorAll("#personaRow button").forEach(b => {
+    b.classList.toggle("active", b.dataset.p === persona);
+  });
+});
+
+// New chat
+document.getElementById("vyoraNewChat")?.addEventListener("click", resetVyoraChat);
+
+
+// Sync energy orb states with chat activity
+(function syncOrbStates(){
+  const legacy = document.getElementById("orbChat");
+  if(!legacy || !window.MutationObserver) return;
+  const mo = new MutationObserver(() => {
+    if(legacy.classList.contains("talk")) setVyoraOrbState("responding");
+    else if(legacy.classList.contains("think")) setVyoraOrbState("thinking");
+    else if(legacy.classList.contains("listen")) setVyoraOrbState("listening");
+    else setVyoraOrbState("idle");
+  });
+  mo.observe(legacy, { attributes:true, attributeFilter:["class"] });
+})();
+
+
+function scrollVyoraLogToBottom(smooth){
+  const log = document.getElementById("vyoraLog");
+  if(!log) return;
+  log.scrollTo({ top: log.scrollHeight, behavior: smooth ? "smooth" : "auto" });
+}
+function updateVyoraJumpBtn(){
+  const log = document.getElementById("vyoraLog");
+  const btn = document.getElementById("vyoraJumpLatest");
+  if(!log || !btn) return;
+  const dist = log.scrollHeight - log.scrollTop - log.clientHeight;
+  btn.classList.toggle("is-visible", dist > 80);
+}
+(function wireVyoraScroll(){
+  const log = document.getElementById("vyoraLog");
+  const btn = document.getElementById("vyoraJumpLatest");
+  if(log){
+    log.addEventListener("scroll", updateVyoraJumpBtn, { passive: true });
+  }
+  btn?.addEventListener("click", () => {
+    scrollVyoraLogToBottom(true);
+    btn.classList.remove("is-visible");
+  });
+  // After messages append, stay at bottom if already near end
+  const mo = log && new MutationObserver(() => {
+    const dist = log.scrollHeight - log.scrollTop - log.clientHeight;
+    if(dist < 120) scrollVyoraLogToBottom(false);
+    updateVyoraJumpBtn();
+  });
+  if(mo && log) mo.observe(log, { childList: true, subtree: true });
+})();
+
+// Start on empty state (no auto welcome bubble)
+showVyoraEmpty();
+initVyoraOrbs();
+
 })();

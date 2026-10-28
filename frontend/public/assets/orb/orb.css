@@ -1,0 +1,4 @@
+/* VYORA orb host styles. Orb size: set --orb-size on the container. */
+.vyora-orb{display:block;width:var(--orb-size,min(72vmin,640px));aspect-ratio:1;margin:0 auto;contain:layout paint style}
+.vyora-orb svg{display:block;width:100%;height:100%;overflow:visible;background:transparent}
+.vyora-orb img{width:100%;height:100%}

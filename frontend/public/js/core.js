@@ -12,6 +12,15 @@ function formatMsgTime(d){
   }
 }
 
+function formatChatText(text){
+  const d = document.createElement('div');
+  d.textContent = String(text ?? '');
+  let h = d.innerHTML;
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  h = h.replace(/(^|\n)[•\*]\s+/g, '$1• ');
+  h = h.replace(/\n/g, '<br>');
+  return h;
+}
 function addMsg(logId, cls, text){
   const log = document.getElementById(logId);
   if (!log) return null;
@@ -40,7 +49,7 @@ function addMsg(logId, cls, text){
   col.className = 'msg-col';
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
-  bubble.textContent = text;
+  bubble.innerHTML = formatChatText(text);
   const meta = document.createElement('div');
   meta.className = 'msg-meta';
   meta.textContent = formatMsgTime();
