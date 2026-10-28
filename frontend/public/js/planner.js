@@ -639,6 +639,9 @@
           guest: generated.guest === true || generated.persisted === false,
           savedAt: new Date().toISOString()
         }));
+        if (window.VyoraNotifications && VyoraNotifications.refresh) {
+          try { VyoraNotifications.refresh(); } catch (_) {}
+        }
       } catch (storageError) {
         console.warn('Could not cache plan locally', storageError);
       }
