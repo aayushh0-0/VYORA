@@ -42,6 +42,36 @@
     listAudit:()=>get('/api/audit'),
     // Copilot Memory, Safety Report & Adaptive Plans
     chat:async(message,mode='vyora',history=[],persona='calm') => (await post('/api/chat',{message,mode,history,persona})).answer,
+    chatStream:async(message,mode='vyora',history=[],persona='calm',onDelta)=>{
+      if(!token) await createSession();
+      const body=JSON.stringify({message,mode,history,persona});
+      const headers={'content-type':'application/json',authorization:'Bearer '+token};
+      let response=await fetch('/api/chat/stream',{method:'POST',headers,body});
+      if(response.status===401){localStorage.removeItem('vyoraSessionToken');token=null;await createSession();response=await fetch('/api/chat/stream',{method:'POST',headers:{...headers,authorization:'Bearer '+token},body});}
+      if(!response.ok){const data=await response.json().catch(()=>({}));throw new Error(data.error||('Request failed ('+response.status+')'));}
+      if(!response.body) throw new Error('Streaming not supported in this browser');
+      const reader=response.body.getReader();
+      const decoder=new TextDecoder();
+      let buffer='', full='';
+      while(true){
+        const {done,value}=await reader.read();
+        if(done) break;
+        buffer+=decoder.decode(value,{stream:true});
+        const lines=buffer.split('\n');
+        buffer=lines.pop()||'';
+        for(const line of lines){
+          const trimmed=line.trim();
+          if(!trimmed.startsWith('data:')) continue;
+          const payload=trimmed.slice(5).trim();
+          if(!payload) continue;
+          let evt; try{evt=JSON.parse(payload);}catch{continue;}
+          if(evt.type==='delta'&&evt.text){full+=evt.text;if(typeof onDelta==='function') onDelta(evt.text,full);}
+          if(evt.type==='error') throw new Error(evt.error||'Stream error');
+          if(evt.type==='done') full=evt.answer||full;
+        }
+      }
+      return full.trim();
+    },
     chatFull:(message,mode='vyora',history=[],persona='calm') => post('/api/ai/chat',{message,mode,history,persona}),
     getChatMemory:()=>get('/api/chat/memory'),
     saveChatMemory:items=>put('/api/chat/memory',{items}),

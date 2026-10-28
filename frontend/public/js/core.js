@@ -1,21 +1,178 @@
 // Shared runtime branch: chat + speech utilities
 (function(){
-function addMsg(logId, cls, text){
-  const log=document.getElementById(logId); if(!log) return;
-  const d=document.createElement("div"); d.className="msg "+cls; d.textContent=text;
-  log.appendChild(d); log.scrollTop=log.scrollHeight;
+function formatMsgTime(d){
+  try {
+    return new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(d || new Date());
+  } catch {
+    const x = d || new Date();
+    let h = x.getHours(), m = x.getMinutes();
+    const ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + ':' + String(m).padStart(2, '0') + ' ' + ap;
+  }
 }
+
+function addMsg(logId, cls, text){
+  const log = document.getElementById(logId);
+  if (!log) return null;
+  const isBot = cls === 'bot';
+  const isSystem = cls === 'system';
+  if (isSystem) {
+    const d = document.createElement('div');
+    d.className = 'msg-row system';
+    d.textContent = text;
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + (isBot ? 'bot' : 'user');
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.setAttribute('aria-hidden', 'true');
+  if (isBot) {
+    avatar.innerHTML = '<img class="msg-avatar-img" src="assets/vyora-avatar.svg" alt="VYORA" width="36" height="36" />';
+  } else {
+    avatar.innerHTML = '<img class="msg-avatar-img" src="assets/user-avatar.svg" alt="You" width="36" height="36" />';
+  }
+
+  const col = document.createElement('div');
+  col.className = 'msg-col';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = text;
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  meta.textContent = formatMsgTime();
+  col.append(bubble, meta);
+
+  if (isBot) row.append(avatar, col);
+  else row.append(col, avatar);
+
+  log.appendChild(row);
+  log.scrollTop = log.scrollHeight;
+  return row;
+}
+
+/** Compact typing indicator — loader sized like the avatar (~36px). */
+function addTypingMsg(logId){
+  const log = document.getElementById(logId);
+  if (!log) return null;
+  const row = document.createElement('div');
+  row.className = 'msg-row bot typing';
+  row.setAttribute('aria-live', 'polite');
+  row.setAttribute('aria-label', 'VYORA is thinking');
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.innerHTML = '<img class="msg-avatar-img" src="assets/vyora-avatar.svg" alt="VYORA" width="36" height="36" />';
+
+  const col = document.createElement('div');
+  col.className = 'msg-col';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble typing-bubble';
+  const loader = document.createElement('div');
+  loader.className = 'msg-loader';
+  const img = document.createElement('img');
+  img.src = 'assets/loading_animation.svg';
+  img.alt = '';
+  img.width = 28;
+  img.height = 28;
+  img.decoding = 'async';
+  loader.appendChild(img);
+  const text = document.createElement('div');
+  text.className = 'msg-typing-text';
+  text.hidden = true;
+  bubble.append(loader, text);
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  meta.textContent = formatMsgTime();
+  col.append(bubble, meta);
+
+  row.append(avatar, col);
+  log.appendChild(row);
+  log.scrollTop = log.scrollHeight;
+  return row;
+}
+
+function setTypingText(el, value){
+  if (!el) return;
+  const loader = el.querySelector('.msg-loader');
+  const text = el.querySelector('.msg-typing-text');
+  const bubble = el.querySelector('.msg-bubble');
+  if (text) {
+    text.hidden = false;
+    text.textContent = value;
+  } else if (bubble) {
+    bubble.textContent = value;
+  }
+  if (loader) loader.hidden = true;
+  el.classList.remove('typing');
+  if (bubble) bubble.classList.remove('typing-bubble');
+  const log = el.closest('.chat-log') || el.parentElement;
+  if (log) log.scrollTop = log.scrollHeight;
+}
+
 function speakWithOrb(text, orb, status){
   if(!orb) return;
-  orb.classList.remove("think","listen"); orb.classList.add("talk"); if(status) status.textContent="Speaking…";
-  const done=()=>{ orb.classList.remove("talk"); if(status) status.textContent="Ready"; };
+  orb.classList.remove("think","listen","lip-open","lip-shut");
+  orb.classList.add("talk");
+  // Do not show "Speaking…" — the face + equalizer express it
+  if(status){ status.dataset.prev = status.textContent; status.textContent = ""; }
+
+  let lipTimer = null;
+  const clearLip = () => {
+    if(lipTimer){ clearInterval(lipTimer); lipTimer = null; }
+    orb.classList.remove("lip-open","lip-shut","talk");
+    if(status) status.textContent = "Ready";
+  };
+
+  const startFallbackLip = () => {
+    // Approximate lip flaps when boundary events are unavailable
+    let open = false;
+    lipTimer = setInterval(() => {
+      open = !open;
+      orb.classList.toggle("lip-open", open);
+      orb.classList.toggle("lip-shut", !open);
+    }, 140);
+  };
+
   try{
     if("speechSynthesis" in window){
-      const u=new SpeechSynthesisUtterance(text);
-      u.onend=done; u.onerror=done;
-      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
-    } else { setTimeout(done, Math.min(4500, 1200+text.length*35)); }
-  }catch(e){ setTimeout(done,1500); }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(String(text || ""));
+      u.rate = 1.02;
+      u.pitch = 1.05;
+      // Boundary events drive more natural lip sync when the engine supports them
+      let gotBoundary = false;
+      u.onboundary = (ev) => {
+        if(ev.name === "word" || ev.name === "sentence"){
+          gotBoundary = true;
+          if(lipTimer){ clearInterval(lipTimer); lipTimer = null; }
+          orb.classList.add("lip-open");
+          orb.classList.remove("lip-shut");
+          setTimeout(() => {
+            if(orb.classList.contains("talk")){
+              orb.classList.remove("lip-open");
+              orb.classList.add("lip-shut");
+            }
+          }, 90);
+        }
+      };
+      u.onstart = () => {
+        setTimeout(() => { if(!gotBoundary && orb.classList.contains("talk")) startFallbackLip(); }, 400);
+      };
+      u.onend = clearLip;
+      u.onerror = clearLip;
+      window.speechSynthesis.speak(u);
+    } else {
+      startFallbackLip();
+      setTimeout(clearLip, Math.min(4500, 1200 + String(text||"").length * 35));
+    }
+  }catch(e){
+    startFallbackLip();
+    setTimeout(clearLip, 1500);
+  }
 }
 function wireChat(inputId, sendId, logId, orbId, replyFn){
   const input=document.getElementById(inputId), orb=document.getElementById(orbId);
@@ -29,19 +186,25 @@ function wireChat(inputId, sendId, logId, orbId, replyFn){
     if(sendBtn) sendBtn.disabled=true;
     addMsg(logId,"user",val); input.value="";
     orb.classList.remove("talk","listen");
-    orb.classList.add("think"); if(status) status.textContent="Thinking…";
+    orb.classList.add("think");
+    if(status) status.textContent="Thinking…";
+    const typing=addTypingMsg(logId);
     try {
-      const reply=await replyFn(val);
+      const reply=await replyFn(val, {
+        onDelta(chunk, full){
+          setTypingText(typing, full);
+        }
+      });
       orb.classList.remove("think");
-      addMsg(logId,"bot",reply);
+      if(typing) setTypingText(typing, reply);
+      else addMsg(logId,"bot",reply);
       speakWithOrb(reply, orb, status);
     } catch(e) {
       orb.classList.remove("think");
       if(status) status.textContent="Error";
-      const reply=e?.message
-        ? String(e.message)
-        : "I couldn't connect to the AI service right now. Check that the backend is running and GEMINI_API_KEY is set.";
-      addMsg(logId,"bot",reply); speakWithOrb(reply, orb, status);
+      const reply=e?.message || "I couldn't connect to the AI service right now.";
+      if(typing) setTypingText(typing, reply);
+      else addMsg(logId,"bot",reply);
     } finally {
       busy=false;
       if(sendBtn) sendBtn.disabled=false;
@@ -52,6 +215,7 @@ function wireChat(inputId, sendId, logId, orbId, replyFn){
   input.addEventListener("keydown",e=>{if(e.key==="Enter")send();});
   return {send};
 }
+
 function wireMic(btnId, inputId, orbId, onVoice){
   const btn=document.getElementById(btnId), input=document.getElementById(inputId);
   const orb=document.getElementById(orbId), status=document.getElementById(orbId+"Status");
@@ -61,16 +225,7 @@ function wireMic(btnId, inputId, orbId, onVoice){
   let on=false;
   btn.addEventListener("click",()=>{
     if(on){ rec.stop(); return; }
-    try{
-      rec.start();
-      on=true;
-      btn.classList.add("on");
-      orb.classList.remove("talk","think");
-      orb.classList.add("listen");
-      if(status) status.textContent="Listening…";
-    }catch(e){
-      if(status) status.textContent="Mic error or blocked";
-    }
+    try{ rec.start(); on=true; btn.classList.add("on"); orb.classList.add("listen"); if(status) status.textContent="Listening…"; }catch(e){}
   });
   rec.onresult=(e)=>{
     const transcript=e.results[0][0].transcript.trim();
@@ -78,16 +233,7 @@ function wireMic(btnId, inputId, orbId, onVoice){
     if(typeof onVoice==='function') onVoice(transcript);
   };
   rec.onend=()=>{ on=false; btn.classList.remove("on"); orb.classList.remove("listen"); if(status) status.textContent="Ready"; };
-  rec.onerror=(e)=>{
-    on=false; btn.classList.remove("on"); orb.classList.remove("listen");
-    if(status) {
-      if(e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-        status.textContent = "Mic permission denied. Enable mic in browser settings.";
-      } else {
-        status.textContent = "Voice error (" + (e.error || 'unknown') + "). Type below instead.";
-      }
-    }
-  };
+  rec.onerror=()=>{ on=false; btn.classList.remove("on"); orb.classList.remove("listen"); if(status) status.textContent="Ready"; };
 }
 function triggerWave(id){
   const el=document.getElementById(id); if(!el) return;
@@ -99,5 +245,5 @@ function navigate(target){
   if(b) b.click();
   else { const v=document.getElementById(target); if(v) v.classList.add('active'); }
 }
-window.VyoraCore={addMsg,speakWithOrb,wireChat,wireMic,triggerWave,navigate};
+window.VyoraCore={addMsg,addTypingMsg,setTypingText,speakWithOrb,wireChat,wireMic,triggerWave,navigate};
 })();

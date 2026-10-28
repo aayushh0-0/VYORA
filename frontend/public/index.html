@@ -7,8 +7,8 @@
 <title>VYORA — Fitness Copilot</title>
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
 
+<div class="app">
   <nav class="rail" aria-label="Main navigation">
     <div class="brand">VY<span>O</span>RA</div>
     <button class="navbtn active" data-target="home"><span class="dot"></span>Home</button>
@@ -21,10 +21,6 @@
     <button class="navbtn" data-target="business"><span class="dot"></span>For Business</button>
     <button class="navbtn" data-target="health"><span class="dot"></span>Health Journey</button>
     <button class="navbtn" data-target="pro"><span class="dot"></span>VYORA Pro</button>
-    <button type="button" class="navbtn notif-bell" id="vyoraNotifBell" aria-label="Open reminders" title="Reminders" aria-expanded="false">
-      <span class="notif-bell-glyph" aria-hidden="true">🔔</span>
-      <span class="notif-count" id="vyoraNotifCount" hidden>0</span>
-    </button>
     <div class="rail-foot">Prototype build · all AI replies are simulated client-side</div>
   </nav>
 
@@ -74,7 +70,8 @@
               <path d="M80,96Q76,110 80,115Q84,112 82,109" stroke="#c99a78" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".5"/>
               <ellipse cx="52" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
               <ellipse cx="108" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
-              <path class="mouth" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
+              <path class="mouth mouth-closed" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
+                <ellipse class="mouth mouth-open" cx="80" cy="136" rx="14" ry="8" fill="#8b3a4a" opacity="0"/>
             </svg></div>
             <div class="wave" id="orbWave">👋</div>
           </div>
@@ -173,19 +170,6 @@
       </div>
 
       <div id="planResults" style="display:none;margin-bottom:20px;">
-        <div class="card weekly-plan-header" id="weeklyPlanHeader" style="margin-bottom:14px;">
-          <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;">
-            <div>
-              <h2 style="margin:0 0 6px;font-size:28px;">Your Personalized Weekly Plan</h2>
-              <p id="weeklyPlanIntro" class="bottom-note" style="margin:0;">Based on your goals, experience, equipment, and schedule.</p>
-            </div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;">
-              <button type="button" class="btn ghost" id="btnEditPreferences">Edit Preferences</button>
-              <button type="button" class="btn" id="btnRegeneratePlan">Regenerate Plan</button>
-            </div>
-          </div>
-          <div id="weeklyPlanSummary" class="plan-summary" style="margin-top:14px;"></div>
-        </div>
         <div class="grid cols-2">
           <div class="card">
             <h3 style="margin-top:0;">Your diet plan</h3>
@@ -193,20 +177,10 @@
             <div id="rMeals"></div>
           </div>
           <div class="card">
-            <h3 style="margin-top:0;">Weekly workout schedule</h3>
+            <h3 style="margin-top:0;">Your workout split</h3>
             <p id="rWorkoutSummary" style="margin-top:0;"></p>
             <div id="rWorkoutDays"></div>
           </div>
-        </div>
-        <div class="card" id="vyoraPlanNotes" style="margin-top:14px;">
-          <h3 style="margin-top:0;">VYORA AI notes</h3>
-          <p id="weeklyAiNotes" class="bottom-note">Generate a plan to see why this schedule fits your profile.</p>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-            <input id="planModInput" type="text" maxlength="240" placeholder="Ask VYORA to modify this plan…" style="flex:1;min-width:200px;"/>
-            <button type="button" class="btn" id="btnPlanModify">Apply change</button>
-            <button type="button" class="btn ghost" id="btnAskVyoraPlan">Open Copilot</button>
-          </div>
-          <p id="planModStatus" class="bottom-note" aria-live="polite"></p>
         </div>
         <div class="grid cols-2" style="margin-top:14px;">
           <div class="card">
@@ -248,7 +222,8 @@
                 <path d="M80,96Q76,110 80,115Q84,112 82,109" stroke="#c99a78" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".5"/>
                 <ellipse cx="52" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
                 <ellipse cx="108" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
-                <path class="mouth" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
+                <path class="mouth mouth-closed" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
+                <ellipse class="mouth mouth-open" cx="80" cy="136" rx="14" ry="8" fill="#8b3a4a" opacity="0"/>
               </svg></div>
               <div class="wave" id="orbChatWave">👋</div>
             </div>
@@ -256,7 +231,7 @@
           </div>
           <div>
             <h3 style="margin:0 0 4px;">Talk to VYORA</h3>
-            <p style="margin:0;">Pick a coaching personality, then type your question. VYORA replies with general fitness and wellness tips (not medical advice).</p>
+            <p style="margin:0;">Pick a coaching personality, then type or use the mic — VYORA reacts as she listens, thinks, and replies.</p>
           </div>
         </div>
         <div class="persona-row" id="personaRow">
@@ -267,16 +242,16 @@
         </div>
         <div class="chat">
           <div class="chat-log" id="vyoraLog">
-            <div class="msg bot">Hey — I'm VYORA. Ask me about today's workout, your diet, or just say you're tired and I'll adjust things.</div>
+            <!-- Welcome bubble injected by JS for consistent avatar layout -->
           </div>
           <div class="chat-row">
-            <button class="mic" id="vyoraMic" title="Voice input" hidden style="display:none" aria-hidden="true">🎙</button>
-            <input id="vyoraInput" placeholder="Type a message to VYORA…" autocomplete="off" />
+            <button class="mic" id="vyoraMic" title="Voice input">🎙</button>
+            <input id="vyoraInput" placeholder="Type or speak to VYORA…" />
             <button class="btn" id="vyoraSend">Send</button>
           </div>
         </div>
       </div>
-      <p class="bottom-note">Text chat only for now. Tips are general wellness guidance — not a diagnosis. Confirm important health decisions with a physician or qualified professional.</p>
+      <p class="bottom-note">Voice uses your browser's built-in speech APIs when available; otherwise use text — everything still works.</p>
     </section>
 
     <!-- WORKOUT -->
@@ -297,8 +272,7 @@
       <div class="section-banner"><span>02</span><strong>TRAIN / EXPLORE / COMPETE</strong><em>SPECIAL TRAINING</em></div>
       <p class="eyebrow">VYORA Special Training</p>
       <h1 class="title">Train beyond the workout</h1>
-      <p class="sub">Athlete dashboard, simulated recording, segments, challenges and leaderboards — demo data stays on this device.</p>
-      <p class="bottom-note st-disclaimer">Simulated tracking only. No live GPS. Rankings and segments use demo data unless you connect real services later.</p>
+      <p class="sub">Performance intelligence, personalized routes, challenges and local discovery — all controlled by voice through VYORA Copilot.</p>
 
       <div class="training-tabs" role="tablist" aria-label="Special training categories">
         <button class="active" data-training-tab="train">TRAIN</button>
@@ -307,84 +281,91 @@
       </div>
 
       <div class="training-feature-index" aria-label="Special Training features">
-        <span><b>01</b> Dashboard</span>
-        <span><b>02</b> Record (sim)</span>
-        <span><b>03</b> Activities</span>
-        <span><b>04</b> Segments</span>
-        <span><b>05</b> Leaderboards</span>
-        <span><b>06</b> Challenges</span>
-        <span><b>07</b> Predictions API</span>
+        <span><b>03</b> Performance Predictions</span>
+        <span><b>04</b> Progress Comparison</span>
+        <span><b>05</b> Athlete Intelligence</span>
+        <span><b>06</b> Personalized Routes</span>
+        <span><b>07</b> 3D Terrain + Elevation</span>
+        <span><b>08</b> Stops + Destinations</span>
+        <span><b>09</b> Leaderboards</span>
+        <span><b>10</b> Group Challenges</span>
+        <span><b>11</b> Local Legend + Segments</span>
       </div>
 
       <div class="training-panel active" data-training-panel="train">
-        <div id="stTrainHub" class="st-hub"></div>
-        <div class="training-grid st-api-grid" style="margin-top:18px;">
+        <div class="training-grid">
           <article class="training-card">
-            <h2>Predict your performance</h2>
-            <p>Advisory race-time estimates from logged VYORA workouts when enough history exists.</p>
-            <button class="btn ghost training-action" type="button" data-action="predict">Run prediction</button>
+            <div class="feature-visual performance-visual">
+              <div class="mini-window"><b>Performance Predictions</b><div class="prediction-grid"><strong>5K<br><small>28:29</small></strong><strong>10K<br><small>59:27</small></strong><strong>13.1 MI<br><small>2:12:08</small></strong><strong>26.2 MI<br><small>4:33:05</small></strong></div></div>
+            </div>
+            <h2>Predict your performance</h2><p>Estimate race times from your recent training, recovery and effort trends.</p>
+            <button class="btn ghost training-action" data-action="predict">Run prediction</button>
           </article>
           <article class="training-card">
-            <h2>Compare your progress</h2>
-            <p>Training load vs your personal baseline from saved logs.</p>
-            <button class="btn ghost training-action" type="button" data-action="compare">Compare progress</button>
+            <div class="feature-visual chart-visual"><div class="chart-line"></div><div class="chart-dot d1"></div><div class="chart-dot d2"></div><div class="chart-dot d3"></div><div class="chart-label">Progress Comparison</div></div>
+            <h2>Compare your progress</h2><p>See current training load and performance against your personal baseline.</p>
+            <button class="btn ghost training-action" data-action="compare">Compare progress</button>
           </article>
           <article class="training-card">
-            <h2>Athlete intelligence</h2>
-            <p>Short insights from recent sessions — not medical advice.</p>
-            <button class="btn ghost training-action" type="button" data-action="intelligence">Show insights</button>
+            <div class="feature-visual intel-visual"><div class="intel-copy"><b>Athlete Intelligence</b><span>Your pace was 13 seconds faster than your 30-day average.</span></div></div>
+            <h2>Get athlete intelligence</h2><p>VYORA turns your activity patterns into clear, useful coaching insights.</p>
+            <button class="btn ghost training-action" data-action="intelligence">Show insights</button>
           </article>
         </div>
-        <div id="trainingResult" class="card st-api-result" hidden></div>
       </div>
 
       <div class="training-panel" data-training-panel="explore">
-        <div id="stExploreHub" class="st-hub"></div>
-        <div class="training-grid st-api-grid" style="margin-top:18px;">
+        <div class="training-grid">
           <article class="training-card">
-            <h2>Personalized routes</h2>
-            <p>Prototype placeholder — live maps need a configured provider. Not invented listings.</p>
-            <button class="btn ghost training-action" type="button" data-action="routes">Build my route</button>
+            <div class="feature-visual map-visual route-map"><span class="route-path"></span><span class="route-pin">◎</span><div class="map-label">MADE FOR YOU</div></div>
+            <h2>Get routes made for you</h2><p>Personalized running, walking and cycling routes based on your goal and training history.</p>
+            <button class="btn ghost training-action" data-action="routes">Build my route</button>
           </article>
           <article class="training-card">
-            <h2>Stops &amp; destinations</h2>
-            <p>Add a café or recovery stop in a future maps build.</p>
-            <button class="btn ghost training-action" type="button" data-action="destination">Add destination</button>
+            <div class="feature-visual terrain-visual"><div class="terrain-lines"></div><div class="terrain-layer">3D LAYERS</div></div>
+            <h2>Plan smarter with new layers</h2><p>Preview elevation, terrain, steep climbs and route conditions before you train.</p>
+            <button class="btn ghost training-action" data-action="layers">Show route layers</button>
+          </article>
+          <article class="training-card">
+            <div class="feature-visual poi-visual"><div class="poi-map"></div><span class="poi-marker">●</span><div class="poi-card"><b>Royal Arch</b><small>1.94 mi away · viewpoint</small></div></div>
+            <h2>Add a stop or destination</h2><p>Add a viewpoint, water stop, café or recovery destination directly to your training route.</p>
+            <button class="btn ghost training-action" data-action="destination">Add destination</button>
           </article>
         </div>
       </div>
 
       <div class="training-panel" data-training-panel="compete">
-        <div id="stCompeteHub" class="st-hub"></div>
+        <div class="training-grid">
+          <article class="training-card">
+            <div class="feature-visual leaderboard-visual"><div class="leader-row"><b>1</b><span>Arby</span><em>♛</em></div><div class="leader-row"><b>2</b><span>You</span><em>↗</em></div><div class="leader-row"><b>3</b><span>Hannah</span><em>—</em></div><div class="leader-row"><b>4</b><span>Brian</span><em>—</em></div></div>
+            <h2>Climb the leaderboards</h2><p>Compare your pace, distance and consistency with your local training community.</p>
+            <button class="btn ghost training-action" data-action="leaderboard">Open leaderboard</button>
+          </article>
+          <article class="training-card">
+            <div class="feature-visual challenge-visual"><div><b>You</b><span><i style="width:88%"></i></span><small>46h / 50h</small></div><div><b>Maya</b><span><i style="width:70%"></i></span><small>36h / 50h</small></div><div><b>Alex</b><span><i style="width:44%"></i></span><small>22h / 50h</small></div><div><b>John</b><span><i style="width:26%"></i></span><small>13h / 50h</small></div></div>
+            <h2>Challenge your friends</h2><p>Turn motivation into a group activity and compete on shared goals.</p>
+            <button class="btn ghost training-action" data-action="challenge">Create challenge</button>
+          </article>
+          <article class="training-card">
+            <div class="feature-visual legend-visual"><div class="legend-badge">27</div><b>LOCAL LEGEND</b><span>Own your local segment.</span></div>
+            <h2>Become a local legend</h2><p>Chase your strongest local segments and earn status through consistent performance.</p>
+            <button class="btn ghost training-action" data-action="legend">Find my segments</button>
+          </article>
+        </div>
       </div>
 
       <div class="card" style="margin:14px 0;">
-        <h3 style="margin-top:0;">Create a personal challenge (account)</h3>
-        <p class="bottom-note">Synced via VYORA API when signed in. Demo challenges above stay on-device.</p>
-        <div class="grid cols-2">
-          <div class="field"><label for="challengeTitle">Challenge title</label><input id="challengeTitle" placeholder="e.g. 30 km this week"/></div>
-          <div class="field"><label for="challengeGoal">Goal</label><input id="challengeGoal" placeholder="Walk or run consistently"/></div>
-          <div class="field"><label for="challengeTarget">Target number</label><input id="challengeTarget" type="number" min="1" step="0.1" placeholder="30"/></div>
-          <div class="field"><label for="challengeUnit">Unit</label><select id="challengeUnit"><option value="km">km</option><option value="minutes">minutes</option><option value="sessions">sessions</option><option value="litres">litres</option></select></div>
-          <div class="field"><label for="challengeStart">Start date</label><input id="challengeStart" type="date"/></div>
-          <div class="field"><label for="challengeEnd">End date</label><input id="challengeEnd" type="date"/></div>
-        </div>
-        <button class="btn" id="challengeCreate" type="button">Create challenge</button>
-        <p id="challengeStatus" class="bottom-note" aria-live="polite"></p>
-        <div id="challengeList" style="margin-top:10px;"></div>
+        <h3 style="margin-top:0;">Create a personal challenge</h3>
+        <div class="grid cols-2"><div class="field"><label for="challengeTitle">Challenge title</label><input id="challengeTitle" placeholder="e.g. 30 km this week"/></div><div class="field"><label for="challengeGoal">Goal</label><input id="challengeGoal" placeholder="Walk or run consistently"/></div><div class="field"><label for="challengeTarget">Target number</label><input id="challengeTarget" type="number" min="1" step="0.1" placeholder="30"/></div><div class="field"><label for="challengeUnit">Unit</label><select id="challengeUnit"><option value="km">km</option><option value="minutes">minutes</option><option value="sessions">sessions</option><option value="litres">litres</option></select></div><div class="field"><label for="challengeStart">Start date</label><input id="challengeStart" type="date"/></div><div class="field"><label for="challengeEnd">End date</label><input id="challengeEnd" type="date"/></div></div>
+        <button class="btn" id="challengeCreate">Create challenge</button><p id="challengeStatus" class="bottom-note" aria-live="polite"></p><div id="challengeList" style="margin-top:10px;"></div>
       </div>
       <div class="card voice-command-card">
-        <div>
-          <span class="eyebrow">Voice-first control</span>
-          <h3 style="margin:4px 0 5px;font-size:28px;">Just tell VYORA what to do.</h3>
-          <p style="margin:0;">“VYORA, predict my 5K.” · “Open the leaderboard.” · “Start a group challenge.”</p>
-        </div>
-        <button class="btn" data-target="home" type="button">Talk to VYORA ↗</button>
+        <div><span class="eyebrow">Voice-first control</span><h3 style="margin:4px 0 5px;font-size:28px;">Just tell VYORA what to do.</h3><p style="margin:0;">“VYORA, predict my 5K.” · “Build a route with a café stop.” · “Open the leaderboard.” · “Start a group challenge.”</p></div>
+        <button class="btn" data-target="home">Talk to VYORA ↗</button>
       </div>
     </section>
 
-    
-<!-- DIET -->
+    <!-- DIET -->
     <section id="diet" class="view">
       <div class="section-banner"><span>02</span><strong>FUEL BETTER</strong><em>NUTRITION ENGINE</em></div>
       <p class="eyebrow">Nutrition Engine</p>
@@ -415,8 +396,8 @@
       <div class="section-banner"><span>03</span><strong>FIND YOUR PLACE</strong><em>GYMS & CAFÉS</em></div>
       <p class="eyebrow">Nearby</p>
       <h1 class="title">Gyms &amp; healthy cafés</h1>
-      <p class="sub">Search an area for gyms and cafés, open Google Maps directions, and save places you want — or add a place manually.</p>
-      <div class="filter-row" id="placeFilter" hidden>
+      <p class="sub">Discovery is location-based in the full build; this demo shows sample listings near you.</p>
+      <div class="filter-row" id="placeFilter">
         <button class="active" data-f="all">All</button>
         <button data-f="gym">Gyms</button>
         <button data-f="cafe">Cafés</button>
@@ -426,76 +407,19 @@
 
     <!-- COMMUNITY -->
     <section id="community" class="view">
-      <div class="section-banner"><span>04</span><strong>SHARE THE WORK</strong><em>COMMUNITY</em></div>
+      <div class="section-banner"><span>04</span><strong>SHARE THE WORK</strong><em>COMMUNITY HUB</em></div>
       <p class="eyebrow">Community</p>
-      <h1 class="title">Share progress</h1>
-      <p class="sub">Post updates, follow hubs, and cheer others on. Optional light campaigns for personal motivation. Not medical advice.</p>
-
-      <div class="com-shell">
-        <aside class="com-side">
-          <div class="com-side-card">
-            <h2 class="com-side-title">Hubs</h2>
-            <button type="button" class="com-hub active" data-hub="all">All</button>
-            <button type="button" class="com-hub" data-hub="Powerlifting"><span>#Powerlifting</span><em>2.4k</em></button>
-            <button type="button" class="com-hub" data-hub="NutritionHacks"><span>#NutritionHacks</span><em>1.8k</em></button>
-            <button type="button" class="com-hub" data-hub="MarathonPrep"><span>#MarathonPrep</span><em>940</em></button>
-            <button type="button" class="com-hub" data-hub="Hypertrophy"><span>#Hypertrophy</span><em>1.1k</em></button>
-            <button type="button" class="com-hub" data-hub="Mobility"><span>#Mobility</span><em>620</em></button>
-          </div>
-          <div class="com-side-card com-guidelines">
-            <h3>Community guidelines</h3>
-            <p>Respect, discipline, and honest progress. No spam or commercial solicitations. Not a substitute for professional care.</p>
-          </div>
-          <div class="com-side-card com-campaign-intro">
-            <h3>Light campaigns</h3>
-            <p class="bottom-note">Introductory only — create a simple motivation campaign for yourself or a small group. Does not affect diet, workouts, or health data.</p>
-            <div class="field"><label for="comCampTitle">Title</label><input id="comCampTitle" maxlength="80" placeholder="e.g. 7-day consistency"/></div>
-            <div class="field"><label for="comCampGoal">Goal note</label><input id="comCampGoal" maxlength="120" placeholder="e.g. Train 4 days this week"/></div>
-            <button type="button" class="btn ghost" id="comCampLaunch">Launch campaign</button>
-            <p id="comCampStatus" class="bottom-note" aria-live="polite"></p>
-            <div id="comCampList"></div>
-          </div>
-        </aside>
-
-        <div class="com-main">
-          <div class="com-composer">
-            <div class="com-composer-av" aria-hidden="true">V</div>
-            <input id="comQuickInput" type="text" maxlength="280" placeholder="Share your progress or PR…" autocomplete="off"/>
-            <button type="button" class="btn com-composer-go" id="comQuickPost">Post</button>
-          </div>
-          <div id="postList" class="com-feed"></div>
-          <p id="postStatus" class="bottom-note" aria-live="polite"></p>
-
-          <details class="com-advanced">
-            <summary>Full post editor</summary>
-            <div class="com-advanced-body card">
-              <div class="field"><label for="postTitle">Title</label><input id="postTitle" maxlength="180" placeholder="Headline"/></div>
-              <div class="field"><label for="postType">Type</label>
-                <select id="postType">
-                  <option value="workout">Workout / PR</option>
-                  <option value="blog">Blog</option>
-                  <option value="article">Article</option>
-                  <option value="photo">Photo</option>
-                  <option value="video">Video link</option>
-                </select>
-              </div>
-              <div class="field"><label for="postHub">Hub tag</label>
-                <select id="postHub">
-                  <option value="Powerlifting">#Powerlifting</option>
-                  <option value="NutritionHacks">#NutritionHacks</option>
-                  <option value="MarathonPrep">#MarathonPrep</option>
-                  <option value="Hypertrophy">#Hypertrophy</option>
-                  <option value="Mobility">#Mobility</option>
-                </select>
-              </div>
-              <div class="field"><label for="postBody">Body</label><textarea id="postBody" rows="3" maxlength="5000" placeholder="Details…"></textarea></div>
-              <div class="field"><label for="postMedia">Image or media URL (https)</label><input id="postMedia" type="url" placeholder="https://…"/></div>
-              <button type="button" class="btn" id="postPublish">Publish</button>
-              <p id="postCreateStatus" class="bottom-note" aria-live="polite"></p>
-            </div>
-          </details>
-        </div>
+      <h1 class="title">Learn, share, follow</h1>
+      <p class="sub">Blogs, videos, and articles from trainers and members — plus direct interaction with your coach.</p>
+      <div class="card" style="margin-bottom:14px;">
+        <h3 style="margin-top:0;">Publish to the community</h3>
+        <div class="field"><label for="postTitle">Title</label><input id="postTitle" maxlength="180" placeholder="What did you learn?"/></div>
+        <div class="field"><label for="postType">Post type</label><select id="postType"><option value="article">Article</option><option value="blog">Blog</option><option value="video">Video link</option><option value="reel">Short reel link</option><option value="photo">Photo link</option></select></div>
+        <div class="field"><label for="postBody">Your post</label><textarea id="postBody" rows="3" maxlength="5000" placeholder="Share a workout, lesson or experience..."></textarea></div>
+        <div class="field"><label for="postMedia">Optional HTTPS media URL</label><input id="postMedia" type="url" placeholder="https://..."/></div>
+        <button class="btn" id="postPublish">Publish post</button><p id="postStatus" class="bottom-note" aria-live="polite"></p>
       </div>
+      <div class="grid cols-2" id="postList"></div>
     </section>
 
     <!-- OVULA -->
@@ -551,21 +475,22 @@
                 <path d="M80,96Q76,110 80,115Q84,112 82,109" stroke="#c99a78" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".5"/>
                 <ellipse cx="52" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
                 <ellipse cx="108" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
-                <path class="mouth" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
+                <path class="mouth mouth-closed" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
+                <ellipse class="mouth mouth-open" cx="80" cy="136" rx="14" ry="8" fill="#8b3a4a" opacity="0"/>
               </svg></div>
               <div class="wave" id="orbOWave">👋</div>
             </div>
             <div class="voicebar"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div><p class="orb-status" id="orbOStatus">Ready</p></div>
           </div>
-          <div><h3 style="margin:0 0 4px;">Chat with OVULA</h3><p style="margin:0;">Ask about cramps, energy, or hygiene — general self-care only, never a diagnosis.</p></div>
+          <div><h3 style="margin:0 0 4px;">Talk to OVULA</h3><p style="margin:0;">Ask about cramps, energy, or hygiene — general support only.</p></div>
         </div>
         <div class="chat">
           <div class="chat-log" id="ovulaLog">
             <div class="msg bot">Hi, I'm OVULA. Tell me what you're feeling and I'll share some general self-care ideas.</div>
           </div>
           <div class="chat-row">
-            <button class="mic" id="ovulaMic" title="Voice input" hidden style="display:none" aria-hidden="true">🎙</button>
-            <input id="ovulaInput" placeholder="e.g. mild cramps today…" autocomplete="off" />
+            <button class="mic" id="ovulaMic" title="Voice input">🎙</button>
+            <input id="ovulaInput" placeholder="e.g. bad cramps today…" />
             <button class="btn" id="ovulaSend">Send</button>
           </div>
         </div>
@@ -577,49 +502,21 @@
     <section id="business" class="view">
       <div class="section-banner"><span>06</span><strong>GROW LOCAL</strong><em>FOR BUSINESS</em></div>
       <p class="eyebrow">For gyms &amp; cafés</p>
-      <h1 class="title">Partner tools &amp; discovery</h1>
-      <p class="sub">Campaigns, suggested gyms, marketing leaderboard, supplements and merch ideas — demo listings are labeled. Personal health data is never shared with businesses.</p>
-
-      <div class="biz-tabs" role="tablist" aria-label="For Business sections">
-        <button type="button" class="active" data-biz-tab="campaigns">Campaigns</button>
-        <button type="button" data-biz-tab="gyms">Top gyms</button>
-        <button type="button" data-biz-tab="leaderboard">Marketing leaderboard</button>
-        <button type="button" data-biz-tab="supplements">Supplements</button>
-        <button type="button" data-biz-tab="merch">Merch</button>
-      </div>
-
-      <div class="biz-panel active" data-biz-panel="campaigns">
-        <div class="grid cols-2">
-          <div class="card">
-            <h3 style="margin-top:0;">New campaign</h3>
-            <div class="field"><label for="cName">Business name</label><input id="cName" placeholder="e.g. Iron Loft Gym"/></div>
-            <div class="field"><label for="cOffer">Offer</label><input id="cOffer" placeholder="e.g. 7-day free trial"/></div>
-            <div class="field"><label for="cDate">Runs until</label><input id="cDate" type="date"/></div>
-            <button class="btn" id="cAdd" type="button">Launch campaign</button>
-          </div>
-          <div class="card">
-            <h3 style="margin-top:0;">Live campaigns</h3>
-            <div id="campList"><p style="font-size:13.5px;">No campaigns yet — launch one to see it here.</p></div>
-            <p style="margin-top:14px;font-size:12.5px;">Aggregate counters only — no personal health records are shared with partners.</p>
-            <p id="bizCampStatus" class="bottom-note" aria-live="polite"></p>
-          </div>
+      <h1 class="title">Run a local campaign</h1>
+      <p class="sub">Get in front of nearby VYORA users with offers, trials, and events.</p>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3 style="margin-top:0;">New campaign</h3>
+          <div class="field"><label>Business name</label><input id="cName" placeholder="e.g. Iron Loft Gym"/></div>
+          <div class="field"><label>Offer</label><input id="cOffer" placeholder="e.g. 7-day free trial"/></div>
+          <div class="field"><label>Runs until</label><input id="cDate" type="date"/></div>
+          <button class="btn" id="cAdd">Launch campaign</button>
         </div>
-      </div>
-
-      <div class="biz-panel" data-biz-panel="gyms">
-        <div id="bizGyms" class="biz-mount"></div>
-      </div>
-
-      <div class="biz-panel" data-biz-panel="leaderboard">
-        <div id="bizLeaderboard" class="biz-mount"></div>
-      </div>
-
-      <div class="biz-panel" data-biz-panel="supplements">
-        <div id="bizSupplements" class="biz-mount"></div>
-      </div>
-
-      <div class="biz-panel" data-biz-panel="merch">
-        <div id="bizMerch" class="biz-mount"></div>
+        <div class="card">
+          <h3 style="margin-top:0;">Live campaigns</h3>
+          <div id="campList"><p style="font-size:13.5px;">No campaigns yet — launch one to see it here.</p></div>
+          <p style="margin-top:14px;font-size:12.5px;">Views 0 · Clicks 0 · Redemptions 0 (demo counters)</p>
+        </div>
       </div>
     </section>
 
@@ -712,57 +609,15 @@
 <script src="js/copilot.js"></script>
 <script src="js/workout.js"></script>
 <script src="js/diet.js"></script>
-<script src="js/trainingStore.js"></script>
 <script src="js/training.js"></script>
 <script src="js/locator.js"></script>
 <script src="js/community.js"></script>
 <script src="js/ovula.js"></script>
 <script src="js/planner.js"></script>
-<script src="js/businessCatalog.js"></script>
 <script src="js/business.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/health.js"></script>
-<script src="js/notifications.js"></script>
 <script src="js/account.js"></script>
 <script src="js/pro.js"></script>
 <script src="js/interactions.js"></script>
-
-<script>
-(function() {
-  // Require login session — otherwise go to the new auth page
-  const token = localStorage.getItem('vyoraSessionToken');
-  if (!token) {
-    window.location.replace('/auth.html');
-    return;
-  }
-  // Trainers belong on the trainer dashboard
-  const role = localStorage.getItem('vyora_role') || sessionStorage.getItem('vyora_demo_role');
-  if (role === 'trainer') {
-    window.location.replace('/trainer-dashboard.html');
-    return;
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const rail = document.querySelector('.rail');
-    if (rail && !document.getElementById('demoLoginNavBtn')) {
-      const btn = document.createElement('button');
-      btn.className = 'navbtn';
-      btn.id = 'demoLoginNavBtn';
-      btn.type = 'button';
-      btn.innerHTML = '<span class="dot"></span>Sign out';
-      btn.title = 'Sign out and return to login';
-      btn.addEventListener('click', function () {
-        localStorage.removeItem('vyoraSessionToken');
-        localStorage.removeItem('vyora_role');
-        sessionStorage.removeItem('vyora_demo_role');
-        window.location.replace('/auth.html');
-      });
-      const foot = rail.querySelector('.rail-foot');
-      if (foot) rail.insertBefore(btn, foot);
-      else rail.appendChild(btn);
-    }
-  });
-})();
-</script>
-</body>
 </html>

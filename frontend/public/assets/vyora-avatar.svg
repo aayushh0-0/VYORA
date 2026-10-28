@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="VYORA">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a1218"/>
+      <stop offset="100%" stop-color="#12080c"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="32" fill="url(#g)"/>
+  <circle cx="32" cy="32" r="30.5" fill="none" stroke="#ef233c" stroke-width="1.5" opacity="0.85"/>
+  <text x="32" y="36.5" text-anchor="middle" font-family="system-ui,Segoe UI,Arial,sans-serif" font-size="11" font-weight="800" letter-spacing="0.06em" fill="#ffffff">VYORA</text>
+</svg>
