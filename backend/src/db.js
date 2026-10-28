@@ -4,7 +4,7 @@
  * API surface matches the previous better-sqlite3 usage in this codebase:
  *   db.prepare().run/get/all, db.exec, seed inserts.
  */
-import 'dotenv/config';
+import './loadEnv.js';
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import crypto from 'node:crypto';

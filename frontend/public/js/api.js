@@ -1,11 +1,6 @@
 /* VYORA API client — Stage 9: adds reminder opt-out/opt-in, OVULA cycle export/delete, community reports, progress & integration connect/disconnect. */
 (function(){
   let token=localStorage.getItem('vyoraSessionToken');
-  // Demo login placeholders are not JWTs — force a real guest session
-  if (token && String(token).startsWith('demo-')) {
-    localStorage.removeItem('vyoraSessionToken');
-    token = null;
-  }
   let sessionPromise=null;
   async function createSession(){
     if(sessionPromise) return sessionPromise;
@@ -46,8 +41,8 @@
     revokeConsent:purpose=>del('/api/consents/'+encodeURIComponent(purpose)),
     listAudit:()=>get('/api/audit'),
     // Copilot Memory, Safety Report & Adaptive Plans
-    chat:async(message,mode='vyora',history=[]) => (await post('/api/chat',{message,mode,history})).answer,
-    chatFull:(message,mode='vyora',history=[]) => post('/api/ai/chat',{message,mode,history}),
+    chat:async(message,mode='vyora',history=[],persona='calm') => (await post('/api/chat',{message,mode,history,persona})).answer,
+    chatFull:(message,mode='vyora',history=[],persona='calm') => post('/api/ai/chat',{message,mode,history,persona}),
     getChatMemory:()=>get('/api/chat/memory'),
     saveChatMemory:items=>put('/api/chat/memory',{items}),
     clearChatMemory:()=>del('/api/chat/memory'),
@@ -68,7 +63,7 @@
     listPartners:()=>get('/api/partners'),createPartner:p=>post('/api/partners',p),listCampaigns:()=>get('/api/campaigns'),createCampaign:p=>post('/api/campaigns',p),updateCampaign:(id,p)=>patch('/api/campaigns/'+encodeURIComponent(id),p),
     listTrainers:()=>get('/api/trainers'),listTrainerShares:()=>get('/api/trainers/shares'),shareWithTrainer:(id,scopes)=>post('/api/trainers/'+encodeURIComponent(id)+'/share',{scopes}),revokeTrainerShare:id=>del('/api/trainers/'+encodeURIComponent(id)+'/share'),reviewTrainer:(id,data)=>post('/api/trainers/'+encodeURIComponent(id)+'/reviews',data),rescheduleBooking:(id,data)=>patch('/api/bookings/'+encodeURIComponent(id),data),recordCampaignEvent:(id,eventType)=>post('/api/campaigns/'+encodeURIComponent(id)+'/events',{eventType}),getCampaignAnalytics:id=>get('/api/campaigns/'+encodeURIComponent(id)+'/analytics'),reportPlace:(id,issue)=>post('/api/places/'+encodeURIComponent(id)+'/report',{issue}),clearPlaces:()=>del('/api/places'),listBookings:()=>get('/api/bookings'),bookTrainer:b=>post('/api/bookings',b),cancelBooking:id=>del('/api/bookings/'+encodeURIComponent(id)),
     getPredictions:()=>get('/api/training/predictions'),getComparison:()=>get('/api/training/comparison'),getIntelligence:()=>get('/api/training/intelligence'),setGamification:enabled=>patch('/api/profile/gamification',{enabled}),listRoutes:()=>get('/api/training/routes'),createRoute:r=>post('/api/training/routes',r),deleteRoute:id=>del('/api/training/routes/'+encodeURIComponent(id)),getLeaderboard:(metricType='weekly_km')=>get('/api/training/leaderboard?metricType='+encodeURIComponent(metricType)),optInLeaderboard:data=>post('/api/training/leaderboard/opt-in',data),leaveLeaderboard:()=>post('/api/training/leaderboard/leave',{}),listChallenges:()=>get('/api/challenges'),createChallenge:c=>post('/api/challenges',c),updateChallenge:(id,value)=>patch('/api/challenges/'+encodeURIComponent(id)+'/progress',{value}),
-    listPlaces:()=>get('/api/places'),savePlace:p=>post('/api/places',p),deletePlace:id=>del('/api/places/'+encodeURIComponent(id)),discoverPlaces:(q,type)=>get('/api/places/discover?q='+encodeURIComponent(q)+'&type='+encodeURIComponent(type||'both')+'&limit=10'),
+    listPlaces:()=>get('/api/places'),savePlace:p=>post('/api/places',p),deletePlace:id=>del('/api/places/'+encodeURIComponent(id)),
     integrations:()=>get('/api/integrations'),connectIntegration:(provider,scopes)=>post('/api/integrations/'+encodeURIComponent(provider)+'/connect',{consent:true,scopes}),disconnectIntegration:provider=>post('/api/integrations/'+encodeURIComponent(provider)+'/disconnect',{}),listImportedMetrics:()=>get('/api/integrations/metrics'),importMetric:m=>post('/api/integrations/metrics',m),
     exportData:async()=>{const data=await get('/api/export');const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vyora-data-export.json';a.click();URL.revokeObjectURL(a.href);return data;},
     deleteAccount:async()=>{const result=await del('/api/account');localStorage.removeItem('vyoraSessionToken');token=null;return result;}

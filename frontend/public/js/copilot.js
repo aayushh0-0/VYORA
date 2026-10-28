@@ -2,6 +2,7 @@
 (function(){
 const {addMsg,wireChat,wireMic,triggerWave,navigate,speakWithOrb}=window.VyoraCore;
 let persona = "calm";
+let chatHistory = []; // {role,text} for Gemini context (bounded)
 let lastUserMsg = "";
 let lastBotReply = "";
 
@@ -58,6 +59,7 @@ document.querySelectorAll("#personaRow button").forEach(b=>{
     if (!window.VyoraAPI?.clearChatMemory) return;
     try {
       await window.VyoraAPI.clearChatMemory();
+      chatHistory = [];
       addMsg("vyoraLog", "system", "Cleared Copilot conversation memory.");
     } catch (e) {
       addMsg("vyoraLog", "system", "Could not clear memory: " + e.message);
@@ -99,12 +101,34 @@ async function vyoraReply(msg){
   lastUserMsg = msg;
   try {
     if(window.VyoraAPI) {
-      const reply = await window.VyoraAPI.chat(msg, "vyora");
+      const reply = await window.VyoraAPI.chat(msg, "vyora", chatHistory, persona);
       lastBotReply = reply;
+      chatHistory.push({ role: "user", text: msg });
+      chatHistory.push({ role: "model", text: reply });
+      if (chatHistory.length > 12) chatHistory = chatHistory.slice(-12);
       return reply;
     }
   } catch(e) {
-    console.warn("Gemini unavailable; using local guidance:", e.message);
+    console.warn("Copilot API error:", e.message);
+    const m = String(e.message || "");
+    // Only treat as "not configured" when the server said so — NOT every message containing "Gemini"
+    if (/not configured|GEMINI_API_KEY/i.test(m) && /not configured|set GEMINI|project root \.env/i.test(m)) {
+      throw new Error("Gemini is not configured on the server. Add GEMINI_API_KEY to the project root .env and restart npm run dev.");
+    }
+    if (/quota|rate limit|RESOURCE_EXHAUSTED|429/i.test(m)) {
+      throw new Error("Gemini rate limit or quota reached. Wait a minute, then try a shorter question.");
+    }
+    if (/API[_ ]?key|API_KEY_INVALID|invalid.*key|PERMISSION_DENIED/i.test(m)) {
+      throw new Error("Gemini rejected the API key. Check GEMINI_API_KEY in the project root .env (no quotes/spaces) and restart the server.");
+    }
+    if (/not found|NOT_FOUND|is not supported|model/i.test(m) && /model|gemini/i.test(m)) {
+      throw new Error("Gemini model unavailable. Set GEMINI_MODEL in .env to a free-tier Flash model (e.g. gemini-3.5-flash-lite or gemini-3.6-flash) and restart.");
+    }
+    if (/401|unauthorized|session expired|invalid or expired/i.test(m)) {
+      throw new Error("Session expired. Refresh the page or sign in again, then retry.");
+    }
+    // Surface the real server/network error instead of hiding it
+    throw new Error(m || "Could not reach the VYORA chat service.");
   }
   const m = msg.toLowerCase();
   let body;

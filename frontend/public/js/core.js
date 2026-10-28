@@ -20,26 +20,35 @@ function speakWithOrb(text, orb, status){
 function wireChat(inputId, sendId, logId, orbId, replyFn){
   const input=document.getElementById(inputId), orb=document.getElementById(orbId);
   const status=document.getElementById(orbId+"Status");
-  function send(){
-    const val=input.value.trim(); if(!val) return;
+  const sendBtn=document.getElementById(sendId);
+  let busy=false;
+  async function send(){
+    const val=input.value.trim();
+    if(!val || busy) return;
+    busy=true;
+    if(sendBtn) sendBtn.disabled=true;
     addMsg(logId,"user",val); input.value="";
     orb.classList.remove("talk","listen");
-    orb.classList.add("think"); if(status) status.textContent="Processing…";
-    setTimeout(async ()=>{
-      try {
-        const reply=await replyFn(val);
-        orb.classList.remove("think");
-        addMsg(logId,"bot",reply);
-        speakWithOrb(reply, orb, status);
-      } catch(e) {
-        orb.classList.remove("think");
-        if(status) status.textContent="Error";
-        const reply="I couldn't connect to the AI service right now. Check the backend configuration or API key.";
-        addMsg(logId,"bot",reply); speakWithOrb(reply, orb, status);
-      }
-    },120);
+    orb.classList.add("think"); if(status) status.textContent="Thinking…";
+    try {
+      const reply=await replyFn(val);
+      orb.classList.remove("think");
+      addMsg(logId,"bot",reply);
+      speakWithOrb(reply, orb, status);
+    } catch(e) {
+      orb.classList.remove("think");
+      if(status) status.textContent="Error";
+      const reply=e?.message
+        ? String(e.message)
+        : "I couldn't connect to the AI service right now. Check that the backend is running and GEMINI_API_KEY is set.";
+      addMsg(logId,"bot",reply); speakWithOrb(reply, orb, status);
+    } finally {
+      busy=false;
+      if(sendBtn) sendBtn.disabled=false;
+      if(status && status.textContent==="Thinking…") status.textContent="Ready";
+    }
   }
-  document.getElementById(sendId).addEventListener("click",send);
+  sendBtn?.addEventListener("click",send);
   input.addEventListener("keydown",e=>{if(e.key==="Enter")send();});
   return {send};
 }

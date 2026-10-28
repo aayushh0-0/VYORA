@@ -3,7 +3,7 @@
  * Includes strict CSP, CORS, rate-limiting, `X-Request-Id` context middleware,
  * modular domain routes, static frontend serving, and safe error handling.
  */
-import 'dotenv/config';
+import './loadEnv.js'; // must run before any process.env reads
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -76,6 +76,8 @@ app.use(errorHandler);
 
 if (process.env.VYORA_NO_LISTEN !== '1') {
   app.listen(PORT, () => {
+    const geminiReady = Boolean((process.env.GEMINI_API_KEY || '').trim());
     console.log(`VYORA listening on http://localhost:${PORT}`);
+    console.log(`Gemini: ${geminiReady ? 'configured' : 'NOT configured (set GEMINI_API_KEY in project root .env)'}`);
   });
 }
