@@ -7,6 +7,9 @@
 <title>VYORA — Fitness Copilot</title>
 <link rel="icon" href="assets/vyora-logo.png" type="image/png">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="css/vyora-pro.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/orb/orb.css">
 </head>
 
@@ -410,15 +413,130 @@
     </section>
 
 <section id="workout" class="view">
-      <div class="section-banner"><span>01</span><strong>TRAIN HARDER</strong><em>WORKOUT ENGINE</em></div>
-      <p class="eyebrow">Workout Engine</p>
-      <h1 class="title">This week's plan</h1>
-      <p class="sub">Auto-built from your goal, equipment, and recent adherence. Check off sets as you go.</p>
-      <p id="workoutPlanStatus" class="bottom-note" role="status"></p>
-      <p id="workoutProgression" class="bottom-note"></p>
-      <div id="workoutGeminiReview" class="card" style="margin-top:12px;display:none;"></div>
-      <div class="daytabs" id="dayTabs" role="tablist" aria-label="Workout days"></div>
-      <div class="card"><div id="exList"></div></div>
+      <div class="workout-engine">
+        <header class="wk-hero">
+          <div class="wk-hero-left">
+            <div class="wk-hero-kicker"><span class="wk-hero-num">01</span> <strong>TRAIN HARDER</strong> <em>/</em></div>
+            <p class="wk-hero-label">Workout Engine</p>
+          </div>
+          <span class="wk-hero-right">WORKOUT ENGINE</span>
+        </header>
+
+        <div class="wk-layout">
+          <main class="wk-main">
+            <div class="wk-plan-head">
+              <h1 class="wk-plan-title">This week's plan</h1>
+              <p class="wk-plan-sub" id="workoutPlanStatus">Auto-built from your goal, equipment, and recent adherence. Check off sets as you go.</p>
+            </div>
+
+            <div id="workoutGeminiReview" class="wk-gemini" style="display:none;" role="region" aria-label="Gemini AI plan review">
+              <div class="wk-gemini-head">
+                <span class="wk-gemini-title"><span class="wk-gemini-spark" aria-hidden="true">✦</span> Gemini AI Plan Review</span>
+                <span class="wk-gemini-badge"><span aria-hidden="true">✦</span> AI Powered</span>
+              </div>
+              <p id="workoutGeminiBody" class="wk-gemini-body"></p>
+            </div>
+            <p id="workoutProgression" class="wk-progression" hidden></p>
+
+            <div class="daytabs wk-daytabs" id="dayTabs" role="tablist" aria-label="Workout days"></div>
+
+            <section class="wk-session-card" aria-labelledby="workoutSessionTitle">
+              <div class="wk-session-heading">
+                <div class="wk-session-heading-text">
+                  <h2 id="workoutSessionTitle" class="wk-session-title">—</h2>
+                  <p id="workoutSessionMeta" class="wk-session-meta"></p>
+                </div>
+                <div class="wk-session-ring-wrap" title="Session progress">
+                  <svg class="wk-session-ring" viewBox="0 0 36 36" aria-hidden="true">
+                    <circle class="wk-ring-bg" cx="18" cy="18" r="15.5" fill="none" stroke-width="2.5"/>
+                    <circle id="workoutSessionRing" class="wk-ring-fg" cx="18" cy="18" r="15.5" fill="none" stroke-width="2.5"
+                      stroke-dasharray="97.4" stroke-dashoffset="97.4" transform="rotate(-90 18 18)"/>
+                  </svg>
+                  <span id="workoutSessionProgress" class="wk-session-progress">0/0</span>
+                </div>
+              </div>
+              <div class="wk-exercise-list" id="exList" role="tabpanel"></div>
+              <div class="wk-log-row">
+                <p id="workoutLogStatus" class="wk-log-status" role="status" aria-live="polite"></p>
+                <button id="workoutLogButton" class="wk-log-button" type="button" disabled>Log this workout</button>
+              </div>
+            </section>
+            <span class="wk-plan-badge" id="workoutPlanBadge" hidden><span aria-hidden="true"></span> ACTIVE PLAN</span>
+          </main>
+
+          <aside class="wk-sidebar" aria-label="Workout overview and actions">
+            <section class="wk-panel wk-overview">
+              <div class="wk-panel-top">
+                <h3 class="wk-panel-title"><span class="wk-ico-bars" aria-hidden="true"></span> Weekly progress</h3>
+                <span id="workoutWeekPct" class="wk-week-pct">0%</span>
+              </div>
+              <div class="wk-week-stats">
+                <div>
+                  <strong id="workoutWeekWorkouts">0 / 4</strong>
+                  <span>Workouts completed</span>
+                </div>
+                <div>
+                  <strong id="workoutWeekCount">0 / 12</strong>
+                  <span>Exercises done</span>
+                </div>
+              </div>
+              <div class="wk-week-days" id="workoutWeekDays" aria-label="Days of week"></div>
+              <div class="wk-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="workoutWeekProgress" hidden>
+                <span></span>
+              </div>
+              <p id="workoutWeekLabel" class="wk-muted-copy" hidden></p>
+            </section>
+
+            <section class="wk-panel wk-muscle">
+              <h3 class="wk-panel-title"><span class="wk-ico-body" aria-hidden="true"></span> Muscle focus <em>(today)</em></h3>
+              <div class="wk-muscle-body">
+                <svg class="wk-anatomy" viewBox="0 0 120 200" aria-hidden="true">
+                  <ellipse class="wk-anat-part" data-m="shoulders" cx="60" cy="28" rx="22" ry="10"/>
+                  <rect class="wk-anat-part" data-m="chest" x="38" y="38" width="44" height="28" rx="8"/>
+                  <rect class="wk-anat-part" data-m="core" x="44" y="68" width="32" height="30" rx="6"/>
+                  <rect class="wk-anat-part" data-m="quads" x="40" y="100" width="16" height="48" rx="6"/>
+                  <rect class="wk-anat-part" data-m="quads" x="64" y="100" width="16" height="48" rx="6"/>
+                  <rect class="wk-anat-part" data-m="calves" x="42" y="150" width="12" height="30" rx="5"/>
+                  <rect class="wk-anat-part" data-m="calves" x="66" y="150" width="12" height="30" rx="5"/>
+                  <rect class="wk-anat-part" data-m="glutes" x="42" y="94" width="36" height="12" rx="4"/>
+                  <circle cx="60" cy="14" r="10" fill="#2a2a30"/>
+                </svg>
+                <ul id="workoutFocusList" class="wk-focus-list"></ul>
+              </div>
+            </section>
+
+            <section class="wk-panel wk-burn">
+              <h3 class="wk-panel-title"><span class="wk-ico-fire" aria-hidden="true">🔥</span> Estimated burn</h3>
+              <p class="wk-burn-value"><strong id="workoutCalories">~320</strong> <span>kcal</span></p>
+              <p class="wk-muted-copy">Based on your plan and profile</p>
+            </section>
+
+            <section class="wk-panel wk-actions">
+              <h3 class="wk-panel-title"><span class="wk-ico-bolt" aria-hidden="true">⚡</span> Quick actions</h3>
+              <button id="workoutLogButton2" class="wk-action-button" type="button">
+                <span class="wk-action-ico" aria-hidden="true">✓</span>
+                <span>Log this workout</span>
+                <span class="wk-action-chevron" aria-hidden="true">›</span>
+              </button>
+              <button id="workoutSwapButton" class="wk-action-button" type="button">
+                <span class="wk-action-ico" aria-hidden="true">⇄</span>
+                <span>Swap exercise</span>
+                <span class="wk-action-chevron" aria-hidden="true">›</span>
+              </button>
+              <button id="workoutExploreButton" class="wk-action-button" type="button">
+                <span class="wk-action-ico" aria-hidden="true">☰</span>
+                <span>View exercise library</span>
+                <span class="wk-action-chevron" aria-hidden="true">›</span>
+              </button>
+              <button id="workoutAdjustButton" class="wk-action-button" type="button">
+                <span class="wk-action-ico" aria-hidden="true">⚙</span>
+                <span>Adjust plan</span>
+                <span class="wk-action-chevron" aria-hidden="true">›</span>
+              </button>
+            </section>
+          </aside>
+        </div>
+      </div>
     </section>
 
     <!-- SPECIAL TRAINING -->
@@ -853,31 +971,837 @@
     </section>
 
     <!-- VYORA PRO -->
-    <section id="pro" class="view">
-      <div class="section-banner"><span>08</span><strong>GO FURTHER</strong><em>VYORA PRO</em></div>
-      <p class="eyebrow">Premium</p>
-      <h1 class="title">VYORA Pro</h1>
-      <p class="sub">Everything in the free plan, plus real human trainers and deeper personalization.</p>
-
-      <div class="grid cols-2" style="margin-bottom:14px;">
-        <div class="card">
-          <h3 style="margin-top:0;">Free</h3>
-          <p style="margin-top:0;font-size:22px;font-family:'Space Grotesk';color:var(--text);">₹0</p>
-          <p><span class="tag">AI diet &amp; workout plans</span><span class="tag">VYORA &amp; OVULA chat</span><span class="tag">Community access</span></p>
+        <section id="pro" class="view">
+<div class="vyora-pro-app">
+    <!-- Top Bar -->
+    <header class="pro-header">
+      <div class="header-left">
+        <div class="pro-badge">
+          <i class="fas fa-crown"></i>
+          <span>VYORA PRO</span>
         </div>
-        <div class="card" style="border-color:var(--accent);">
-          <h3 style="margin-top:0;">Pro</h3>
-          <p style="margin-top:0;font-size:22px;font-family:'Space Grotesk';color:var(--text);">₹999<span style="font-size:12px;color:var(--muted);">/mo</span></p>
-          <p><span class="tag">1:1 human trainer sessions</span><span class="tag">Deeper AI memory</span><span class="tag">Advanced analytics</span><span class="tag">Priority support</span></p>
-          <button class="btn" style="margin-top:6px;">Upgrade to Pro</button>
+        <h1>Your Personal Elite Coaching Hub</h1>
+      </div>
+      <div class="header-right">
+        <div class="streak-chip">
+          <i class="fas fa-fire"></i>
+          <span id="streak-count">12</span> day streak
+        </div>
+        <div class="notification-bell" id="notif-bell">
+          <i class="fas fa-bell"></i>
+          <span class="notif-dot"></span>
+        </div>
+        <div class="user-chip">
+          <div class="avatar">P</div>
+          <span>Priya • Pro</span>
         </div>
       </div>
+    </header>
 
-      <div class="card">
-        <h3 style="margin-top:0;">Book a trainer</h3>
-        <p style="margin-top:0;">Pro members can book live sessions with verified trainers.</p>
-        <div class="grid cols-3" id="trainerList"></div>
+    <!-- Main Layout -->
+    <div class="pro-layout">
+      <!-- Left Navigation Tabs -->
+      <nav class="pro-sidebar">
+        <button class="nav-item active" data-tab="dashboard">
+          <i class="fas fa-th-large"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="trainer">
+          <i class="fas fa-user-tie"></i>
+          <span>1:1 Trainer</span>
+        </button>
+        <button class="nav-item" data-tab="diet">
+          <i class="fas fa-utensils"></i>
+          <span>Diet & Nutrition</span>
+        </button>
+        <button class="nav-item" data-tab="workout">
+          <i class="fas fa-dumbbell"></i>
+          <span>Workouts</span>
+        </button>
+        <button class="nav-item" data-tab="classes">
+          <i class="fas fa-spa"></i>
+          <span>Yoga • Zumba • Aerobics</span>
+        </button>
+        <button class="nav-item" data-tab="trackers">
+          <i class="fas fa-chart-line"></i>
+          <span>Live Trackers</span>
+        </button>
+        <button class="nav-item" data-tab="womens">
+          <i class="fas fa-venus"></i>
+          <span>Women's Health</span>
+        </button>
+        <button class="nav-item" data-tab="webinars">
+          <i class="fas fa-video"></i>
+          <span>Live Webinars</span>
+        </button>
+        <button class="nav-item" data-tab="reminders">
+          <i class="fas fa-bell"></i>
+          <span>Reminders & Push</span>
+        </button>
+      </nav>
+
+      <!-- Content Area -->
+      <main class="pro-content">
+        <!-- ==================== DASHBOARD ==================== -->
+        <section id="tab-dashboard" class="tab-panel active">
+          <div class="welcome-banner">
+            <div class="welcome-text">
+              <h2>Welcome back, Priya 👋</h2>
+              <p>Your dedicated coach <strong>Ananya Sharma</strong> has prepared today's plan. Let's crush it.</p>
+            </div>
+            <button class="btn-primary" onclick="switchTab('trainer')">
+              <i class="fas fa-comments"></i> Message Coach
+            </button>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon water"><i class="fas fa-tint"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Water</span>
+                <span class="stat-value" id="water-stat">1.8 / 3.0 L</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon steps"><i class="fas fa-shoe-prints"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Steps</span>
+                <span class="stat-value" id="steps-stat">7,420 / 10,000</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon cal"><i class="fas fa-fire-alt"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Calories</span>
+                <span class="stat-value" id="cal-stat">1,450 / 1,800</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon sleep"><i class="fas fa-moon"></i></div>
+              <div class="stat-info">
+                <span class="stat-label">Sleep</span>
+                <span class="stat-value">6h 45m</span>
+                <div class="progress-bar"><div class="progress-fill" style="width:68%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div class="card">
+              <h3><i class="fas fa-calendar-check"></i> Today's Schedule</h3>
+              <ul class="schedule-list">
+                <li>
+                  <span class="time">07:00</span>
+                  <span class="task">Morning Yoga Flow (30 min)</span>
+                  <span class="tag live">Live</span>
+                </li>
+                <li>
+                  <span class="time">09:30</span>
+                  <span class="task">Protein Smoothie + Eggs</span>
+                  <span class="tag diet">Diet</span>
+                </li>
+                <li>
+                  <span class="time">13:00</span>
+                  <span class="task">1:1 Call with Coach Ananya</span>
+                  <span class="tag trainer">Trainer</span>
+                </li>
+                <li>
+                  <span class="time">18:30</span>
+                  <span class="task">HIIT + Zumba Combo</span>
+                  <span class="tag workout">Workout</span>
+                </li>
+                <li>
+                  <span class="time">21:00</span>
+                  <span class="task">Cycle Log & Reflection</span>
+                  <span class="tag women">Women's</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3><i class="fas fa-bullseye"></i> Weekly Goals</h3>
+              <div class="goal-item">
+                <div class="goal-header">
+                  <span>Workout Consistency</span>
+                  <span>5/6</span>
+                </div>
+                <div class="progress-bar thick"><div class="progress-fill" style="width:83%"></div></div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-header">
+                  <span>Water Intake Avg</span>
+                  <span>2.4 L</span>
+                </div>
+                <div class="progress-bar thick"><div class="progress-fill" style="width:80%"></div></div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-header">
+                  <span>Protein Target</span>
+                  <span>92 g</span>
+                </div>
+                <div class="progress-bar thick"><div class="progress-fill" style="width:92%"></div></div>
+              </div>
+              <div class="goal-item">
+                <div class="goal-header">
+                  <span>Cycle Tracking</span>
+                  <span>On track</span>
+                </div>
+                <div class="progress-bar thick"><div class="progress-fill green" style="width:100%"></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== 1:1 TRAINER ==================== -->
+        <section id="tab-trainer" class="tab-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-user-tie"></i> Your Dedicated Personal Trainer</h2>
+            <button class="btn-outline" id="book-session-btn">
+              <i class="fas fa-calendar-plus"></i> Book Live Session
+            </button>
+          </div>
+
+          <div class="trainer-hero">
+            <div class="trainer-avatar-large">
+              <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=200&h=200&fit=crop&crop=face" alt="Coach Ananya" />
+              <span class="online-dot"></span>
+            </div>
+            <div class="trainer-info">
+              <h3>Ananya Sharma</h3>
+              <p class="title">Certified Strength & Conditioning Coach • 8+ years</p>
+              <div class="trainer-tags">
+                <span>HIIT Specialist</span>
+                <span>Women's Fitness</span>
+                <span>Nutrition</span>
+                <span>Yoga Alliance RYT-200</span>
+              </div>
+              <p class="bio">Ananya has guided 400+ women through body transformations with a holistic approach that combines strength training, mindful movement and cycle-aware programming.</p>
+              <div class="trainer-actions">
+                <button class="btn-primary"><i class="fas fa-video"></i> Start Video Call</button>
+                <button class="btn-ghost"><i class="fas fa-comment-dots"></i> Chat</button>
+                <button class="btn-ghost"><i class="fas fa-phone"></i> Voice Call</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div class="card">
+              <h3>Upcoming Sessions</h3>
+              <div class="session-card">
+                <div class="session-date">
+                  <span class="day">TODAY</span>
+                  <span class="time">13:00 – 13:45</span>
+                </div>
+                <div class="session-detail">
+                  <strong>Form Check + Next Week Plan</strong>
+                  <p>Review deadlift technique & set progressive overload</p>
+                </div>
+                <button class="btn-sm">Join</button>
+              </div>
+              <div class="session-card">
+                <div class="session-date">
+                  <span class="day">SAT</span>
+                  <span class="time">10:00 – 10:30</span>
+                </div>
+                <div class="session-detail">
+                  <strong>Weekly Check-in</strong>
+                  <p>Progress photos, measurements & mindset</p>
+                </div>
+                <button class="btn-sm outline">Reschedule</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Coach Notes for You</h3>
+              <div class="note-item">
+                <span class="note-date">28 Oct</span>
+                <p>“Great job hitting protein target 5 days this week. Let’s increase water to 3.2 L as we start the new hypertrophy block.”</p>
+              </div>
+              <div class="note-item">
+                <span class="note-date">25 Oct</span>
+                <p>“Your squat depth has improved a lot. Keep the tempo 3-1-1 as discussed.”</p>
+              </div>
+              <div class="note-item">
+                <span class="note-date">22 Oct</span>
+                <p>“Cycle day 3 – keep intensity moderate and focus on recovery walks.”</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== DIET ==================== -->
+        <section id="tab-diet" class="tab-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-utensils"></i> Personalised Diet Plan</h2>
+            <div class="header-actions">
+              <button class="btn-outline" id="log-meal-btn"><i class="fas fa-plus"></i> Log Meal</button>
+              <button class="btn-ghost"><i class="fas fa-sync"></i> Regenerate Plan</button>
+            </div>
+          </div>
+
+          <div class="macros-row">
+            <div class="macro-card">
+              <span class="macro-label">Calories</span>
+              <span class="macro-value">1,450 <small>/ 1,800</small></span>
+              <div class="ring" data-percent="80"></div>
+            </div>
+            <div class="macro-card">
+              <span class="macro-label">Protein</span>
+              <span class="macro-value">92 <small>g</small></span>
+              <div class="ring" data-percent="92"></div>
+            </div>
+            <div class="macro-card">
+              <span class="macro-label">Carbs</span>
+              <span class="macro-value">148 <small>g</small></span>
+              <div class="ring" data-percent="74"></div>
+            </div>
+            <div class="macro-card">
+              <span class="macro-label">Fats</span>
+              <span class="macro-value">48 <small>g</small></span>
+              <div class="ring" data-percent="68"></div>
+            </div>
+          </div>
+
+          <div class="meal-timeline">
+            <div class="meal-card completed">
+              <div class="meal-time">07:30</div>
+              <div class="meal-content">
+                <h4>Breakfast • Protein Smoothie Bowl</h4>
+                <p>Greek yogurt, berries, whey, chia seeds, almond butter</p>
+                <div class="meal-macros">420 kcal • 38g P • 32g C • 14g F</div>
+              </div>
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">13:00</div>
+              <div class="meal-content">
+                <h4>Lunch • Grilled Chicken + Quinoa</h4>
+                <p>150g chicken breast, 80g quinoa, roasted veggies, olive oil</p>
+                <div class="meal-macros">510 kcal • 48g P • 42g C • 16g F</div>
+              </div>
+              <button class="btn-sm">Log</button>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">16:30</div>
+              <div class="meal-content">
+                <h4>Snack • Cottage Cheese + Apple</h4>
+                <p>150g low-fat paneer, 1 apple, cinnamon</p>
+                <div class="meal-macros">220 kcal • 22g P • 24g C • 4g F</div>
+              </div>
+              <button class="btn-sm">Log</button>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">20:00</div>
+              <div class="meal-content">
+                <h4>Dinner • Paneer Tikka + Salad</h4>
+                <p>120g paneer, mixed greens, cucumber, yogurt dip</p>
+                <div class="meal-macros">380 kcal • 28g P • 18g C • 20g F</div>
+              </div>
+              <button class="btn-sm">Log</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== WORKOUT ==================== -->
+        <section id="tab-workout" class="tab-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-dumbbell"></i> Personalised Workouts</h2>
+            <button class="btn-primary"><i class="fas fa-play"></i> Start Today's Session</button>
+          </div>
+
+          <div class="workout-hero-card">
+            <div class="workout-badge">TODAY • UPPER BODY + CORE</div>
+            <h3>Hypertrophy Block — Week 3 Day 2</h3>
+            <p>45 minutes • Intermediate • Equipment: Dumbbells + Resistance Band</p>
+            <div class="workout-meta">
+              <span><i class="fas fa-fire"></i> ~320 kcal</span>
+              <span><i class="fas fa-clock"></i> 45 min</span>
+              <span><i class="fas fa-signal"></i> Intermediate</span>
+            </div>
+          </div>
+
+          <div class="exercise-list">
+            <div class="exercise-item">
+              <div class="ex-num">01</div>
+              <div class="ex-info">
+                <h4>Dumbbell Bench Press</h4>
+                <p>4 sets × 10-12 reps • Rest 90s</p>
+              </div>
+              <button class="btn-sm">Demo</button>
+            </div>
+            <div class="exercise-item">
+              <div class="ex-num">02</div>
+              <div class="ex-info">
+                <h4>Single-Arm Row</h4>
+                <p>3 sets × 12 reps each • Rest 60s</p>
+              </div>
+              <button class="btn-sm">Demo</button>
+            </div>
+            <div class="exercise-item">
+              <div class="ex-num">03</div>
+              <div class="ex-info">
+                <h4>Arnold Press</h4>
+                <p>3 sets × 10-12 reps • Rest 75s</p>
+              </div>
+              <button class="btn-sm">Demo</button>
+            </div>
+            <div class="exercise-item">
+              <div class="ex-num">04</div>
+              <div class="ex-info">
+                <h4>Face Pulls (Band)</h4>
+                <p>3 sets × 15 reps • Rest 45s</p>
+              </div>
+              <button class="btn-sm">Demo</button>
+            </div>
+            <div class="exercise-item">
+              <div class="ex-num">05</div>
+              <div class="ex-info">
+                <h4>Plank + Side Plank Circuit</h4>
+                <p>3 rounds • 40s each • Rest 30s</p>
+              </div>
+              <button class="btn-sm">Demo</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== CLASSES (Yoga / Zumba / Aerobics) ==================== -->
+        <section id="tab-classes" class="tab-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-spa"></i> Premium Classes</h2>
+            <div class="filter-chips">
+              <button class="chip active">All</button>
+              <button class="chip">Yoga</button>
+              <button class="chip">Zumba</button>
+              <button class="chip">Aerobics</button>
+              <button class="chip">Live</button>
+            </div>
+          </div>
+
+          <div class="classes-grid">
+            <div class="class-card live">
+              <div class="class-thumb yoga">
+                <span class="live-badge"><i class="fas fa-circle"></i> LIVE NOW</span>
+              </div>
+              <div class="class-body">
+                <h4>Sunrise Vinyasa Flow</h4>
+                <p>with Coach Meera • 40 min</p>
+                <div class="class-meta">
+                  <span>Beginner–Intermediate</span>
+                  <button class="btn-sm primary">Join Live</button>
+                </div>
+              </div>
+            </div>
+            <div class="class-card">
+              <div class="class-thumb zumba">
+                <span class="time-badge">TODAY 18:00</span>
+              </div>
+              <div class="class-body">
+                <h4>Zumba Party – Latin Hits</h4>
+                <p>with Coach Riya • 45 min</p>
+                <div class="class-meta">
+                  <span>All Levels</span>
+                  <button class="btn-sm">Remind Me</button>
+                </div>
+              </div>
+            </div>
+            <div class="class-card">
+              <div class="class-thumb aerobics">
+                <span class="time-badge">TOM 07:30</span>
+              </div>
+              <div class="class-body">
+                <h4>Power Aerobics HIIT</h4>
+                <p>with Coach Ananya • 35 min</p>
+                <div class="class-meta">
+                  <span>Intermediate</span>
+                  <button class="btn-sm">Remind Me</button>
+                </div>
+              </div>
+            </div>
+            <div class="class-card">
+              <div class="class-thumb yoga">
+                <span class="time-badge">FRI 20:00</span>
+              </div>
+              <div class="class-body">
+                <h4>Yin Yoga for Cycle Relief</h4>
+                <p>with Coach Meera • 50 min</p>
+                <div class="class-meta">
+                  <span>All Levels • Women's Focus</span>
+                  <button class="btn-sm">Remind Me</button>
+                </div>
+              </div>
+            </div>
+            <div class="class-card">
+              <div class="class-thumb zumba">
+                <span class="time-badge">SAT 09:00</span>
+              </div>
+              <div class="class-body">
+                <h4>Bollywood Zumba Special</h4>
+                <p>with Coach Riya • 50 min</p>
+                <div class="class-meta">
+                  <span>All Levels</span>
+                  <button class="btn-sm">Remind Me</button>
+                </div>
+              </div>
+            </div>
+            <div class="class-card">
+              <div class="class-thumb yoga">
+                <span class="time-badge">ON DEMAND</span>
+              </div>
+              <div class="class-body">
+                <h4>Deep Stretch & Mobility</h4>
+                <p>with Coach Ananya • 25 min</p>
+                <div class="class-meta">
+                  <span>Recovery</span>
+                  <button class="btn-sm">Watch</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== LIVE TRACKERS ==================== -->
+        <section id="tab-trackers" class="tab-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-chart-line"></i> Live Health Trackers</h2>
+            <button class="btn-outline" id="sync-wearable"><i class="fas fa-sync-alt"></i> Sync Wearable</button>
+          </div>
+
+          <div class="tracker-grid">
+            <!-- Water -->
+            <div class="tracker-card">
+              <div class="tracker-header">
+                <h3><i class="fas fa-tint"></i> Water Intake</h3>
+                <span class="tracker-value">1.8 L <small>/ 3.0 L</small></span>
+              </div>
+              <div class="water-glasses">
+                <div class="glass filled"></div>
+                <div class="glass filled"></div>
+                <div class="glass filled"></div>
+                <div class="glass filled"></div>
+                <div class="glass filled"></div>
+                <div class="glass filled"></div>
+                <div class="glass"></div>
+                <div class="glass"></div>
+                <div class="glass"></div>
+                <div class="glass"></div>
+              </div>
+              <div class="tracker-actions">
+                <button class="btn-sm" onclick="addWater(0.25)">+250 ml</button>
+                <button class="btn-sm" onclick="addWater(0.5)">+500 ml</button>
+              </div>
+            </div>
+
+            <!-- Steps -->
+            <div class="tracker-card">
+              <div class="tracker-header">
+                <h3><i class="fas fa-shoe-prints"></i> Steps</h3>
+                <span class="tracker-value">7,420 <small>/ 10,000</small></span>
+              </div>
+              <div class="steps-visual">
+                <div class="steps-ring">
+                  <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="42" class="ring-bg"></circle>
+                    <circle cx="50" cy="50" r="42" class="ring-progress" style="stroke-dashoffset: 68"></circle>
+                  </svg>
+                  <div class="steps-percent">74%</div>
+                </div>
+              </div>
+              <p class="tracker-note">~3.8 km walked today</p>
+            </div>
+
+            <!-- Calories -->
+            <div class="tracker-card">
+              <div class="tracker-header">
+                <h3><i class="fas fa-fire-alt"></i> Calories</h3>
+                <span class="tracker-value">1,450 <small>/ 1,800</small></span>
+              </div>
+              <div class="cal-breakdown">
+                <div class="cal-item">
+                  <span>Burned</span>
+                  <strong>420</strong>
+                </div>
+                <div class="cal-item">
+                  <span>Consumed</span>
+                  <strong>1,450</strong>
+                </div>
+                <div class="cal-item">
+                  <span>Remaining</span>
+                  <strong>350</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sleep -->
+            <div class="tracker-card">
+              <div class="tracker-header">
+                <h3><i class="fas fa-moon"></i> Sleep Quality</h3>
+                <span class="tracker-value">6h 45m</span>
+              </div>
+              <div class="sleep-bars">
+                <div class="sleep-bar" style="height:40%"><span>Deep</span></div>
+                <div class="sleep-bar" style="height:55%"><span>Light</span></div>
+                <div class="sleep-bar" style="height:25%"><span>REM</span></div>
+                <div class="sleep-bar" style="height:15%"><span>Awake</span></div>
+              </div>
+              <p class="tracker-note">Score: 72 / 100 — Aim for earlier bedtime</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== WOMEN'S HEALTH ==================== -->
+        <section id="tab-womens" class="tab-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-venus"></i> Women's Health Companion</h2>
+            <span class="privacy-badge"><i class="fas fa-lock"></i> Private & Encrypted</span>
+          </div>
+
+          <div class="womens-hero">
+            <div class="cycle-card">
+              <h3>Current Cycle Day</h3>
+              <div class="cycle-day">Day 12</div>
+              <p class="phase">Follicular Phase • Energy Rising</p>
+              <div class="cycle-progress">
+                <div class="cycle-fill" style="width:43%"></div>
+              </div>
+              <p class="next-period">Predicted next period: 16 Nov</p>
+            </div>
+            <div class="advice-card">
+              <h3><i class="fas fa-heart"></i> Today's Guidance</h3>
+              <ul>
+                <li>Higher estrogen → great day for strength training & HIIT</li>
+                <li>Focus on complex carbs for sustained energy</li>
+                <li>Stay hydrated — aim for 3+ litres</li>
+                <li>Good window for challenging progressive overload</li>
+              </ul>
+              <button class="btn-outline btn-sm">Talk to Women's Health Coach</button>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div class="card">
+              <h3>Log Symptoms & Mood</h3>
+              <div class="symptom-grid">
+                <button class="symptom-btn">Cramps</button>
+                <button class="symptom-btn">Bloating</button>
+                <button class="symptom-btn">Headache</button>
+                <button class="symptom-btn">Fatigue</button>
+                <button class="symptom-btn">Mood Swings</button>
+                <button class="symptom-btn">Acne</button>
+                <button class="symptom-btn active">Energetic</button>
+                <button class="symptom-btn">Cravings</button>
+              </div>
+              <textarea placeholder="Any notes for your coach or doctor..."></textarea>
+              <button class="btn-primary full">Save Today's Log</button>
+            </div>
+            <div class="card">
+              <h3>Personalised Insights</h3>
+              <div class="insight-item">
+                <i class="fas fa-lightbulb"></i>
+                <div>
+                  <strong>Training Adjustment</strong>
+                  <p>Your coach has reduced volume by 15% for the next 3 days based on your cycle phase.</p>
+                </div>
+              </div>
+              <div class="insight-item">
+                <i class="fas fa-utensils"></i>
+                <div>
+                  <strong>Nutrition Tip</strong>
+                  <p>Increase iron-rich foods (spinach, lentils) this week as you approach ovulation.</p>
+                </div>
+              </div>
+              <div class="insight-item">
+                <i class="fas fa-moon"></i>
+                <div>
+                  <strong>Recovery Focus</strong>
+                  <p>Prioritise sleep this week. Aim for 7.5+ hours for optimal hormone balance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== WEBINARS ==================== -->
+        <section id="tab-webinars" class="tab-panel">
+          <div class="section-header">
+            <h2><i class="fas fa-video"></i> Free Live Webinars by Trainers</h2>
+            <span class="free-badge">Included with Pro</span>
+          </div>
+
+          <div class="webinar-list">
+            <div class="webinar-card upcoming">
+              <div class="webinar-date">
+                <span class="month">NOV</span>
+                <span class="day">02</span>
+              </div>
+              <div class="webinar-info">
+                <h4>Building Muscle as a Woman — Myths vs Science</h4>
+                <p>with Coach Ananya Sharma • 60 min</p>
+                <div class="webinar-meta">
+                  <span><i class="fas fa-users"></i> 214 registered</span>
+                  <span><i class="fas fa-clock"></i> 7:00 PM IST</span>
+                </div>
+              </div>
+              <button class="btn-primary">Register Free</button>
+            </div>
+            <div class="webinar-card upcoming">
+              <div class="webinar-date">
+                <span class="month">NOV</span>
+                <span class="day">08</span>
+              </div>
+              <div class="webinar-info">
+                <h4>Cycle-Syncing Your Workouts & Nutrition</h4>
+                <p>with Coach Meera + Guest Gynaecologist • 75 min</p>
+                <div class="webinar-meta">
+                  <span><i class="fas fa-users"></i> 389 registered</span>
+                  <span><i class="fas fa-clock"></i> 6:30 PM IST</span>
+                </div>
+              </div>
+              <button class="btn-primary">Register Free</button>
+            </div>
+            <div class="webinar-card">
+              <div class="webinar-date past">
+                <span class="month">OCT</span>
+                <span class="day">22</span>
+              </div>
+              <div class="webinar-info">
+                <h4>Home Gym Essentials under ₹15,000</h4>
+                <p>with Coach Riya • 45 min</p>
+                <div class="webinar-meta">
+                  <span><i class="fas fa-play-circle"></i> Recording available</span>
+                </div>
+              </div>
+              <button class="btn-outline">Watch Replay</button>
+            </div>
+            <div class="webinar-card">
+              <div class="webinar-date past">
+                <span class="month">OCT</span>
+                <span class="day">15</span>
+              </div>
+              <div class="webinar-info">
+                <h4>Mindful Eating & Breaking Cravings</h4>
+                <p>with Nutritionist Kavya • 50 min</p>
+                <div class="webinar-meta">
+                  <span><i class="fas fa-play-circle"></i> Recording available</span>
+                </div>
+              </div>
+              <button class="btn-outline">Watch Replay</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== REMINDERS ==================== -->
+        <section id="tab-reminders" class="tab-panel tab-reminders-fit">
+          <div class="section-header rem-header">
+            <h2><i class="fas fa-bell"></i> Reminders &amp; Push</h2>
+            <button class="btn-primary btn-sm" id="add-reminder-btn"><i class="fas fa-plus"></i> Add</button>
+          </div>
+
+          <div class="reminders-grid">
+            <div class="reminder-card active">
+              <div class="rem-icon water"><i class="fas fa-tint"></i></div>
+              <div class="rem-info">
+                <h4>Water</h4>
+                <p>Every 90 min · 8 AM–9 PM</p>
+              </div>
+              <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="reminder-card active">
+              <div class="rem-icon meal"><i class="fas fa-utensils"></i></div>
+              <div class="rem-info">
+                <h4>Meals</h4>
+                <p>Before each meal</p>
+              </div>
+              <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="reminder-card active">
+              <div class="rem-icon workout"><i class="fas fa-dumbbell"></i></div>
+              <div class="rem-info">
+                <h4>Workout</h4>
+                <p>Daily · 6:30 PM</p>
+              </div>
+              <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="reminder-card">
+              <div class="rem-icon sleep"><i class="fas fa-moon"></i></div>
+              <div class="rem-info">
+                <h4>Wind Down</h4>
+                <p>9:30 PM · Screens off</p>
+              </div>
+              <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+            </div>
+            <div class="reminder-card active">
+              <div class="rem-icon cycle"><i class="fas fa-venus"></i></div>
+              <div class="rem-info">
+                <h4>Cycle</h4>
+                <p>Nightly · 9:00 PM</p>
+              </div>
+              <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="reminder-card">
+              <div class="rem-icon steps"><i class="fas fa-shoe-prints"></i></div>
+              <div class="rem-info">
+                <h4>Steps</h4>
+                <p>Under 6k by 4 PM</p>
+              </div>
+              <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+            </div>
+          </div>
+
+          <div class="card push-settings push-settings-compact">
+            <h3>Push preferences</h3>
+            <div class="pref-row"><span>Coach &amp; sessions</span><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
+            <div class="pref-row"><span>Live classes</span><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
+            <div class="pref-row"><span>Webinars</span><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
+            <div class="pref-row"><span>Daily summary</span><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
+            <div class="pref-row"><span>Health insights</span><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: Book Session -->
+  <div class="modal-overlay" id="book-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Book 1:1 Live Session</h3>
+        <button class="modal-close" id="close-book">&times;</button>
       </div>
+      <div class="modal-body">
+        <label>Preferred Date</label>
+        <input type="date" id="session-date" />
+        <label>Preferred Time</label>
+        <select id="session-time">
+          <option>09:00 AM</option>
+          <option>11:00 AM</option>
+          <option selected>01:00 PM</option>
+          <option>04:00 PM</option>
+          <option>06:30 PM</option>
+          <option>08:00 PM</option>
+        </select>
+        <label>Session Focus</label>
+        <select>
+          <option>Form Check</option>
+          <option>Program Review</option>
+          <option>Nutrition Discussion</option>
+          <option>Mindset / Motivation</option>
+          <option>Women's Health Query</option>
+        </select>
+        <label>Notes for Coach (optional)</label>
+        <textarea placeholder="Anything specific you'd like to cover..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancel-book">Cancel</button>
+        <button class="btn-primary">Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
     </section>
 
   </main>
@@ -902,6 +1826,6 @@
 <script src="js/admin.js"></script>
 <script src="js/health.js"></script>
 <script src="js/account.js"></script>
-<script src="js/pro.js"></script>
+<script src="js/vyora-pro.js"></script>
 <script src="js/interactions.js"></script>
 </html>
