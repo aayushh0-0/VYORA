@@ -64,6 +64,10 @@
     // Unlock page scroll when leaving VYORA chat
     if (target === "vyora") {
       document.body.style.overflow = "hidden";
+      // Let the WebGL orb re-measure once the view is visible
+      requestAnimationFrame(() => {
+        window.dispatchEvent(new CustomEvent("vyora:view-active"));
+      });
     } else {
       document.body.style.overflow = "";
       const stage = document.querySelector(".stage");

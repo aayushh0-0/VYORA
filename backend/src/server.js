@@ -30,6 +30,7 @@ app.use(helmet({
       'script-src': ["'self'"],
       'style-src': ["'self'", "'unsafe-inline'"],
       'img-src': ["'self'", 'data:', 'https:'],
+      'media-src': ["'self'"],
       'connect-src': ["'self'"],
       'font-src': ["'self'"],
       'object-src': ["'none'"],
@@ -61,11 +62,18 @@ app.use('/api/', rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: true
 registerHealthRoutes(app);
 registerApiRoutes(app);
 
-// Static frontend: prefer Vite production build when present, else source public/
+// Static frontend: prefer Vite production build only when it includes assets (icons/orb/loader).
+// Incomplete dist (CSS-only) falls back to frontend/public so avatars, loader SVG, and orb work.
 const distDir = path.join(root, 'dist');
 const publicDir = path.join(root, 'frontend/public');
-const staticDir = fs.existsSync(path.join(distDir, 'index.html')) ? distDir : publicDir;
+const distReady = fs.existsSync(path.join(distDir, 'index.html'))
+  && fs.existsSync(path.join(distDir, 'assets', 'vyora-icon.png'));
+const staticDir = distReady ? distDir : publicDir;
 app.use(express.static(staticDir));
+// Always expose source assets as fallback (covers partial builds / missing media)
+if (staticDir !== publicDir) {
+  app.use(express.static(publicDir));
+}
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api')) return next();
   res.sendFile(path.join(staticDir, 'index.html'));

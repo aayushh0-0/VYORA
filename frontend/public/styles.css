@@ -318,7 +318,7 @@ button.btn:hover,.hero-cta:hover{box-shadow:0 9px 22px rgba(239,35,60,.2)}
 /* Chat typing loader (animated SVG) */
 .msg.typing{display:flex;align-items:center;justify-content:center;min-width:72px;min-height:56px;padding:8px 12px;background:#1a1a1e;border:1px solid #2e2e34}
 .msg-loader{display:flex;align-items:center;justify-content:center;line-height:0}
-.msg-loader img{width:56px;height:56px;display:block}
+.msg-loader img{width:22px;height:22px;display:block;border-radius:50%}
 .msg-typing-text{white-space:pre-wrap;word-break:break-word}
 .msg.bot:not(.typing) .msg-loader{display:none}
 
@@ -1402,4 +1402,319 @@ body:not([data-section="vyora"]) .stage{
   height:auto !important;
   max-height:none !important;
   overflow:visible !important;
+}
+
+/* Typing indicator uses VYORA icon (not colorful loader SVG) */
+.msg-row.typing .msg-loader{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;
+  height:28px;
+  line-height:0;
+}
+.msg-row.typing .msg-loader-icon,
+.msg-row.typing .msg-loader img{
+  width:22px !important;
+  height:22px !important;
+  border-radius:50%;
+  display:block;
+  animation:vyoraThinkPulse 1.1s ease-in-out infinite;
+  box-shadow:0 0 0 1px rgba(239,35,60,.35);
+}
+.msg-row.typing .msg-bubble.typing-bubble{
+  min-height:0;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+}
+@keyframes vyoraThinkPulse{
+  0%,100%{ opacity:.55; transform:scale(.92); }
+  50%{ opacity:1; transform:scale(1); }
+}
+
+/* Typing bubble: colorful VYORA loader dots */
+.msg-row.typing .msg-loader{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;
+  height:32px;
+  line-height:0;
+}
+.msg-row.typing .msg-loader img,
+.msg-row.typing .msg-loader-icon{
+  width:28px !important;
+  height:28px !important;
+  border-radius:0 !important;
+  animation:none !important;
+  box-shadow:none !important;
+  display:block;
+}
+.msg-row.typing .msg-bubble.typing-bubble{
+  min-height:0;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+}
+
+/* Official VYORA logo (project-wide) */
+.brand{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:4px;
+  min-width:0;
+}
+.brand-logo{
+  display:block;
+  height:44px;
+  width:auto;
+  max-width:160px;
+  object-fit:contain;
+  object-position:left center;
+}
+.brand-logo-mark{
+  display:none;
+  width:40px;
+  height:40px;
+  object-fit:cover;
+  object-position:center 35%;
+  border-radius:10px;
+  background:#000;
+}
+.brand-sub{
+  margin-top:0;
+}
+.app.sidebar-collapsed .brand-logo,
+.app.sidebar-collapsed .brand-sub{display:none}
+.app.sidebar-collapsed .brand-logo-mark{display:block}
+.app.sidebar-collapsed .brand{align-items:center}
+
+.v-brand-line{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.v-brand-logo{
+  height:36px;
+  width:auto;
+  max-width:140px;
+  object-fit:contain;
+  display:block;
+}
+
+.v-empty-title{
+  margin:4px 0 8px !important;
+  line-height:0 !important;
+}
+.v-empty-logo{
+  height:clamp(56px, 10vw, 88px);
+  width:auto;
+  max-width:min(320px, 80vw);
+  object-fit:contain;
+  display:block;
+  margin:0 auto;
+  filter:drop-shadow(0 0 18px rgba(239,35,60,.35));
+}
+
+.rail-foot-avatar{
+  overflow:hidden;
+  padding:0 !important;
+  background:#000 !important;
+}
+.rail-foot-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 32%;
+  display:block;
+}
+
+/* Chat message avatars use logo */
+.msg-avatar-img[src*="vyora-logo"],
+.msg-avatar img[src*="vyora-logo"]{
+  object-fit:cover;
+  object-position:center 30%;
+  background:#000;
+  border-radius:50%;
+}
+
+/* Firestreak animation beside sidebar logo */
+.brand-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  width:100%;
+}
+.brand-streak{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  flex:none;
+  pointer-events:none;
+  filter:drop-shadow(0 0 8px rgba(255,80,30,.55));
+  mix-blend-mode:screen;
+}
+.app.sidebar-collapsed .brand-streak{
+  display:none;
+}
+.app.sidebar-collapsed .brand-row{
+  justify-content:center;
+}
+
+/* Brand: icon + wordmark + compact streak */
+.brand-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  width:100%;
+}
+.brand-icon{
+  width:36px;
+  height:36px;
+  object-fit:contain;
+  flex:none;
+  display:block;
+}
+.brand-wordmark{
+  height:18px;
+  width:auto;
+  max-width:110px;
+  object-fit:contain;
+  object-position:left center;
+  flex:none;
+  display:block;
+}
+.brand-logo{display:none !important} /* legacy full logo */
+.brand-streak-wrap{
+  position:relative;
+  flex:none;
+  width:28px;
+  height:28px;
+  margin-left:2px;
+  display:grid;
+  place-items:center;
+}
+.brand-streak{
+  width:28px !important;
+  height:28px !important;
+  object-fit:contain;
+  pointer-events:none;
+  filter:drop-shadow(0 0 6px rgba(255,90,20,.5));
+  mix-blend-mode:screen;
+}
+.brand-streak-num{
+  position:absolute;
+  right:-2px;
+  bottom:-3px;
+  min-width:14px;
+  height:14px;
+  padding:0 3px;
+  border-radius:8px;
+  background:#ef233c;
+  color:#fff;
+  font:800 9px/14px 'Barlow Condensed',system-ui,sans-serif;
+  text-align:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.45);
+  z-index:1;
+}
+.app.sidebar-collapsed .brand-icon,
+.app.sidebar-collapsed .brand-wordmark,
+.app.sidebar-collapsed .brand-streak-wrap,
+.app.sidebar-collapsed .brand-sub{display:none}
+.app.sidebar-collapsed .brand-logo-mark{
+  display:block;
+  width:36px;
+  height:36px;
+  object-fit:contain;
+}
+.app.sidebar-collapsed .brand-row{justify-content:center}
+
+/* New VYORA orb (webm) */
+.vyora-page .v-empty-orb{
+  width:auto;
+  height:auto;
+  margin:0 auto 12px;
+  line-height:0;
+}
+.vyora-page .vyora-orb-video{
+  display:block;
+  width:min(28vmin, 200px);
+  height:min(28vmin, 200px);
+  object-fit:contain;
+  background:transparent;
+  filter:drop-shadow(0 0 18px rgba(239,35,60,.4));
+  pointer-events:none;
+}
+.vyora-page .v-chat-intro-orb.vyora-orb-video{
+  width:48px;
+  height:48px;
+  flex:none;
+  margin:0;
+  filter:drop-shadow(0 0 10px rgba(239,35,60,.45));
+}
+/* WebGL orb hosts (divs) */
+.vyora-page #vyoraOrbEmpty.vyora-orb,
+.vyora-page #vyoraOrbChat.vyora-orb{
+  display:block;
+  pointer-events:auto;
+}
+
+/* Chat bot avatar: clean icon (not full logo wordmark) */
+.msg-row.bot .msg-avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  overflow:hidden;
+  flex:none;
+  background:#0a0a0c;
+  border:1px solid rgba(239,35,60,.55) !important;
+  display:grid;
+  place-items:center;
+}
+.msg-row.bot .msg-avatar-img,
+.msg-row.bot .msg-avatar img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  background:#000;
+  border-radius:50%;
+  display:block;
+  border:none !important;
+}
+/* Typing loader must stay visible */
+.msg-row.typing .msg-loader{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:32px !important;
+  height:32px !important;
+  align-items:center;
+  justify-content:center;
+}
+.msg-row.typing .msg-loader img,
+.msg-row.typing .msg-loader-icon{
+  width:28px !important;
+  height:28px !important;
+  max-width:28px !important;
+  max-height:28px !important;
+  border-radius:0 !important;
+  object-fit:contain !important;
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  animation:none !important;
+  filter:none !important;
+}
+.msg-row.typing .msg-bubble.typing-bubble{
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  min-width:52px;
+  min-height:40px;
+  padding:10px 14px !important;
 }

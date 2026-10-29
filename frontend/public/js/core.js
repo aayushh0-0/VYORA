@@ -40,9 +40,10 @@ function addMsg(logId, cls, text){
   avatar.className = 'msg-avatar';
   avatar.setAttribute('aria-hidden', 'true');
   if (isBot) {
-    avatar.innerHTML = '<img class="msg-avatar-img" src="assets/vyora-avatar.svg" alt="VYORA" width="36" height="36" />';
+    // Square logo mark (not the wide wordmark icon) so the circle never crops to "VYOF"
+    avatar.innerHTML = '<img class="msg-avatar-img" src="/assets/vyora-logo.png" alt="VYORA" width="40" height="40" onerror="this.onerror=null;this.src=\'/assets/vyora-avatar.svg\'" />';
   } else {
-    avatar.innerHTML = '<img class="msg-avatar-img" src="assets/user-avatar.svg" alt="You" width="36" height="36" />';
+    avatar.innerHTML = '<img class="msg-avatar-img" src="/assets/user-avatar.svg" alt="You" width="36" height="36" />';
   }
 
   const col = document.createElement('div');
@@ -74,7 +75,7 @@ function addTypingMsg(logId){
 
   const avatar = document.createElement('div');
   avatar.className = 'msg-avatar';
-  avatar.innerHTML = '<img class="msg-avatar-img" src="assets/vyora-avatar.svg" alt="VYORA" width="36" height="36" />';
+  avatar.innerHTML = '<img class="msg-avatar-img" src="/assets/vyora-logo.png" alt="VYORA" width="40" height="40" onerror="this.onerror=null;this.src=\'/assets/vyora-avatar.svg\'" />';
 
   const col = document.createElement('div');
   col.className = 'msg-col';
@@ -82,13 +83,7 @@ function addTypingMsg(logId){
   bubble.className = 'msg-bubble typing-bubble';
   const loader = document.createElement('div');
   loader.className = 'msg-loader';
-  const img = document.createElement('img');
-  img.src = 'assets/loading_animation.svg';
-  img.alt = '';
-  img.width = 28;
-  img.height = 28;
-  img.decoding = 'async';
-  loader.appendChild(img);
+  loader.innerHTML = '<img class="msg-loader-icon" src="/assets/loading_animation.svg" alt="" width="28" height="28" decoding="async" onerror="this.style.display=\'none\'" />';
   const text = document.createElement('div');
   text.className = 'msg-typing-text';
   text.hidden = true;

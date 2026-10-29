@@ -3,20 +3,33 @@
 const {addMsg,wireChat,wireMic,triggerWave,navigate,speakWithOrb}=window.VyoraCore;
 let persona = "calm";
 
-// Provided VYORA energy orb (assets/orb/orb.js)
+// Live VYORA energy orb (WebGL2 — assets/orb/orb.js)
 let vyoraOrbEmpty = null;
 let vyoraOrbChat = null;
 function initVyoraOrbs(){
+  ["vyoraOrbEmpty", "vyoraOrbChat"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el && el.tagName === "VIDEO") {
+      try { el.play?.().catch(() => {}); } catch (_) {}
+    }
+  });
   if(!window.VyoraOrb || typeof window.VyoraOrb.create !== "function") return;
   const emptyHost = document.getElementById("vyoraOrbEmpty");
   const chatHost = document.getElementById("vyoraOrbChat");
   try {
-    if(emptyHost && !vyoraOrbEmpty){
-      vyoraOrbEmpty = window.VyoraOrb.create(emptyHost, {});
+    if(emptyHost && emptyHost.tagName !== "VIDEO" && !vyoraOrbEmpty){
+      vyoraOrbEmpty = window.VyoraOrb.create(emptyHost, {
+        colors: ['#ef233c', '#ff6b4a', '#7a1020'],
+        size: 0.82, glow: 1.35, wobble: 1.2, bleed: 1.2, highlight: 1.15,
+        followCursor: true, clickPulse: true, intro: true
+      });
       vyoraOrbEmpty.setState("idle");
     }
-    if(chatHost && !vyoraOrbChat){
-      vyoraOrbChat = window.VyoraOrb.create(chatHost, {});
+    if(chatHost && chatHost.tagName !== "VIDEO" && !vyoraOrbChat){
+      vyoraOrbChat = window.VyoraOrb.create(chatHost, {
+        colors: ['#ef233c', '#ff6b4a', '#7a1020'],
+        size: 0.9, glow: 1.2, followCursor: true, clickPulse: true
+      });
       vyoraOrbChat.setState("idle");
     }
   } catch(e) { console.warn("VyoraOrb init:", e); }
@@ -28,6 +41,21 @@ function setVyoraOrbState(state){
   } catch(_){}
 }
 initVyoraOrbs();
+function ensureOrbFallbackPlaying(){
+  const v = document.getElementById("vyoraOrbFallback");
+  if (v && v.tagName === "VIDEO") {
+    try { v.play?.().catch(() => {}); } catch (_) {}
+  }
+}
+window.addEventListener("vyora:view-active", () => {
+  try { vyoraOrbEmpty?.destroy?.(); } catch (_) {}
+  try { vyoraOrbChat?.destroy?.(); } catch (_) {}
+  vyoraOrbEmpty = null;
+  vyoraOrbChat = null;
+  initVyoraOrbs();
+  ensureOrbFallbackPlaying();
+});
+ensureOrbFallbackPlaying();
 
 let lastUserMsg = "";
 let lastBotReply = "";
