@@ -1,0 +1,359 @@
+
+/* Pace athlete platform — embedded in #training */
+#training.view {
+  padding: 8px 4px 32px;
+}
+.pace-app {
+  --bg: #0b0c10;
+  --panel: #12141a;
+  --line: #242833;
+  --text: #f3f4f6;
+  --muted: #9aa3b2;
+  --lime: #c8f542;
+  --accent: #ef233c;
+  font-family: Inter, system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.06);
+  overflow: hidden;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+.pace-app * { box-sizing: border-box; }
+.pace-app .pace-shell {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+}
+.pace-app .pace-side {
+  background: #0e1016;
+  border-right: 1px solid var(--line);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pace-app .pace-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+.pace-app .pace-brand strong {
+  font-size: 14px;
+  letter-spacing: .02em;
+}
+.pace-app .pace-brand small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+}
+.pace-app .pace-nav-item {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  font: 600 13px Inter, system-ui, sans-serif;
+}
+.pace-app .pace-nav-item:hover { background: rgba(255,255,255,.04); color: #fff; }
+.pace-app .pace-nav-item.active {
+  background: rgba(200,245,66,.12);
+  color: var(--lime);
+}
+.pace-app .pace-main {
+  overflow: auto;
+  padding: 20px 22px 28px;
+  max-height: calc(100vh - 80px);
+}
+.pace-app .pace-page { display: none; }
+.pace-app .pace-page.active { display: block; animation: paceFade .25s ease; }
+@keyframes paceFade { from { opacity: 0; } to { opacity: 1; } }
+.pace-app .eyebrow { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.pace-app h1 { font-size: 28px; margin: 4px 0 6px; font-weight: 800; letter-spacing: -.02em; }
+.pace-app h2 { font-size: 18px; margin: 0 0 10px; font-weight: 700; }
+.pace-app .muted, .pace-app .pace-muted { color: var(--muted); }
+.pace-app .panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+.pace-app .welcome {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+.pace-app .stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.pace-app .stat {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+.pace-app .stat strong { display: block; font-size: 24px; margin: 8px 0 4px; }
+.pace-app .stat strong small { font-size: 12px; color: var(--muted); margin-left: 4px; }
+.pace-app .stat p { margin: 0; font-size: 12px; color: var(--muted); }
+.pace-app .between { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.pace-app .two-col {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 14px;
+}
+.pace-app .section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.pace-app .activity-list { display: flex; flex-direction: column; gap: 8px; }
+.pace-app .activity-row {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 36px 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.02);
+  cursor: pointer;
+  width: 100%;
+}
+.pace-app .activity-row:hover { border-color: rgba(200,245,66,.35); }
+.pace-app .activity-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: grid; place-items: center;
+  background: rgba(200,245,66,.1);
+}
+.pace-app .activity-name b { display: block; font-size: 13px; }
+.pace-app .activity-name small, .pace-app .activity-value small { color: var(--muted); font-size: 11px; }
+.pace-app .kudos { color: var(--muted); font-size: 12px; }
+.pace-app .progress {
+  height: 8px; border-radius: 99px; background: rgba(255,255,255,.06); overflow: hidden; margin: 8px 0;
+}
+.pace-app .progress > span {
+  display: block; height: 100%; background: linear-gradient(90deg, #c8f542, #8fd14f); border-radius: 99px;
+}
+.pace-app .lime-text { color: var(--lime); }
+.pace-app .primary, .pace-app .outline, .pace-app .quiet, .pace-app .linkbtn, .pace-app .iconbtn {
+  font-family: inherit; cursor: pointer;
+}
+.pace-app .primary {
+  background: var(--lime); color: #111; border: 0; border-radius: 10px;
+  padding: 10px 14px; font-weight: 700; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.pace-app .outline {
+  background: transparent; color: #fff; border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 14px; font-weight: 600; font-size: 13px;
+}
+.pace-app .outline.full, .pace-app .primary.full { width: 100%; justify-content: center; }
+.pace-app .quiet, .pace-app .linkbtn {
+  background: none; border: 0; color: var(--lime); font-weight: 600; font-size: 12px; padding: 0;
+}
+.pace-app .types { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.pace-app .types button {
+  background: rgba(255,255,255,.03); border: 1px solid var(--line); color: var(--muted);
+  border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 600; font-size: 12px;
+}
+.pace-app .types button.chosen { border-color: var(--lime); color: var(--lime); background: rgba(200,245,66,.1); }
+.pace-app .fake-map {
+  border-radius: 14px; border: 1px dashed var(--line); padding: 28px; text-align: center;
+  margin-bottom: 14px; position: relative; min-height: 140px;
+  background: radial-gradient(circle at 50% 40%, rgba(200,245,66,.08), transparent 60%);
+}
+.pace-app .record-stats {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px;
+}
+.pace-app .record-stats div {
+  background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+}
+.pace-app .record-stats small { color: var(--muted); font-size: 10px; letter-spacing: .08em; }
+.pace-app .record-stats strong { display: block; font-size: 20px; margin-top: 4px; }
+.pace-app .record-stats i { font-style: normal; font-size: 12px; color: var(--muted); }
+.pace-app .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+.pace-app .status { font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); }
+.pace-app .status.recording { color: #ef233c; border-color: rgba(239,35,60,.4); }
+.pace-app .status.paused { color: #f59e0b; }
+.pace-app .status.ready { color: var(--lime); }
+.pace-app .record-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+.pace-app .tip { display: flex; gap: 10px; margin-top: 12px; }
+.pace-app .tip b { color: var(--lime); }
+.pace-app .challenge-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.pace-app .challenge {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px;
+}
+.pace-app .challenge h3 { margin: 0 0 6px; font-size: 15px; }
+.pace-app .challenge p { margin: 0 0 10px; color: var(--muted); font-size: 12px; }
+.pace-app .leader-list, .pace-app .feed { display: flex; flex-direction: column; gap: 10px; }
+.pace-app .leader-row, .pace-app .feed-item {
+  display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel);
+}
+.pace-app .composer textarea {
+  width: 100%; min-height: 80px; border-radius: 12px; border: 1px solid var(--line);
+  background: rgba(255,255,255,.03); color: #fff; padding: 12px; resize: vertical; font: inherit;
+}
+.pace-app .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.pace-app .filters button, .pace-app .pill {
+  background: rgba(255,255,255,.03); border: 1px solid var(--line); color: var(--muted);
+  border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 12px; font-weight: 600;
+}
+.pace-app .filters button.active, .pace-app .pill.active { color: var(--lime); border-color: var(--lime); }
+.pace-app .pace-search {
+  width: 100%; max-width: 320px; padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--line); background: rgba(255,255,255,.03); color: #fff; font: inherit;
+}
+.pace-app .form input, .pace-app .form select, .pace-app .form textarea {
+  width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: rgba(255,255,255,.03); color: #fff; font: inherit; margin-top: 4px; margin-bottom: 10px;
+}
+.pace-app .pace-modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none;
+  align-items: center; justify-content: center; z-index: 80;
+}
+.pace-app .pace-modal-backdrop.open { display: flex; }
+.pace-app .pace-modal {
+  width: min(420px, 92vw); background: #12141a; border: 1px solid var(--line);
+  border-radius: 16px; padding: 18px;
+}
+.pace-app .hero {
+  display: flex; justify-content: space-between; gap: 16px; align-items: center;
+  padding: 20px; border-radius: 16px; margin-bottom: 16px;
+  background: linear-gradient(135deg, rgba(200,245,66,.12), rgba(239,35,60,.08));
+  border: 1px solid rgba(200,245,66,.2);
+}
+.pace-app .hero-orbit {
+  width: 110px; height: 110px; border-radius: 50%;
+  display: grid; place-items: center; text-align: center;
+  border: 2px solid rgba(200,245,66,.35); background: rgba(0,0,0,.25);
+}
+.pace-app .hero-orbit strong { font-size: 22px; }
+.pace-app .hero-orbit small { display: block; font-size: 9px; letter-spacing: .1em; color: var(--muted); }
+.pace-app .focus { display: flex; gap: 10px; margin: 12px 0; }
+.pace-app .local-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
+.pace-app .training-banner {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 10px 14px; margin-bottom: 12px;
+}
+@media (max-width: 980px) {
+  .pace-app .pace-shell { grid-template-columns: 1fr; }
+  .pace-app .pace-side {
+    flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--line);
+  }
+  .pace-app .pace-brand { width: 100%; }
+  .pace-app .stats, .pace-app .two-col, .pace-app .record-layout, .pace-app .challenge-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Pace: fit viewport, no nested scrollbars */
+#training.view {
+  padding: 4px 0 0 !important;
+  height: calc(100vh - 64px);
+  max-height: calc(100vh - 64px);
+  overflow: hidden !important;
+}
+#training.view.active {
+  display: flex !important;
+  flex-direction: column;
+}
+#training .section-banner {
+  flex: none;
+  margin-bottom: 8px;
+  padding: 4px 8px;
+}
+.pace-app {
+  flex: 1;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: 100%;
+  overflow: hidden !important;
+}
+.pace-app .pace-shell {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+.pace-app .pace-side {
+  overflow: hidden;
+  padding: 10px 8px;
+}
+.pace-app .pace-nav-item { padding: 8px 10px; font-size: 12px; }
+.pace-app .pace-main {
+  overflow: hidden !important;
+  max-height: none !important;
+  height: 100%;
+  padding: 12px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+.pace-app .pace-main::-webkit-scrollbar { display: none; }
+.pace-app .pace-page.active {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.pace-app .hero {
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  flex: none;
+}
+.pace-app h1 { font-size: 22px; margin: 2px 0 4px; }
+.pace-app .stats {
+  gap: 8px;
+  margin-bottom: 10px;
+  flex: none;
+}
+.pace-app .stat { padding: 10px; }
+.pace-app .stat strong { font-size: 18px; margin: 4px 0; }
+.pace-app .two-col {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  gap: 10px;
+}
+.pace-app .panel {
+  overflow: hidden;
+  min-height: 0;
+  padding: 12px;
+}
+.pace-app .activity-list { overflow: hidden; }
+.pace-app .activity-row { padding: 8px 10px; }
+/* Record / other pages can use thin internal scroll if needed */
+.pace-app .pace-page.active[data-page="record"],
+.pace-app .pace-page.active[data-page="activities"],
+.pace-app .pace-page.active[data-page="challenges"],
+.pace-app .pace-page.active[data-page="community"],
+.pace-app .pace-page.active[data-page="profile"],
+.pace-app .pace-page.active[data-page="leaderboard"],
+.pace-app .pace-page.active[data-page="segments"] {
+  overflow: auto;
+  scrollbar-width: thin;
+}
+body:has(#training.view.active) .stage {
+  overflow: hidden !important;
+}

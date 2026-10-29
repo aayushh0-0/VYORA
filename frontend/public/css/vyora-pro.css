@@ -66,12 +66,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 28px;
+  padding: 10px 20px;
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  position: relative;
+  z-index: 2;
+  flex: none;
 }
 
 .header-left {
@@ -177,7 +177,8 @@
 .pro-layout {
   display: flex;
   flex: 1;
-  min-height: calc(100vh - 73px);
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* ---------- Sidebar Nav ---------- */
@@ -228,9 +229,12 @@
 /* ---------- Content ---------- */
 .pro-content {
   flex: 1;
-  padding: 28px 32px;
-  overflow-y: auto;
-  max-height: calc(100vh - 73px);
+  min-width: 0;
+  min-height: 0;
+  padding: 14px 18px 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .tab-panel {
@@ -1899,4 +1903,106 @@ input:checked + .slider:before {
   font-weight: 700;
   letter-spacing: -0.01em;
   color: #f0f0f5;
+}
+
+
+/* ===== Pro: no page scroll, no overlap, compact dashboard ===== */
+#pro.view {
+  padding: 0 !important;
+  height: calc(100vh - 64px);
+  max-height: calc(100vh - 64px);
+  overflow: hidden !important;
+  background: #0a0a0c;
+}
+#pro.view.active {
+  display: flex !important;
+  flex-direction: column;
+}
+.vyora-pro-app {
+  flex: 1;
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
+  border-radius: 0;
+}
+.vyora-pro-app .pro-layout {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.vyora-pro-app .pro-sidebar {
+  padding: 12px 8px;
+  overflow: hidden;
+}
+.vyora-pro-app .pro-sidebar .nav-item {
+  padding: 9px 12px;
+  font-size: 13px;
+}
+.vyora-pro-app .pro-content {
+  overflow: hidden !important;
+  scrollbar-width: none;
+}
+.vyora-pro-app .pro-content::-webkit-scrollbar { width: 0; height: 0; display: none; }
+.vyora-pro-app .tab-panel.active {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* Dashboard density */
+.vyora-pro-app .welcome-banner {
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  flex: none;
+}
+.vyora-pro-app .welcome-text h2 { font-size: 18px; margin-bottom: 4px; }
+.vyora-pro-app .welcome-text p { font-size: 12px; }
+.vyora-pro-app .stats-grid {
+  gap: 10px;
+  margin-bottom: 12px;
+  flex: none;
+}
+.vyora-pro-app .stat-card { padding: 12px; }
+.vyora-pro-app .stat-icon { width: 34px; height: 34px; font-size: 14px; }
+.vyora-pro-app .stat-value { font-size: 15px; }
+.vyora-pro-app .two-col {
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.vyora-pro-app .two-col .card {
+  margin: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.vyora-pro-app .schedule-list { overflow: hidden; }
+.vyora-pro-app .section-header { margin-bottom: 12px; }
+.vyora-pro-app .section-header h2 { font-size: 18px; }
+/* Hide duplicate streak/bell if markup remains */
+.vyora-pro-app .streak-chip,
+.vyora-pro-app .notification-bell { display: none !important; }
+/* Kill outer stage scroll while Pro is open */
+body:has(#pro.view.active) .stage {
+  overflow: hidden !important;
+  height: calc(100vh - 0px);
+}
+body:has(#pro.view.active),
+body:has(#training.view.active) {
+  overflow: hidden;
+}
+/* Other pro tabs: still no outer double scrollbar */
+.vyora-pro-app .tab-panel.active:not(#tab-dashboard) {
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.vyora-pro-app .tab-panel.active:not(#tab-dashboard)::-webkit-scrollbar { width: 4px; }
+.vyora-pro-app .tab-panel.active:not(#tab-dashboard)::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.12); border-radius: 4px;
 }

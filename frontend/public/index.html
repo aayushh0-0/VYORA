@@ -8,6 +8,7 @@
 <link rel="icon" href="assets/vyora-logo.png" type="image/png">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="css/vyora-pro.css">
+<link rel="stylesheet" href="css/pace.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/orb/orb.css">
@@ -540,100 +541,217 @@
     </section>
 
     <!-- SPECIAL TRAINING -->
-    <section id="training" class="view">
+        <section id="training" class="view">
       <div class="section-banner"><span>02</span><strong>TRAIN / EXPLORE / COMPETE</strong><em>SPECIAL TRAINING</em></div>
-      <p class="eyebrow">VYORA Special Training</p>
-      <h1 class="title">Train beyond the workout</h1>
-      <p class="sub">Performance intelligence, personalized routes, challenges and local discovery — all controlled by voice through VYORA Copilot.</p>
 
-      <div class="training-tabs" role="tablist" aria-label="Special training categories">
-        <button class="active" data-training-tab="train">TRAIN</button>
-        <button data-training-tab="explore">EXPLORE</button>
-        <button data-training-tab="compete">COMPETE</button>
-      </div>
-
-      <div class="training-feature-index" aria-label="Special Training features">
-        <span><b>03</b> Performance Predictions</span>
-        <span><b>04</b> Progress Comparison</span>
-        <span><b>05</b> Athlete Intelligence</span>
-        <span><b>06</b> Personalized Routes</span>
-        <span><b>07</b> 3D Terrain + Elevation</span>
-        <span><b>08</b> Stops + Destinations</span>
-        <span><b>09</b> Leaderboards</span>
-        <span><b>10</b> Group Challenges</span>
-        <span><b>11</b> Local Legend + Segments</span>
-      </div>
-
-      <div class="training-panel active" data-training-panel="train">
-        <div class="training-grid">
-          <article class="training-card">
-            <div class="feature-visual performance-visual">
-              <div class="mini-window"><b>Performance Predictions</b><div class="prediction-grid"><strong>5K<br><small>28:29</small></strong><strong>10K<br><small>59:27</small></strong><strong>13.1 MI<br><small>2:12:08</small></strong><strong>26.2 MI<br><small>4:33:05</small></strong></div></div>
+      <div class="pace-app" id="paceApp">
+        <div class="pace-shell">
+          <aside class="pace-side" aria-label="Athlete platform navigation">
+            <div class="pace-brand">
+              <div>
+                <strong>PACE</strong>
+                <small>Athlete platform</small>
+              </div>
             </div>
-            <h2>Predict your performance</h2><p>Estimate race times from your recent training, recovery and effort trends.</p>
-            <button class="btn ghost training-action" data-action="predict">Run prediction</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual chart-visual"><div class="chart-line"></div><div class="chart-dot d1"></div><div class="chart-dot d2"></div><div class="chart-dot d3"></div><div class="chart-label">Progress Comparison</div></div>
-            <h2>Compare your progress</h2><p>See current training load and performance against your personal baseline.</p>
-            <button class="btn ghost training-action" data-action="compare">Compare progress</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual intel-visual"><div class="intel-copy"><b>Athlete Intelligence</b><span>Your pace was 13 seconds faster than your 30-day average.</span></div></div>
-            <h2>Get athlete intelligence</h2><p>VYORA turns your activity patterns into clear, useful coaching insights.</p>
-            <button class="btn ghost training-action" data-action="intelligence">Show insights</button>
-          </article>
-        </div>
-      </div>
+            <button type="button" class="pace-nav-item active" data-page="dashboard">Dashboard</button>
+            <button type="button" class="pace-nav-item" data-page="record">Record</button>
+            <button type="button" class="pace-nav-item" data-page="activities">Activities</button>
+            <button type="button" class="pace-nav-item" data-page="segments">Segments</button>
+            <button type="button" class="pace-nav-item" data-page="leaderboard">Leaderboard</button>
+            <button type="button" class="pace-nav-item" data-page="challenges">Challenges</button>
+            <button type="button" class="pace-nav-item" data-page="community">Community</button>
+            <button type="button" class="pace-nav-item" data-page="profile">Profile</button>
+          </aside>
 
-      <div class="training-panel" data-training-panel="explore">
-        <div class="training-grid">
-          <article class="training-card">
-            <div class="feature-visual map-visual route-map"><span class="route-path"></span><span class="route-pin">◎</span><div class="map-label">MADE FOR YOU</div></div>
-            <h2>Get routes made for you</h2><p>Personalized running, walking and cycling routes based on your goal and training history.</p>
-            <button class="btn ghost training-action" data-action="routes">Build my route</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual terrain-visual"><div class="terrain-lines"></div><div class="terrain-layer">3D LAYERS</div></div>
-            <h2>Plan smarter with new layers</h2><p>Preview elevation, terrain, steep climbs and route conditions before you train.</p>
-            <button class="btn ghost training-action" data-action="layers">Show route layers</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual poi-visual"><div class="poi-map"></div><span class="poi-marker">●</span><div class="poi-card"><b>Royal Arch</b><small>1.94 mi away · viewpoint</small></div></div>
-            <h2>Add a stop or destination</h2><p>Add a viewpoint, water stop, café or recovery destination directly to your training route.</p>
-            <button class="btn ghost training-action" data-action="destination">Add destination</button>
-          </article>
-        </div>
-      </div>
+          <div class="pace-main">
+            <!-- Dashboard -->
+            <div class="pace-page active" data-page="dashboard">
+              <section class="hero">
+                <div>
+                  <small class="eyebrow">YOUR WEEK</small>
+                  <h1>Train with intention.</h1>
+                  <p class="muted">Every session is a vote for the athlete you're becoming.</p>
+                  <button type="button" class="linkbtn" data-page-jump="activities">Explore your training ↗</button>
+                </div>
+                <div class="hero-orbit"><strong data-orbit>0<small>KM LOGGED</small></strong></div>
+              </section>
+              <div class="stats">
+                <div class="stat"><div class="between"><span>Distance logged</span><span>↗</span></div><strong data-stat="km">0<small>km</small></strong><p>+12% this month</p></div>
+                <div class="stat"><div class="between"><span>Time moving</span><span>⏱</span></div><strong data-stat="hours">0<small>hrs</small></strong><p>Across all activities</p></div>
+                <div class="stat"><div class="between"><span>Activities</span><span>✦</span></div><strong data-stat="count">0<small>sessions</small></strong><p>Training logged</p></div>
+                <div class="stat"><div class="between"><span>Weekly target</span><span>◎</span></div><strong data-stat="goal">0%<small>complete</small></strong><p data-goal-left>0 km to go</p></div>
+              </div>
+              <div class="two-col">
+                <section class="panel">
+                  <div class="section-head">
+                    <div><small class="eyebrow">YOUR TRAINING</small><h2>Recent activities</h2></div>
+                    <button type="button" class="quiet" data-page-jump="activities">View all ↗</button>
+                  </div>
+                  <div data-recent class="activity-list"></div>
+                </section>
+                <section class="panel">
+                  <small class="eyebrow">TRAINING FOCUS</small>
+                  <h2>Stay in rhythm</h2>
+                  <div class="focus"><span>✦</span><div><b>Build your base</b><p class="muted" style="margin:4px 0 0;font-size:13px">Keep easy sessions conversational this week.</p></div></div>
+                  <div class="between"><span>Weekly distance goal</span><b class="lime-text" data-stat="goal">0%</b></div>
+                  <div class="progress"><span data-goal-bar style="width:0%"></span></div>
+                  <div class="between muted"><span data-goal-done>0 km completed</span><span data-goal-target>25 km goal</span></div>
+                  <button type="button" class="outline full" style="margin-top:12px" data-page-jump="challenges">Find a challenge →</button>
+                </section>
+              </div>
+            </div>
 
-      <div class="training-panel" data-training-panel="compete">
-        <div class="training-grid">
-          <article class="training-card">
-            <div class="feature-visual leaderboard-visual"><div class="leader-row"><b>1</b><span>Arby</span><em>♛</em></div><div class="leader-row"><b>2</b><span>You</span><em>↗</em></div><div class="leader-row"><b>3</b><span>Hannah</span><em>—</em></div><div class="leader-row"><b>4</b><span>Brian</span><em>—</em></div></div>
-            <h2>Climb the leaderboards</h2><p>Compare your pace, distance and consistency with your local training community.</p>
-            <button class="btn ghost training-action" data-action="leaderboard">Open leaderboard</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual challenge-visual"><div><b>You</b><span><i style="width:88%"></i></span><small>46h / 50h</small></div><div><b>Maya</b><span><i style="width:70%"></i></span><small>36h / 50h</small></div><div><b>Alex</b><span><i style="width:44%"></i></span><small>22h / 50h</small></div><div><b>John</b><span><i style="width:26%"></i></span><small>13h / 50h</small></div></div>
-            <h2>Challenge your friends</h2><p>Turn motivation into a group activity and compete on shared goals.</p>
-            <button class="btn ghost training-action" data-action="challenge">Create challenge</button>
-          </article>
-          <article class="training-card">
-            <div class="feature-visual legend-visual"><div class="legend-badge">27</div><b>LOCAL LEGEND</b><span>Own your local segment.</span></div>
-            <h2>Become a local legend</h2><p>Chase your strongest local segments and earn status through consistent performance.</p>
-            <button class="btn ghost training-action" data-action="legend">Find my segments</button>
-          </article>
-        </div>
-      </div>
+            <!-- Record -->
+            <div class="pace-page" data-page="record">
+              <div class="welcome">
+                <div>
+                  <small class="eyebrow">TRACK YOUR EFFORT</small>
+                  <h1>Record activity</h1>
+                  <p class="muted">A simple training recorder — GPS is simulated in this demo.</p>
+                </div>
+                <span class="status ready" data-rec-status>● Ready</span>
+              </div>
+              <div class="record-layout">
+                <section class="panel">
+                  <div class="types">
+                    <button type="button" class="chosen" data-type="Run">↗ Run</button>
+                    <button type="button" data-type="Ride">🚴 Ride</button>
+                    <button type="button" data-type="Hike">⛰ Hike</button>
+                  </div>
+                  <div class="fake-map">
+                    <div style="font-size:28px;margin-bottom:8px">◎</div>
+                    <span style="font-weight:700;letter-spacing:.12em;font-size:11px;color:var(--muted)">GPS PREVIEW</span>
+                    <p class="muted" style="margin:8px 0 0;font-size:12px">Tracking is simulated — no real location is collected.</p>
+                  </div>
+                  <div class="record-stats">
+                    <div><small>DISTANCE</small><strong data-rec-km>0.00 <i>km</i></strong></div>
+                    <div><small>ELAPSED TIME</small><strong data-rec-time>0:00</strong></div>
+                    <div><small>AVG PACE</small><strong data-rec-pace>—</strong></div>
+                  </div>
+                  <div class="controls">
+                    <button type="button" class="primary" data-rec-start>▶ Start recording</button>
+                    <button type="button" class="outline" data-rec-finish hidden>■ Finish &amp; save</button>
+                    <button type="button" class="outline" data-rec-reset hidden title="Discard">↺</button>
+                  </div>
+                </section>
+                <aside class="panel">
+                  <div style="font-size:22px;margin-bottom:8px">✦</div>
+                  <h2>Make it count.</h2>
+                  <p class="muted" style="font-size:13px">Choose activity, start recording, then finish to save to your history.</p>
+                  <div class="tip"><b>01</b><p><strong>Start when ready</strong><br/><span class="muted">Metrics update while recording.</span></p></div>
+                  <div class="tip"><b>02</b><p><strong>Pause when you need</strong><br/><span class="muted">Resume without losing your session.</span></p></div>
+                  <div class="tip"><b>03</b><p><strong>Save your effort</strong><br/><span class="muted">Session appears in Activities.</span></p></div>
+                </aside>
+              </div>
+            </div>
 
-      <div class="card" style="margin:14px 0;">
-        <h3 style="margin-top:0;">Create a personal challenge</h3>
-        <div class="grid cols-2"><div class="field"><label for="challengeTitle">Challenge title</label><input id="challengeTitle" placeholder="e.g. 30 km this week"/></div><div class="field"><label for="challengeGoal">Goal</label><input id="challengeGoal" placeholder="Walk or run consistently"/></div><div class="field"><label for="challengeTarget">Target number</label><input id="challengeTarget" type="number" min="1" step="0.1" placeholder="30"/></div><div class="field"><label for="challengeUnit">Unit</label><select id="challengeUnit"><option value="km">km</option><option value="minutes">minutes</option><option value="sessions">sessions</option><option value="litres">litres</option></select></div><div class="field"><label for="challengeStart">Start date</label><input id="challengeStart" type="date"/></div><div class="field"><label for="challengeEnd">End date</label><input id="challengeEnd" type="date"/></div></div>
-        <button class="btn" id="challengeCreate">Create challenge</button><p id="challengeStatus" class="bottom-note" aria-live="polite"></p><div id="challengeList" style="margin-top:10px;"></div>
-      </div>
-      <div class="card voice-command-card">
-        <div><span class="eyebrow">Voice-first control</span><h3 style="margin:4px 0 5px;font-size:28px;">Just tell VYORA what to do.</h3><p style="margin:0;">“VYORA, predict my 5K.” · “Build a route with a café stop.” · “Open the leaderboard.” · “Start a group challenge.”</p></div>
-        <button class="btn" data-target="vyora">Talk to VYORA ↗</button>
+            <!-- Activities -->
+            <div class="pace-page" data-page="activities">
+              <div class="welcome">
+                <div>
+                  <small class="eyebrow">HISTORY</small>
+                  <h1>Activities</h1>
+                  <p class="muted">Search, filter, and review your logged sessions.</p>
+                </div>
+                <button type="button" class="outline" data-export>Export JSON</button>
+              </div>
+              <div class="between" style="margin-bottom:12px;gap:12px;flex-wrap:wrap">
+                <input class="pace-search" type="search" placeholder="Search activities…" data-search />
+                <div class="filters">
+                  <button type="button" class="active" data-filter="All">All</button>
+                  <button type="button" data-filter="Run">Run</button>
+                  <button type="button" data-filter="Ride">Ride</button>
+                  <button type="button" data-filter="Hike">Hike</button>
+                </div>
+              </div>
+              <div data-list class="activity-list"></div>
+            </div>
+
+            <!-- Segments -->
+            <div class="pace-page" data-page="segments">
+              <div class="welcome">
+                <div>
+                  <small class="eyebrow">LOCAL LEGENDS</small>
+                  <h1>Segments</h1>
+                  <p class="muted">Featured segments and your demo ranking.</p>
+                </div>
+              </div>
+              <div class="panel"><div data-segments class="leader-list"></div></div>
+              <p class="local-note">Segment matching is demo-only until a map backend is connected.</p>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="pace-page" data-page="leaderboard">
+              <div class="welcome">
+                <div>
+                  <small class="eyebrow">RANKINGS</small>
+                  <h1>Leaderboard</h1>
+                  <p class="muted">Distance leaders this period (includes your logged km).</p>
+                </div>
+              </div>
+              <div class="panel"><div data-leaders class="leader-list"></div></div>
+            </div>
+
+            <!-- Challenges -->
+            <div class="pace-page" data-page="challenges">
+              <div class="welcome">
+                <div>
+                  <small class="eyebrow">GOALS</small>
+                  <h1>Challenges</h1>
+                  <p class="muted">Join or leave challenges — progress is stored on this device.</p>
+                </div>
+              </div>
+              <div class="challenge-grid" data-challenges></div>
+            </div>
+
+            <!-- Community -->
+            <div class="pace-page" data-page="community">
+              <div class="welcome">
+                <div>
+                  <small class="eyebrow">FEED</small>
+                  <h1>Community</h1>
+                  <p class="muted">Share updates and give kudos.</p>
+                </div>
+              </div>
+              <div class="panel composer" style="margin-bottom:14px">
+                <textarea data-composer placeholder="Share a training update…"></textarea>
+                <div class="between" style="margin-top:10px">
+                  <span class="muted" style="font-size:12px">Posts stay on this device</span>
+                  <button type="button" class="primary" data-post>Post</button>
+                </div>
+              </div>
+              <div data-feed class="feed"></div>
+            </div>
+
+            <!-- Profile -->
+            <div class="pace-page" data-page="profile">
+              <div class="welcome">
+                <div>
+                  <small class="eyebrow">YOU</small>
+                  <h1>Profile</h1>
+                  <p class="muted">Edit your athlete profile and weekly goal.</p>
+                </div>
+              </div>
+              <div class="panel form" style="max-width:480px">
+                <label>Name<input name="name" type="text" /></label>
+                <label>Handle<input name="handle" type="text" /></label>
+                <label>Location<input name="location" type="text" /></label>
+                <label>Bio<textarea name="bio" rows="3"></textarea></label>
+                <label>Goal<input name="goal" type="text" /></label>
+                <label>Weekly goal (km)<input name="weeklyGoal" type="number" min="1" step="1" /></label>
+                <div class="controls" style="margin-top:8px">
+                  <button type="button" class="primary" data-save-profile>Save profile</button>
+                  <button type="button" class="outline" data-reset-demo>Reset demo data</button>
+                </div>
+                <p class="local-note">All Pace data is stored in browser localStorage only.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pace-modal-backdrop" role="dialog" aria-modal="true">
+          <div class="pace-modal" data-modal-body></div>
+        </div>
       </div>
     </section>
 
@@ -983,14 +1101,6 @@
         <h1>Your Personal Elite Coaching Hub</h1>
       </div>
       <div class="header-right">
-        <div class="streak-chip">
-          <i class="fas fa-fire"></i>
-          <span id="streak-count">12</span> day streak
-        </div>
-        <div class="notification-bell" id="notif-bell">
-          <i class="fas fa-bell"></i>
-          <span class="notif-dot"></span>
-        </div>
         <div class="user-chip">
           <div class="avatar">P</div>
           <span>Priya • Pro</span>
@@ -1818,6 +1928,7 @@
 <script src="js/workout.js"></script>
 <script src="js/diet.js"></script>
 <script src="js/training.js"></script>
+<script src="js/pace.js"></script>
 <script src="js/locator.js"></script>
 <script src="js/community.js"></script>
 <script src="js/ovula.js"></script>
