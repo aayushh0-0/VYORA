@@ -24,8 +24,7 @@
   const quickbar = document.createElement('div'); quickbar.className = 'vyora-quickbar';
   quickbar.append(
     makeBtn('palette', 'Command palette (Ctrl/⌘ K)', 'Open command palette', '⌘K'),
-    makeBtn('focus', 'Toggle focus mode (F)', 'Toggle focus mode', '◎'),
-    makeBtn('theme', 'Toggle dark mode (D)', 'Toggle dark mode', '◐')
+    makeBtn('focus', 'Toggle focus mode (F)', 'Toggle focus mode', '◎')
   );
   document.body.append(progress, cursor, spotlight, topButton, quickbar);
 
@@ -115,12 +114,13 @@
     document.body.classList.toggle('vyora-focus-mode');
     announce(document.body.classList.contains('vyora-focus-mode') ? 'Focus mode on. Press F to exit.' : 'Focus mode off.');
   };
+  // Dark theme only — light mode removed
   const toggleTheme = () => {
-    const enabled = document.documentElement.classList.toggle('vyora-dark');
-    try { localStorage.setItem('vyora-ui-theme', enabled ? 'dark' : 'light'); } catch {}
-    announce(enabled ? 'Dark theme enabled.' : 'Light theme enabled.');
+    document.documentElement.classList.add('vyora-dark');
+    try { localStorage.setItem('vyora-ui-theme', 'dark'); } catch {}
   };
-  try { if (localStorage.getItem('vyora-ui-theme') === 'dark') document.documentElement.classList.add('vyora-dark'); } catch {}
+  document.documentElement.classList.add('vyora-dark');
+  try { localStorage.setItem('vyora-ui-theme', 'dark'); } catch {}
 
   // Build command palette using safe DOM methods (zero innerHTML)
   const palette = document.createElement('div');
@@ -167,7 +167,7 @@
   const commands = [
     ['Home', 'home', 'Navigate'], ['Workout', 'workout', 'Navigate'], ['Special Training', 'training', 'Navigate'], ['Diet Planner', 'diet', 'Navigate'],
     ['Gyms & Cafés', 'locator', 'Navigate'], ['Community', 'community', 'Navigate'], ['OVULA', 'ovula', 'Navigate'], ['For Business', 'business', 'Navigate'],
-    ['Health Journey', 'health', 'Navigate'], ['VYORA Pro', 'pro', 'Navigate'], ['Toggle focus mode', 'focus', 'Action'], ['Toggle dark theme', 'theme', 'Action'], ['Back to top', 'top', 'Action']
+    ['Health Journey', 'health', 'Navigate'], ['VYORA Pro', 'pro', 'Navigate'], ['Toggle focus mode', 'focus', 'Action'], ['Back to top', 'top', 'Action']
   ];
   let selected = 0;
 
@@ -229,7 +229,6 @@
     }
     if (e.altKey || e.ctrlKey || e.metaKey || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '') || document.activeElement?.isContentEditable) return;
     if (e.key.toLowerCase() === 'f') toggleFocus();
-    if (e.key.toLowerCase() === 'd') toggleTheme();
     if (e.key === '?') openPalette();
   });
 
@@ -256,4 +255,10 @@
     toast.textContent = message; toast.classList.add('show'); clearTimeout(toast._hideTimer); toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 2200);
   }
   window.VyoraInteractions = { openPalette, toggleFocus, toggleTheme, announce };
+
+  document.getElementById('appTopSearch')?.addEventListener('click', () => openPalette());
+  document.getElementById('appNotifyBtn')?.addEventListener('click', () => {
+    try { window.VyoraCore?.navigate?.('community'); } catch (_) {}
+  });
+
 })();

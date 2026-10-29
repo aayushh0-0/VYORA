@@ -1,3 +1,18 @@
+/* dark-only lock */
+:root{
+  --bg:#101012;
+  --ink:#f1f0ee;
+  --muted:#aaa8ad;
+  --paper:#19191d;
+  --line:#38373c;
+  --soft:#29282e;
+  --surface:#19191d;
+  --surface2:#232227;
+  color-scheme:dark;
+}
+html,body{background:#101012;color:#f1f0ee}
+/* end dark-only lock */
+
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
 :root{--bg:#f5f4f1;--ink:#111114;--muted:#6c6b70;--paper:#fff;--red:#ef233c;--red2:#c9152c;--black:#09090b;--line:#d9d7d3;--soft:#eceae6;--accent:#ef233c;--accent-ink:#fff;--surface:#fff;--surface2:#f0efec;--radius:0px;}
 [data-section="ovula"]{--accent:#b94166;--accent-ink:#fff;}
@@ -1898,4 +1913,282 @@ body:not([data-section="vyora"]) .stage{
   height: 56px !important;
   flex: none !important;
   --orb-size: 56px !important;
+}
+
+/* —— Permanent global top navbar —— */
+:root{
+  --app-topbar-h: 58px;
+  --rail-w: 252px;
+  --rail-w-collapsed: 72px;
+}
+.app-topbar{
+  position:fixed;
+  top:0;
+  left:var(--rail-w);
+  right:0;
+  height:var(--app-topbar-h);
+  z-index:90;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:0 20px 0 24px;
+  box-sizing:border-box;
+  background:rgba(8,8,12,.88);
+  border-bottom:1px solid rgba(239,35,60,.22);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:0 8px 28px rgba(0,0,0,.35);
+}
+.app.sidebar-collapsed .app-topbar{
+  left:var(--rail-w-collapsed);
+}
+.app-topbar-search{
+  flex:1 1 auto;
+  max-width:520px;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:40px;
+  padding:0 12px 0 14px;
+  margin:0 auto;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(22,22,28,.92);
+  color:#c8c4ca;
+  cursor:pointer;
+  text-align:left;
+  font:500 13px/1 'DM Sans',system-ui,sans-serif;
+  transition:border-color .15s, box-shadow .15s;
+}
+.app-topbar-search:hover,
+.app-topbar-search:focus-visible{
+  border-color:rgba(239,35,60,.45);
+  box-shadow:0 0 0 1px rgba(239,35,60,.2);
+  outline:none;
+}
+.app-topbar-search-ico{
+  display:grid;
+  place-items:center;
+  color:#8a8690;
+  flex:none;
+}
+.app-topbar-search-placeholder{
+  flex:1;
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  color:#8f8b93;
+}
+.app-topbar-kbd{
+  flex:none;
+  font:600 10px/1 system-ui,sans-serif;
+  letter-spacing:.3px;
+  padding:5px 8px;
+  border-radius:6px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.35);
+  color:#a8a4ac;
+}
+.app-topbar-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex:none;
+  margin-left:auto;
+}
+.app-streak-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 12px 4px 6px;
+  border-radius:999px;
+  border:1px solid rgba(239,35,60,.55);
+  background:rgba(40,8,12,.8);
+  box-shadow:0 0 18px rgba(239,35,60,.28);
+  color:#fff;
+}
+.app-streak-fire{
+  width:26px;
+  height:26px;
+  object-fit:contain;
+  mix-blend-mode:screen;
+  pointer-events:none;
+  filter:drop-shadow(0 0 6px rgba(255,90,20,.65));
+}
+.app-streak-count{
+  font:800 15px/1 'Barlow Condensed',system-ui,sans-serif;
+  color:#ff6b4a;
+}
+.app-streak-label{
+  font:700 10px/1 'Barlow Condensed',system-ui,sans-serif;
+  letter-spacing:1.4px;
+  color:#f0c0b8;
+}
+.app-notify-btn{
+  position:relative;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(22,22,28,.9);
+  color:#e8e4ea;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  padding:0;
+}
+.app-notify-btn:hover{
+  border-color:rgba(239,35,60,.45);
+  color:#fff;
+}
+.app-notify-dot{
+  position:absolute;
+  top:9px;
+  right:10px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#ef233c;
+  box-shadow:0 0 0 2px rgba(8,8,12,.9);
+}
+/* Stage clears fixed topbar */
+main.stage{
+  padding-top:calc(var(--app-topbar-h) + 8px) !important;
+}
+/* VYORA full-bleed pages still clear topbar */
+#vyora.vyora-page.view.active{
+  padding-top:0 !important;
+  /* topbar overlays; internal topbar sits below global */
+}
+.vyora-page .v-topbar{
+  margin-top:0;
+}
+/* Hide page-level streak if leftover */
+.v-streak-badge{display:none !important}
+@media (max-width:900px){
+  .app-topbar{
+    left:0;
+    padding-left:56px; /* room for mobile menu */
+  }
+  .app-topbar-search{max-width:none}
+  .app-topbar-kbd{display:none}
+  .app-streak-label{display:none}
+}
+
+/* Streak badge: fire + number only */
+.app-streak-label,
+.v-streak-label,
+.brand-streak-num + .app-streak-label{display:none !important}
+.app-streak-badge{
+  gap:4px !important;
+  padding:4px 10px 4px 6px !important;
+}
+.app-streak-count{
+  font:800 16px/1 'Barlow Condensed',system-ui,sans-serif !important;
+  color:#ff6b4a !important;
+}
+
+/* —— VYORA chat: pin composer, scroll log only, scrollbar at edge —— */
+#vyora.vyora-page.view.active,
+.vyora-page.view.active{
+  display:flex !important;
+  flex-direction:column !important;
+  height:calc(100vh - var(--app-topbar-h, 58px)) !important;
+  max-height:calc(100vh - var(--app-topbar-h, 58px)) !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+.vyora-page .v-topbar{
+  flex:0 0 auto !important;
+  z-index:5;
+}
+.vyora-page .v-chat:not([hidden]){
+  flex:1 1 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  min-height:0 !important;
+  max-width:none !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  position:relative !important;
+  height:auto !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+.vyora-page .v-chat-intro{
+  flex:0 0 auto;
+  padding:14px 28px 8px;
+  max-width:900px;
+  width:100%;
+  margin:0 auto;
+  box-sizing:border-box;
+}
+.vyora-page .v-chat-log,
+.vyora-page #vyoraLog.chat-log{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain;
+  padding:8px 28px 16px !important;
+  max-width:900px;
+  width:100%;
+  margin:0 auto;
+  box-sizing:border-box;
+  /* Themed scrollbar */
+  scrollbar-width:thin;
+  scrollbar-color:#ef233c #16161a;
+}
+.vyora-page .v-chat-log::-webkit-scrollbar,
+.vyora-page #vyoraLog::-webkit-scrollbar{
+  width:10px;
+}
+.vyora-page .v-chat-log::-webkit-scrollbar-track,
+.vyora-page #vyoraLog::-webkit-scrollbar-track{
+  background:rgba(12,12,16,.85);
+  border-left:1px solid rgba(239,35,60,.15);
+}
+.vyora-page .v-chat-log::-webkit-scrollbar-thumb,
+.vyora-page #vyoraLog::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#ef233c,#7a1020);
+  border-radius:8px;
+  border:2px solid rgba(12,12,16,.85);
+}
+.vyora-page .v-chat-log::-webkit-scrollbar-thumb:hover,
+.vyora-page #vyoraLog::-webkit-scrollbar-thumb:hover{
+  background:linear-gradient(180deg,#ff4d5e,#ef233c);
+}
+.vyora-page .v-jump-latest{
+  right:18px !important;
+  bottom:12px !important;
+}
+.vyora-page .v-bottom-composer:not([hidden]){
+  flex:0 0 auto !important;
+  position:relative !important;
+  width:100% !important;
+  max-width:900px;
+  margin:0 auto !important;
+  padding:10px 28px 18px !important;
+  box-sizing:border-box !important;
+  background:linear-gradient(180deg, transparent, rgba(5,5,8,.72) 35%) !important;
+  z-index:6;
+}
+/* Stage: themed scrollbar when needed, flush right */
+main.stage{
+  scrollbar-width:thin;
+  scrollbar-color:#ef233c #121216;
+}
+main.stage::-webkit-scrollbar{width:10px}
+main.stage::-webkit-scrollbar-track{background:#121216}
+main.stage::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#ef233c,#7a1020);
+  border-radius:8px;
+  border:2px solid #121216;
 }
