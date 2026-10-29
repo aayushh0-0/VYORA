@@ -6,6 +6,18 @@ import { id, str } from '../utils/helpers.js';
 import { authOnly } from '../middleware/auth.js';
 import { logAudit } from '../services/auditService.js';
 
+const COMMUNITY_IMAGE_PATHS = new Set([
+  '/assets/community/02_strength_training.jpg',
+  '/assets/community/03_running_outdoor.jpg',
+  '/assets/community/04_meal_prep.jpg',
+  '/assets/community/05_yoga_recovery.jpg',
+  '/assets/community/06_gym_motivation.jpg',
+  '/assets/community/07_progress_journey.jpg',
+  '/assets/community/08_recovery_motivation.jpg',
+  '/assets/community/09_discipline_motivation.jpg',
+  '/assets/community/10_mindset_wellness.jpg'
+]);
+
 export function registerCommunityAndAdminRoutes(app) {
   app.get('/api/community/posts', authOnly, (req, res) => {
     const rows = db.prepare(
@@ -25,7 +37,9 @@ export function registerCommunityAndAdminRoutes(app) {
     const mediaUrl = str(req.body?.mediaUrl, 1000);
     const visibility = req.body?.visibility === 'private' ? 'private' : 'public';
     if (!title || !body) return res.status(400).json({ error: 'Post title and content are required.' });
-    if (mediaUrl && !/^https:\/\//i.test(mediaUrl)) return res.status(400).json({ error: 'Media URL must use HTTPS.' });
+    if (mediaUrl && !/^https:\/\//i.test(mediaUrl) && !COMMUNITY_IMAGE_PATHS.has(mediaUrl)) {
+      return res.status(400).json({ error: 'Media must use HTTPS or a supplied VYORA community image.' });
+    }
     const u = db.prepare('SELECT display_name FROM users WHERE id=?').get(req.user.sub);
     const pid = id(), now = isoNow();
     db.prepare('INSERT INTO community_posts(id,user_id,author_name,type,title,body,media_url,visibility,created_at) VALUES(?,?,?,?,?,?,?,?,?)')

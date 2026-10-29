@@ -17,7 +17,7 @@
     const headers={'content-type':'application/json',...(options.headers||{}),authorization:'Bearer '+token};
     let response=await fetch(url,{...options,headers});
     if(response.status===401){localStorage.removeItem('vyoraSessionToken');token=null;await createSession();response=await fetch(url,{...options,headers:{...headers,authorization:'Bearer '+token}});}
-    const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||`Request failed (${response.status})`);return data;
+    const data=await response.json().catch(()=>({}));if(!response.ok){const error=new Error(data.error||`Request failed (${response.status})`);error.status=response.status;throw error;}return data;
   }
   const get=url=>request(url);
   const post=(url,body)=>request(url,{method:'POST',body:JSON.stringify(body||{})});

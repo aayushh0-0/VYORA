@@ -118,7 +118,8 @@
         <div class="hero-kicker"><span class="hero-mark">✦</span> VYORA FITNESS INTELLIGENCE · 01</div>
         <div class="hero-title-wrap">
           <div class="hero-title">BUILD</div>
-          <div class="hero-title hero-title-offset">YOUR <span>STRENGTH</span></div>
+          <div class="hero-title">YOUR</div>
+          <div class="hero-title hero-title-outline">STRENGTH</div>
         </div>
         <div class="hero-meta">
           <p>REDESIGN YOUR ROUTINE.<br>TRAIN SMARTER. LIVE STRONGER.</p>
@@ -559,20 +560,149 @@
     </section>
 
     <!-- COMMUNITY -->
-    <section id="community" class="view">
-      <div class="section-banner"><span>04</span><strong>SHARE THE WORK</strong><em>COMMUNITY HUB</em></div>
-      <p class="eyebrow">Community</p>
-      <h1 class="title">Learn, share, follow</h1>
-      <p class="sub">Blogs, videos, and articles from trainers and members — plus direct interaction with your coach.</p>
-      <div class="card" style="margin-bottom:14px;">
-        <h3 style="margin-top:0;">Publish to the community</h3>
-        <div class="field"><label for="postTitle">Title</label><input id="postTitle" maxlength="180" placeholder="What did you learn?"/></div>
-        <div class="field"><label for="postType">Post type</label><select id="postType"><option value="article">Article</option><option value="blog">Blog</option><option value="video">Video link</option><option value="reel">Short reel link</option><option value="photo">Photo link</option></select></div>
-        <div class="field"><label for="postBody">Your post</label><textarea id="postBody" rows="3" maxlength="5000" placeholder="Share a workout, lesson or experience..."></textarea></div>
-        <div class="field"><label for="postMedia">Optional HTTPS media URL</label><input id="postMedia" type="url" placeholder="https://..."/></div>
-        <button class="btn" id="postPublish">Publish post</button><p id="postStatus" class="bottom-note" aria-live="polite"></p>
+    <section id="community" class="view community-page">
+      <img class="com-hero" src="assets/community/01_community_banner.jpg" alt="VYORA Community. Train together. Grow together." width="1536" height="220">
+      <header class="com-page-heading">
+        <div>
+          <h1>Progress is better shared.</h1>
+          <p>Training notes, ideas, and small wins from the VYORA community.</p>
+        </div>
+      </header>
+
+      <div class="com-layout">
+        <div class="com-main">
+          <details class="com-composer" id="communityComposer">
+            <summary>
+              <span class="com-composer-mark" aria-hidden="true">+</span>
+              <span><strong>Share with the community</strong><small>Post a training note, idea, or win.</small></span>
+              <span class="com-composer-action">Write a post</span>
+            </summary>
+            <form class="com-composer-form" id="communityPostForm">
+              <div class="com-form-row">
+                <div class="field">
+                  <label for="postTitle">Title</label>
+                  <input id="postTitle" name="title" maxlength="180" placeholder="What would you like to share?" required>
+                </div>
+                <div class="field">
+                  <label for="postType">Post type</label>
+                  <select id="postType" name="type">
+                    <option value="article">Article</option>
+                    <option value="blog">Blog</option>
+                    <option value="video">Video</option>
+                    <option value="reel">Reel</option>
+                    <option value="photo">Photo</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="postBody">Your post</label>
+                <textarea id="postBody" name="body" rows="4" maxlength="5000" placeholder="Share what you learned, tried, or enjoyed." required></textarea>
+              </div>
+              <div class="com-form-row">
+                <div class="field">
+                  <label for="postTopic">Topic</label>
+                  <select id="postTopic" name="topic">
+                    <option value="training">Training</option>
+                    <option value="nutrition">Nutrition</option>
+                    <option value="progress">Progress</option>
+                    <option value="recovery">Recovery</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="postHashtags">Hashtags</label>
+                  <input id="postHashtags" name="hashtags" maxlength="120" placeholder="strength, consistency">
+                  <small class="com-field-hint">Add up to five tags. The selected topic is added automatically.</small>
+                </div>
+              </div>
+              <div class="com-form-row">
+                <div class="field">
+                  <label for="postAsset">Community image</label>
+                  <select id="postAsset" name="asset">
+                    <option value="">No image</option>
+                    <option value="/assets/community/02_strength_training.jpg">Strength training</option>
+                    <option value="/assets/community/03_running_outdoor.jpg">Running outdoors</option>
+                    <option value="/assets/community/04_meal_prep.jpg">Meal prep</option>
+                    <option value="/assets/community/05_yoga_recovery.jpg">Yoga and mobility</option>
+                    <option value="/assets/community/06_gym_motivation.jpg">Gym motivation</option>
+                    <option value="/assets/community/07_progress_journey.jpg">Progress journey</option>
+                    <option value="/assets/community/08_recovery_motivation.jpg">Recovery</option>
+                    <option value="/assets/community/09_discipline_motivation.jpg">Discipline</option>
+                    <option value="/assets/community/10_mindset_wellness.jpg">Mindset and wellness</option>
+                  </select>
+                  <img class="com-image-preview" id="postImagePreview" src="assets/community/02_strength_training.jpg" alt="Preview: strength training" hidden>
+                </div>
+                <div class="field">
+                  <label for="postMedia">Or add an HTTPS media link</label>
+                  <input id="postMedia" name="mediaUrl" type="url" inputmode="url" placeholder="https://example.com/image.jpg">
+                  <small class="com-field-hint">Uploads are not available yet. Choose a supplied photo or an HTTPS image link.</small>
+                </div>
+              </div>
+              <div class="com-composer-footer">
+                <p id="postCreateStatus" class="com-status" aria-live="polite"></p>
+                <button class="com-cancel-btn" id="postCancel" type="button">Cancel</button>
+                <button class="com-primary-btn" id="postPublish" type="submit">Publish post</button>
+              </div>
+            </form>
+          </details>
+
+          <div class="com-feed-tools">
+            <label class="com-search">
+              <span class="sr-only">Search community posts</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+              <input id="communitySearch" type="search" placeholder="Search posts, people, or topics">
+            </label>
+            <label class="com-sort">
+              <span class="sr-only">Sort community posts</span>
+              <select id="communitySort">
+                <option value="newest">Newest</option>
+                <option value="popular">Most liked</option>
+              </select>
+            </label>
+          </div>
+          <div class="com-filters" role="group" aria-label="Filter posts by type">
+            <button type="button" class="active" data-post-filter="all" aria-pressed="true">All posts</button>
+            <button type="button" data-post-filter="article" aria-pressed="false">Articles</button>
+            <button type="button" data-post-filter="blog" aria-pressed="false">Blogs</button>
+            <button type="button" data-post-filter="video" aria-pressed="false">Videos</button>
+            <button type="button" data-post-filter="reel" aria-pressed="false">Reels</button>
+            <button type="button" data-post-filter="photo" aria-pressed="false">Photos</button>
+          </div>
+          <label class="com-topic-filter">
+            <span>Topic</span>
+            <select id="communityTopicFilter">
+              <option value="all">All topics</option>
+              <option value="training">Training</option>
+              <option value="nutrition">Nutrition</option>
+              <option value="progress">Progress</option>
+              <option value="recovery">Recovery</option>
+            </select>
+          </label>
+          <p id="postStatus" class="com-status com-feed-status" aria-live="polite"></p>
+          <p id="communityPreviewNotice" class="com-demo-notice" role="status" hidden>
+            Development preview: these examples are not community activity. Likes and comments last for this page session; saved posts stay on this device.
+          </p>
+          <div class="com-post-grid" id="postList" aria-live="polite" aria-busy="true"></div>
+        </div>
+
+        <aside class="com-rail" aria-label="Community highlights">
+          <section class="com-rail-section com-challenge">
+            <img src="assets/community/05_yoga_recovery.jpg" alt="Athlete stretching during a recovery session" loading="lazy" width="497" height="210">
+            <div class="com-rail-copy">
+              <p class="com-rail-label">Weekly challenge</p>
+              <h2>Make room for recovery.</h2>
+              <p>Add a short mobility session to your week. Rest and recovery are part of training.</p>
+            </div>
+          </section>
+          <section class="com-rail-section">
+            <h2>Trending topics</h2>
+            <div id="communityTopics" class="com-topic-list"></div>
+          </section>
+          <section class="com-rail-section">
+            <h2>Explore topics</h2>
+            <div id="communityExploreTopics" class="com-explore-topics"></div>
+          </section>
+        </aside>
       </div>
-      <div class="grid cols-2" id="postList"></div>
     </section>
 
     <!-- OVULA -->

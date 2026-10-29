@@ -57,6 +57,8 @@ npm run db:init      # Ensure schema exists
 npm test             # Existing node:test suite
 ```
 
+In Vite development mode, the Community shows six clearly labeled sample posts only when the API returns no posts and there are no locally saved posts. These use the supplied local images, are never inserted into the database, and keep preview likes/comments in the current page session. Production builds omit the preview flag and show only real posts or the normal empty state. API errors remain errors and do not trigger sample content.
+
 ## Troubleshooting
 
 1. **Wrong folder** — `package.json` with `"dev"` must be inside `VYORA_`.
