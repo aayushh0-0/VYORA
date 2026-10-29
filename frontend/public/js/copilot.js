@@ -20,15 +20,17 @@ function initVyoraOrbs(){
     if(emptyHost && emptyHost.tagName !== "VIDEO" && !vyoraOrbEmpty){
       vyoraOrbEmpty = window.VyoraOrb.create(emptyHost, {
         colors: ['#ef233c', '#ff6b4a', '#7a1020'],
-        size: 0.82, glow: 1.35, wobble: 1.2, bleed: 1.2, highlight: 1.15,
-        followCursor: true, clickPulse: true, intro: true
+        size: 0.72, glow: 1.55, wobble: 1.35, bleed: 1.3, highlight: 1.3,
+        speed: 1.75, trail: 1.25, hoverIntensity: 1.25,
+        followCursor: true, clickPulse: true, intro: true, rotateOnHover: true
       });
       vyoraOrbEmpty.setState("idle");
     }
     if(chatHost && chatHost.tagName !== "VIDEO" && !vyoraOrbChat){
       vyoraOrbChat = window.VyoraOrb.create(chatHost, {
         colors: ['#ef233c', '#ff6b4a', '#7a1020'],
-        size: 0.9, glow: 1.2, followCursor: true, clickPulse: true
+        size: 0.9, glow: 1.35, wobble: 1.4, speed: 1.7, trail: 1.2,
+        followCursor: true, clickPulse: true, rotateOnHover: true
       });
       vyoraOrbChat.setState("idle");
     }

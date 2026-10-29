@@ -19,10 +19,6 @@
         <div class="brand-row">
           <img class="brand-icon" src="assets/vyora-icon.png" alt="" aria-hidden="true" />
           <img class="brand-wordmark" src="assets/vyora-wordmark.png" alt="VYORA" />
-          <div class="brand-streak-wrap" title="Streak">
-            <video class="brand-streak" src="assets/firestreak.webm" autoplay muted loop playsinline aria-hidden="true"></video>
-            <span class="brand-streak-num" id="vyoraStreakCount">7</span>
-          </div>
           <img class="brand-logo-mark" src="assets/vyora-icon.png" alt="VYORA" aria-hidden="true" />
         </div>
         <span class="brand-sub">AI FITNESS COPILOT</span>
@@ -305,6 +301,11 @@
             </select>
           </div>
           <button type="button" class="v-new-chat" id="vyoraNewChat" title="Start a new chat">+ New chat</button>
+          <div class="v-streak-badge" title="Daily streak" aria-label="Streak">
+            <video class="v-streak-fire" src="assets/firestreak.webm" autoplay muted loop playsinline aria-hidden="true"></video>
+            <span class="v-streak-count" id="vyoraStreakCount">12</span>
+            <span class="v-streak-label">STREAK</span>
+          </div>
         </div>
       </header>
 
@@ -326,7 +327,7 @@
       <!-- EMPTY STATE -->
       <div class="v-empty" id="vyoraEmpty">
         <div class="v-empty-orb" aria-hidden="true">
-          <div id="vyoraOrbEmpty" class="vyora-orb"></div>
+          <div id="vyoraOrbEmpty" class="vyora-orb" role="img" aria-label="VYORA orb"></div>
         </div>
         <p class="v-empty-tag">DISCIPLINE BUILDS A BETTER <em>YOU</em></p>
         <div class="v-empty-composer">

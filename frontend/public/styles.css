@@ -1718,3 +1718,184 @@ body:not([data-section="vyora"]) .stage{
   min-height:40px;
   padding:10px 14px !important;
 }
+
+/* Chat bot avatar — logo ICON only (not full wordmark) */
+.msg-row.bot .msg-avatar{
+  width:40px !important;
+  height:40px !important;
+  border-radius:50% !important;
+  overflow:hidden !important;
+  flex:none !important;
+  background:#050506 !important;
+  border:1.5px solid rgba(239,35,60,.65) !important;
+  display:grid !important;
+  place-items:center !important;
+}
+.msg-row.bot .msg-avatar-img,
+.msg-row.bot .msg-avatar img{
+  width:78% !important;
+  height:78% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  border-radius:0 !important;
+  border:none !important;
+  background:transparent !important;
+  display:block !important;
+}
+/* Typing loader always visible */
+.msg-row.typing .msg-bubble.typing-bubble{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:56px !important;
+  min-height:42px !important;
+  padding:10px 14px !important;
+}
+.msg-row.typing .msg-loader{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:32px !important;
+  height:32px !important;
+  line-height:0 !important;
+}
+.msg-row.typing .msg-loader img,
+.msg-row.typing .msg-loader-icon{
+  width:28px !important;
+  height:28px !important;
+  border-radius:0 !important;
+  object-fit:contain !important;
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  animation:none !important;
+}
+
+/* —— VYORA page: dark mountain background (blurred) —— */
+#vyora.vyora-page.view,
+.vyora-page.view.active{
+  position:relative;
+  background-color:#050508;
+  background-image:url("assets/vyora-chat-bg.jpg");
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+}
+#vyora.vyora-page.view::before,
+.vyora-page.view.active::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(5,5,8,.42);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  pointer-events:none;
+  z-index:0;
+}
+.vyora-page > *{
+  position:relative;
+  z-index:1;
+}
+.vyora-page .v-topbar{
+  background:rgba(8,8,12,.55);
+  border-bottom:1px solid rgba(239,35,60,.18);
+  backdrop-filter:blur(8px);
+}
+.vyora-page .v-empty,
+.vyora-page .v-chat{
+  background:transparent;
+}
+.vyora-page .v-bottom-composer:not([hidden]){
+  background:linear-gradient(180deg, transparent, rgba(5,5,8,.75) 40%) !important;
+}
+
+/* Much larger empty-state orb */
+.vyora-page .v-empty-orb{
+  margin:0 auto 18px !important;
+}
+.vyora-page .vyora-orb-video{
+  width:min(52vmin, 360px) !important;
+  height:min(52vmin, 360px) !important;
+  filter:drop-shadow(0 0 28px rgba(239,35,60,.55)) !important;
+}
+.vyora-page #vyoraOrbEmpty.vyora-orb,
+.vyora-page #vyoraOrbEmpty{
+  width:min(52vmin, 360px) !important;
+  height:min(52vmin, 360px) !important;
+  max-width:360px;
+  max-height:360px;
+}
+.vyora-page .v-empty-orb .vyora-orb,
+.vyora-page .v-empty-orb canvas{
+  width:min(52vmin, 360px) !important;
+  height:min(52vmin, 360px) !important;
+}
+
+/* Topbar streak badge (reference: fire + count + STREAK) */
+.v-streak-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 12px 4px 6px;
+  border-radius:999px;
+  border:1px solid rgba(239,35,60,.55);
+  background:rgba(40,8,12,.75);
+  box-shadow:0 0 18px rgba(239,35,60,.25);
+  color:#fff;
+  flex:none;
+  margin-left:4px;
+}
+.v-streak-fire{
+  width:26px;
+  height:26px;
+  object-fit:contain;
+  mix-blend-mode:screen;
+  pointer-events:none;
+  filter:drop-shadow(0 0 6px rgba(255,90,20,.6));
+}
+.v-streak-count{
+  font:800 15px/1 'Barlow Condensed',system-ui,sans-serif;
+  color:#ff6b4a;
+  letter-spacing:.5px;
+}
+.v-streak-label{
+  font:700 10px/1 'Barlow Condensed',system-ui,sans-serif;
+  letter-spacing:1.5px;
+  color:#f0c0b8;
+}
+/* Sidebar brand no longer hosts streak */
+.brand-streak-wrap{display:none !important}
+
+/* Claude WebGL orb — large empty-state size */
+.vyora-page .v-empty-orb{
+  width: min(72vmin, 480px) !important;
+  height: min(72vmin, 480px) !important;
+  margin: 0 auto 12px !important;
+  display: grid !important;
+  place-items: center;
+  line-height: 0;
+}
+.vyora-page #vyoraOrbEmpty.vyora-orb,
+.vyora-page .v-empty-orb .vyora-orb{
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 480px !important;
+  max-height: 480px !important;
+  --orb-size: min(72vmin, 480px) !important;
+  margin: 0 !important;
+  display: block !important;
+}
+.vyora-page .v-empty-orb .orb-canvas,
+.vyora-page #vyoraOrbEmpty canvas{
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+/* Small chat-intro orb */
+.vyora-page #vyoraOrbChat.vyora-orb,
+.vyora-page .v-chat-intro-orb.vyora-orb{
+  width: 56px !important;
+  height: 56px !important;
+  flex: none !important;
+  --orb-size: 56px !important;
+}
