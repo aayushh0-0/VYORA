@@ -1459,7 +1459,7 @@ if (orbMount) {
   createRoot(orbMount).render(React.createElement(CrystalizedBall, {
     preset: 'nebula',
     color: '#ff6f98',
-    size: 0.72,
+    size: 0.9,
     crackle: 0.9,
     fill: 0.48,
     particleCount: 9000,
