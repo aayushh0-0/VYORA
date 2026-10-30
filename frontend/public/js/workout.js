@@ -457,7 +457,7 @@
         const startBtn = document.createElement('button');
         startBtn.type = 'button';
         startBtn.className = 'wk-start-btn';
-        startBtn.innerHTML = '<span aria-hidden="true">▶</span> Start';
+        startBtn.textContent = 'Search on YouTube ↗';
         const searchQuery = (exercise.videoQuery || `${exercise.name || 'exercise form'} proper form`).trim();
         startBtn.addEventListener('click', () => {
           window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`, '_blank', 'noopener,noreferrer');

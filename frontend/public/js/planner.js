@@ -241,44 +241,60 @@
       if (Array.isArray(d.exercises) && d.exercises.length) {
         d.exercises.forEach((exercise) => {
           const row = el('div', 'ex-row');
+
           const nameCell = document.createElement('div');
           nameCell.className = 'ex-name';
-          nameCell.textContent = exercise.name || 'Exercise';
+          const nameTitle = document.createElement('div');
+          nameTitle.className = 'ex-name-title';
+          nameTitle.textContent = exercise.name || 'Exercise';
+          nameCell.appendChild(nameTitle);
           if (exercise.formCue) {
             const cue = document.createElement('div');
-            cue.className = 'ex-muted';
+            cue.className = 'ex-muted ex-cue';
             cue.textContent = exercise.formCue;
             nameCell.appendChild(cue);
           }
-          const sets = document.createElement('div');
-          sets.textContent = exercise.sets != null ? `Sets: ${exercise.sets}` : (exercise.prescription || '—');
-          const reps = document.createElement('div');
-          reps.textContent = exercise.reps != null ? `Reps: ${exercise.reps}` : (exercise.intensityRpe || '');
-          const rest = document.createElement('div');
-          rest.className = 'ex-muted';
-          rest.textContent = exercise.rest ? `Rest ${exercise.rest}` : '';
+
+          const stats = document.createElement('div');
+          stats.className = 'ex-stats';
+          const setsVal = exercise.sets != null ? String(exercise.sets) : (exercise.prescription || '—');
+          const repsVal = exercise.reps != null ? String(exercise.reps) : (exercise.intensityRpe ? 'RPE ' + exercise.intensityRpe : '—');
+          const restVal = exercise.rest ? String(exercise.rest) : '—';
+          [['Sets', setsVal], ['Reps', repsVal], ['Rest', restVal]].forEach(function (pair) {
+            const cell = document.createElement('div');
+            cell.className = 'ex-stat';
+            const lab = document.createElement('span');
+            lab.className = 'ex-stat-label';
+            lab.textContent = pair[0];
+            const val = document.createElement('span');
+            val.className = 'ex-stat-value';
+            val.textContent = pair[1];
+            cell.append(lab, val);
+            stats.appendChild(cell);
+          });
 
           const action = document.createElement('div');
-          const searchQuery = (exercise.videoQuery || `${exercise.name || 'exercise form'} proper form`).trim();
+          action.className = 'ex-action';
+          const searchQuery = (exercise.videoQuery || (exercise.name || 'exercise form') + ' proper form').trim();
           const yt = document.createElement('a');
-          yt.className = 'btn ghost btn-tutorial';
+          yt.className = 'yt-link';
           yt.textContent = 'Search on YouTube ↗';
-          yt.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
+          yt.href = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery);
           yt.target = '_blank';
           yt.rel = 'noopener noreferrer';
-          yt.title = `Search YouTube for "${exercise.name || 'exercise form'}"`;
+          yt.title = 'Search YouTube for "' + (exercise.name || 'exercise form') + '"';
           action.appendChild(yt);
           if (exercise.tutorialUrl) {
             const a = document.createElement('a');
-            a.className = 'btn ghost btn-tutorial';
+            a.className = 'yt-link yt-link-secondary';
             a.textContent = 'Watch Tutorial';
             a.href = exercise.tutorialUrl;
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
-            a.style.marginLeft = '8px';
             action.appendChild(a);
           }
-          row.append(nameCell, sets, reps, rest, action);
+
+          row.append(nameCell, stats, action);
           card.appendChild(row);
         });
       } else {

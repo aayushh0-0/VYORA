@@ -3658,3 +3658,102 @@ h1, h2, h3, h4, h5, .title, .eyebrow, .section-banner strong, .section-banner em
 .vyora-notif-item.kind-care{border-left:3px solid #b94166;padding-left:8px}
 .vyora-notif-item.kind-diet{border-left:3px solid #8bc34a;padding-left:8px}
 .vyora-notif-item.kind-workout{border-left:3px solid #42a5f5;padding-left:8px}
+
+/* Hero auth buttons (landing) */
+.hero-auth{
+  position:relative;
+  z-index:2;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.hero-auth .hero-auth-btn{
+  border-radius:0;
+  text-transform:uppercase;
+  font-weight:700;
+  letter-spacing:.8px;
+  font-size:12px;
+  padding:12px 22px;
+}
+.hero-auth .hero-auth-login.btn.ghost{
+  background:transparent;
+  border:1px solid #fff;
+  color:#fff;
+  opacity:.9;
+  cursor:not-allowed;
+}
+.hero-auth .hero-auth-login.btn.ghost:hover{
+  background:#fff;
+  color:#111;
+  border-color:#fff;
+}
+.hero-auth .hero-auth-guest.hero-cta:hover{
+  background:var(--red,#ef233c);
+  color:#fff;
+  box-shadow:0 0 24px rgba(239,35,60,.45);
+}
+@media (max-width:640px){
+  .hero-auth{flex-direction:column}
+  .hero-auth .hero-auth-btn{width:100%}
+}
+
+/* Organized workout exercise rows (plan schedule + workout page) */
+.ex-row{
+  display:grid;
+  grid-template-columns:minmax(0,1.6fr) minmax(140px,1fr) auto;
+  gap:12px 16px;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid var(--line,#2a2a32);
+}
+.ex-row:last-child{border-bottom:none}
+.ex-name-title{font-weight:700;font-size:15px;color:inherit;margin:0 0 4px}
+.ex-cue{margin-top:2px;font-size:12px;line-height:1.4}
+.ex-stats{display:flex;flex-wrap:wrap;gap:10px 14px}
+.ex-stat{display:flex;flex-direction:column;gap:2px;min-width:52px}
+.ex-stat-label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.65}
+.ex-stat-value{font-size:13px;font-weight:700}
+.ex-action{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.yt-link{
+  display:inline-block;
+  margin:0;
+  padding:8px 12px;
+  border:1px solid currentColor;
+  color:inherit;
+  font-size:11px;
+  font-weight:700;
+  text-decoration:none;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  white-space:nowrap;
+  background:transparent;
+}
+.yt-link:hover{background:#ef233c;border-color:#ef233c;color:#fff}
+.yt-link-secondary{opacity:.85}
+.wk-start-btn{
+  justify-self:end;
+  white-space:nowrap;
+  padding:8px 12px!important;
+  font-size:11px!important;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.wk-exercise{
+  align-items:center;
+}
+.wk-exercise-details{
+  display:flex!important;
+  flex-wrap:wrap;
+  gap:12px 16px!important;
+}
+.wk-stat{display:flex;flex-direction:column;gap:2px;min-width:52px}
+.wk-stat-label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.65}
+@media(max-width:720px){
+  .ex-row{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .ex-action{justify-content:flex-start}
+  .ex-stats{gap:12px}
+}
