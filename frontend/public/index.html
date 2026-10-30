@@ -425,7 +425,7 @@
         </header>
 
         <div class="wk-layout">
-          <main class="wk-main">
+          <div class="wk-main">
             <div class="wk-plan-head">
               <h1 class="wk-plan-title">This week's plan</h1>
               <p class="wk-plan-sub" id="workoutPlanStatus">Auto-built from your goal, equipment, and recent adherence. Check off sets as you go.</p>
@@ -464,7 +464,7 @@
               </div>
             </section>
             <span class="wk-plan-badge" id="workoutPlanBadge" hidden><span aria-hidden="true"></span> ACTIVE PLAN</span>
-          </main>
+          </div>
 
           <aside class="wk-sidebar" aria-label="Workout overview and actions">
             <section class="wk-panel wk-overview">
@@ -965,13 +965,14 @@
               <div class="ovula-chat-log" id="ovulaLog" aria-live="polite" aria-label="Conversation with OVULA">
                 <div class="msg bot">Hi, I'm OVULA. Tell me what you're feeling and I'll share some general self-care ideas.</div>
               </div>
-              <div class="ovula-hero-copy">
-                <p class="ovula-eyebrow">YOUR WELLNESS, AT YOUR PACE</p>
-                <h1 id="ovula-hero-title">Feel more <span>in tune.</span></h1>
-                <div class="ovula-orb-reserve" aria-hidden="true">
-                  <div id="ovula-crystal-orb-slot" class="ovula-crystal-orb-slot"></div>
+              <div class="ovula-chat-intro" id="ovulaChatIntro">
+                <div id="ovula-crystal-orb-slot" class="ovula-crystal-orb-slot" aria-hidden="true"></div>
+                <div class="ovula-chat-intro-copy">
+                  <h1 id="ovula-hero-title">Your body deserves care at every pace.</h1>
+                  <p>A little care, every day.</p>
                 </div>
-
+              </div>
+              <div class="ovula-hero-copy">
                 <div class="ovula-composer" role="group" aria-label="Ask OVULA">
                   <div class="ovula-prompt-row">
                     <label class="ovula-sr-only" for="ovulaInput">Ask Ovula anything</label>
@@ -1089,8 +1090,7 @@
                   <p class="ovula-medical-note">OVULA offers general self-care information. It does not diagnose conditions or replace a clinician. Seek medical care for severe or unusual symptoms.</p>
                 </div>
                 </section>
-              </dialog>
-            </section>
+                </dialog>
           </div>
         </div>
       </div>
@@ -1230,7 +1230,7 @@
       </nav>
 
       <!-- Content Area -->
-      <main class="pro-content">
+      <div class="pro-content">
         <!-- ==================== DASHBOARD ==================== -->
         <section id="tab-dashboard" class="tab-panel active">
           <div class="welcome-banner">
@@ -1948,7 +1948,7 @@
             <div class="pref-row"><span>Health insights</span><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   </div>
 

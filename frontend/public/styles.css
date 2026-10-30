@@ -1231,8 +1231,9 @@ body[data-section="vyora"]{
 }
 body[data-section="vyora"] .stage{
   overflow:hidden;
-  padding-bottom:0;
-  height:100vh;
+  box-sizing:border-box;
+  height:100dvh;
+  padding:calc(var(--app-topbar-h, 58px) + 8px) 0 0 !important;
 }
 
 /* Composer: fully rounded, no sharp focus box */
@@ -1883,9 +1884,9 @@ body:not([data-section="vyora"]) .stage{
 
 /* Claude WebGL orb — large empty-state size */
 .vyora-page .v-empty-orb{
-  width: min(72vmin, 480px) !important;
-  height: min(72vmin, 480px) !important;
-  margin: 0 auto 12px !important;
+  width: min(21vmin, 148px) !important;
+  height: min(21vmin, 148px) !important;
+  margin: 0 auto 6px !important;
   display: grid !important;
   place-items: center;
   line-height: 0;
@@ -1894,9 +1895,9 @@ body:not([data-section="vyora"]) .stage{
 .vyora-page .v-empty-orb .vyora-orb{
   width: 100% !important;
   height: 100% !important;
-  max-width: 480px !important;
-  max-height: 480px !important;
-  --orb-size: min(72vmin, 480px) !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  --orb-size: min(21vmin, 148px) !important;
   margin: 0 !important;
   display: block !important;
 }
@@ -2095,8 +2096,8 @@ main.stage{
 .vyora-page.view.active{
   display:flex !important;
   flex-direction:column !important;
-  height:calc(100vh - var(--app-topbar-h, 58px)) !important;
-  max-height:calc(100vh - var(--app-topbar-h, 58px)) !important;
+  height:calc(100dvh - var(--app-topbar-h, 58px) - 8px) !important;
+  max-height:calc(100dvh - var(--app-topbar-h, 58px) - 8px) !important;
   min-height:0 !important;
   overflow:hidden !important;
   box-sizing:border-box !important;
@@ -3190,6 +3191,145 @@ h1, h2, h3, h4, h5, .title, .eyebrow, .section-banner strong, .section-banner em
   margin: 0;
   padding: 0;
 }
+
+@media (max-width: 900px) {
+  .vyora-page .v-empty:not([hidden]) {
+    padding: 8px 12px 10px;
+  }
+
+  .vyora-page .v-empty-orb {
+    width: min(20vmin, 104px) !important;
+    height: min(20vmin, 104px) !important;
+    margin-bottom: 4px !important;
+  }
+
+  .vyora-page #vyoraOrbEmpty.vyora-orb,
+  .vyora-page .v-empty-orb .vyora-orb {
+    --orb-size: min(20vmin, 104px) !important;
+  }
+
+  .vyora-page .v-empty-tag {
+    margin-bottom: 8px;
+    font-size: 10px;
+    letter-spacing: 1.6px;
+  }
+
+  .vyora-page .v-empty-composer {
+    margin-bottom: 10px;
+  }
+
+  .vyora-page .v-composer-shell {
+    padding: 10px 12px 8px;
+  }
+
+  .vyora-page .v-composer-tools {
+    margin-top: 4px;
+  }
+
+  .vyora-page .v-suggestions {
+    gap: 7px;
+  }
+
+  .vyora-page .v-sug {
+    min-height: 48px;
+    align-items: center;
+    padding: 8px 10px;
+  }
+
+  .vyora-page .v-sug-body {
+    gap: 0;
+  }
+
+  .vyora-page .v-sug-body small {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .vyora-page .v-topbar {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .vyora-page .v-brand-sep,
+  .vyora-page .v-brand-sub {
+    display: none;
+  }
+
+  .vyora-page .v-brand-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .vyora-page .v-topbar-right {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .vyora-page .v-online {
+    display: none;
+  }
+
+  .vyora-page .v-persona-select {
+    max-width: 118px;
+    padding: 7px 24px 7px 9px;
+  }
+
+  .vyora-page .v-new-chat {
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 900px) and (max-height: 640px) {
+  .vyora-page .v-empty:not([hidden]) {
+    padding: 4px 8px 6px;
+  }
+
+  .vyora-page .v-empty-orb {
+    width: min(14vmin, 52px) !important;
+    height: min(14vmin, 52px) !important;
+    margin-bottom: 2px !important;
+  }
+
+  .vyora-page #vyoraOrbEmpty.vyora-orb,
+  .vyora-page .v-empty-orb .vyora-orb {
+    --orb-size: min(14vmin, 52px) !important;
+  }
+
+  .vyora-page .v-empty-tag {
+    margin-bottom: 5px;
+    font-size: 9px;
+  }
+
+  .vyora-page .v-empty-composer {
+    margin-bottom: 6px;
+  }
+
+  .vyora-page .v-composer-shell {
+    padding: 6px 8px;
+  }
+
+  .vyora-page .v-input {
+    padding: 5px 3px;
+    font-size: 14px;
+  }
+
+  .vyora-page .v-suggestions {
+    gap: 5px;
+  }
+
+  .vyora-page .v-sug {
+    padding: 5px 8px;
+  }
+
+  .vyora-page .v-sug-body strong {
+    font-size: 11px;
+    line-height: 1.15;
+  }
+}
 .app.sidebar-collapsed .sidebar-toggle,
 .app.sidebar-collapsed .rail-chip.sidebar-toggle{
   width: 32px;
@@ -3272,4 +3412,204 @@ h1, h2, h3, h4, h5, .title, .eyebrow, .section-banner strong, .section-banner em
 .app.sidebar-collapsed .rail-foot-avatar img{
   object-fit: contain;
   padding: 2px;
+}
+
+/* VYORA landing orb and suggestion-card polish */
+.vyora-page .v-empty{
+  max-width:880px;
+}
+.vyora-page .v-empty-composer{
+  max-width:560px;
+}
+.vyora-page .v-suggestions{
+  max-width:780px;
+}
+.vyora-page .v-empty-orb{
+  width:min(42vmin, 320px) !important;
+  height:min(42vmin, 320px) !important;
+  margin:0 auto 6px !important;
+}
+.vyora-page #vyoraOrbEmpty.vyora-orb,
+.vyora-page .v-empty-orb .vyora-orb{
+  --orb-size:min(42vmin, 320px) !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+}
+.vyora-page .v-empty-orb .orb-canvas,
+.vyora-page #vyoraOrbEmpty canvas{
+  width:100% !important;
+  height:100% !important;
+}
+.vyora-page .v-empty-tag{
+  margin-bottom:14px;
+  font-size:12px;
+  letter-spacing:3.2px;
+}
+.vyora-page .v-suggestions{
+  gap:12px;
+}
+.vyora-page .v-sug{
+  min-height:108px;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  border:1px solid rgba(239,35,60,.3);
+  border-radius:18px;
+  background:linear-gradient(145deg,rgba(30,20,25,.96),rgba(12,11,15,.94));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 12px 28px rgba(0,0,0,.2);
+  backdrop-filter:blur(10px);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.vyora-page .v-sug:hover{
+  transform:translateY(-3px);
+  border-color:rgba(255,71,91,.72);
+  background:linear-gradient(145deg,rgba(43,22,29,.98),rgba(16,12,17,.96));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 16px 34px rgba(0,0,0,.32),0 0 22px rgba(239,35,60,.12);
+}
+.vyora-page .v-sug:focus-visible{
+  outline:2px solid #ff6478;
+  outline-offset:3px;
+}
+.vyora-page .v-sug-ico{
+  width:38px;
+  height:38px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(239,35,60,.24);
+  border-radius:12px;
+  background:rgba(239,35,60,.1);
+  font-size:19px;
+}
+.vyora-page .v-sug-body{
+  gap:5px;
+}
+.vyora-page .v-sug-body strong{
+  font-size:13px;
+  line-height:1.3;
+  display:-webkit-box;
+  overflow:hidden;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+}
+.vyora-page .v-sug-body small{
+  font-size:11.5px;
+  line-height:1.4;
+  color:#b9b3bb;
+  display:-webkit-box;
+  overflow:hidden;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+}
+.vyora-page .v-sug-arrow{
+  width:28px;
+  height:28px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(239,35,60,.28);
+  border-radius:50%;
+  background:rgba(239,35,60,.08);
+  transition:transform .2s ease,background .2s ease;
+}
+.vyora-page .v-sug:hover .v-sug-arrow{
+  transform:translateX(2px);
+  background:rgba(239,35,60,.2);
+}
+.vyora-page .v-chat-intro-orb.vyora-orb,
+.vyora-page #vyoraOrbChat.vyora-orb{
+  --orb-size:48px !important;
+  width:48px !important;
+  height:48px !important;
+  flex:none !important;
+}
+
+@media(max-width:900px){
+  .vyora-page .v-empty-orb{
+    width:min(49vmin, 190px) !important;
+    height:min(49vmin, 190px) !important;
+    margin-bottom:6px !important;
+  }
+  .vyora-page #vyoraOrbEmpty.vyora-orb,
+  .vyora-page .v-empty-orb .vyora-orb{
+    --orb-size:min(49vmin, 190px) !important;
+  }
+  .vyora-page .v-empty-tag{
+    margin-bottom:10px;
+  }
+  .vyora-page .v-empty-composer{
+    max-width:520px;
+    margin-bottom:10px;
+  }
+  .vyora-page .v-composer-shell{
+    padding:10px 12px 8px;
+  }
+  .vyora-page .v-composer-tools{
+    margin-top:3px;
+  }
+  .vyora-page .v-sug{
+    min-height:64px;
+    padding:8px 10px;
+  }
+  .vyora-page .v-sug-ico{
+    width:34px;
+    height:34px;
+    border-radius:11px;
+  }
+  .vyora-page .v-sug-body small{
+    display:none;
+  }
+}
+
+@media(max-width:900px) and (max-height:640px){
+  .vyora-page .v-empty-orb{
+    width:min(40vmin, 128px) !important;
+    height:min(40vmin, 128px) !important;
+    margin-bottom:5px !important;
+  }
+  .vyora-page #vyoraOrbEmpty.vyora-orb,
+  .vyora-page .v-empty-orb .vyora-orb{
+    --orb-size:min(40vmin, 128px) !important;
+  }
+  .vyora-page .v-empty-tag{
+    margin-bottom:6px;
+    font-size:9px;
+  }
+  .vyora-page .v-empty-composer{
+    margin-bottom:6px;
+  }
+  .vyora-page .v-composer-shell{
+    padding:6px 8px;
+  }
+  .vyora-page .v-composer-tools{
+    margin-top:2px;
+  }
+  .vyora-page .v-sug{
+    min-height:44px;
+    padding:3px 8px;
+    gap:7px;
+  }
+  .vyora-page .v-sug-ico{
+    width:26px;
+    height:26px;
+    font-size:16px;
+  }
+  .vyora-page .v-sug-body strong{
+    font-size:10px;
+    line-height:1.15;
+    white-space:nowrap;
+  }
+  .vyora-page .v-sug-arrow{
+    width:24px;
+    height:24px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .vyora-page .v-sug,
+  .vyora-page .v-sug-arrow{
+    transition:none;
+  }
 }

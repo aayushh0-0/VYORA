@@ -20,7 +20,7 @@ function initVyoraOrbs(){
     if(emptyHost && emptyHost.tagName !== "VIDEO" && !vyoraOrbEmpty){
       vyoraOrbEmpty = window.VyoraOrb.create(emptyHost, {
         colors: ['#ef233c', '#ff6b4a', '#7a1020'],
-        size: 0.72, glow: 1.55, wobble: 1.35, bleed: 1.3, highlight: 1.3,
+        size: 0.9, glow: 1.55, wobble: 1.35, bleed: 1.3, highlight: 1.3,
         speed: 1.75, trail: 1.25, hoverIntensity: 1.25,
         followCursor: true, clickPulse: true, intro: true, rotateOnHover: true
       });

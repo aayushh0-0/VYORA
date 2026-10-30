@@ -1917,6 +1917,10 @@ input:checked + .slider:before {
 #pro.view.active {
   display: flex !important;
   flex-direction: column;
+  height: calc(100dvh - var(--app-topbar-h, 58px) - 8px) !important;
+  max-height: calc(100dvh - var(--app-topbar-h, 58px) - 8px) !important;
+  box-sizing: border-box;
+  overflow: hidden !important;
 }
 .vyora-pro-app {
   flex: 1;
@@ -1982,7 +1986,12 @@ input:checked + .slider:before {
   flex-direction: column;
   min-height: 0;
 }
-.vyora-pro-app .schedule-list { overflow: hidden; }
+.vyora-pro-app .schedule-list {
+  min-height: 0;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
 .vyora-pro-app .section-header { margin-bottom: 12px; }
 .vyora-pro-app .section-header h2 { font-size: 18px; }
 /* Hide duplicate streak/bell if markup remains */
@@ -1991,12 +2000,52 @@ input:checked + .slider:before {
 /* Kill outer stage scroll while Pro is open */
 body:has(#pro.view.active) .stage {
   overflow: hidden !important;
-  height: calc(100vh - 0px);
+  box-sizing: border-box;
+  height: 100dvh;
+  padding: calc(var(--app-topbar-h, 58px) + 8px) 0 0 !important;
+}
+body:has(#pro.view.active) .app {
+  height: 100dvh;
+  min-height: 0;
 }
 body:has(#pro.view.active),
 body:has(#training.view.active) {
   overflow: hidden;
 }
+
+@media (max-width: 640px) {
+  .vyora-pro-app .pro-content {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: thin;
+  }
+
+  .vyora-pro-app .tab-panel.active {
+    flex: none;
+    min-height: min-content;
+    overflow: visible;
+  }
+
+  .vyora-pro-app .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vyora-pro-app .two-col {
+    flex: none;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .vyora-pro-app .two-col .card {
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .vyora-pro-app .schedule-list {
+    max-height: 260px;
+  }
+}
+
 /* Other pro tabs: still no outer double scrollbar */
 .vyora-pro-app .tab-panel.active:not(#tab-dashboard) {
   overflow: auto;
