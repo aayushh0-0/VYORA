@@ -235,7 +235,7 @@
 
   function updateBell(count) {
     const badge = document.getElementById('vyoraNotifCount');
-    const bell = document.getElementById('vyoraNotifBell');
+    const bell = (document.getElementById('vyoraNotifBell') || document.getElementById('appNotifyBtn'));
     if (!badge) return;
     if (count > 0) {
       badge.hidden = false;
@@ -250,7 +250,7 @@
 
   function openBar() {
     const bar = ensureBar();
-    const bell = document.getElementById('vyoraNotifBell');
+    const bell = (document.getElementById('vyoraNotifBell') || document.getElementById('appNotifyBtn'));
     bar.dataset.open = '1';
     bar.hidden = false;
     if (bell) bell.setAttribute('aria-expanded', 'true');
@@ -258,7 +258,7 @@
 
   function closeBar() {
     const bar = document.getElementById('vyoraNotifBar');
-    const bell = document.getElementById('vyoraNotifBell');
+    const bell = (document.getElementById('vyoraNotifBell') || document.getElementById('appNotifyBtn'));
     if (bar) {
       delete bar.dataset.open;
       bar.hidden = true;
@@ -357,7 +357,7 @@
   }
 
   function wireBell() {
-    const bell = document.getElementById('vyoraNotifBell');
+    const bell = (document.getElementById('vyoraNotifBell') || document.getElementById('appNotifyBtn'));
     if (!bell) return;
     if (bell.dataset.wired === '1') return;
     bell.dataset.wired = '1';

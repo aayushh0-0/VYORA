@@ -257,8 +257,5 @@
   window.VyoraInteractions = { openPalette, toggleFocus, toggleTheme, announce };
 
   document.getElementById('appTopSearch')?.addEventListener('click', () => openPalette());
-  document.getElementById('appNotifyBtn')?.addEventListener('click', () => {
-    try { window.VyoraCore?.navigate?.('community'); } catch (_) {}
-  });
 
 })();
