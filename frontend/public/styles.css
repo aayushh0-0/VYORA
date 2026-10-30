@@ -3613,3 +3613,48 @@ h1, h2, h3, h4, h5, .title, .eyebrow, .section-banner strong, .section-banner em
     transition:none;
   }
 }
+
+/* Reminders popup (notification bell) */
+.vyora-notif-bar{
+  position:fixed;
+  top:calc(var(--app-topbar-h, 56px) + 8px);
+  right:16px;
+  width:min(380px, calc(100vw - 32px));
+  max-height:70vh;
+  overflow:auto;
+  z-index:120;
+  background:rgba(22,22,28,.97);
+  border:1px solid rgba(255,255,255,.12);
+  color:#e8e4ea;
+  border-radius:4px;
+  box-shadow:0 12px 40px rgba(0,0,0,.45);
+  padding:12px 14px;
+}
+.vyora-notif-bar[hidden]{display:none!important}
+.vyora-notif-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+.vyora-notif-head strong{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#e8e4ea}
+.vyora-notif-sub{font-size:10px;color:rgba(232,228,234,.55)}
+.vyora-notif-empty{font-size:12.5px;color:rgba(232,228,234,.7);line-height:1.5;margin:4px 0}
+.vyora-notif-item{border-top:1px solid rgba(255,255,255,.1);padding:10px 0;display:flex;flex-direction:column;gap:8px}
+.vyora-notif-item:first-of-type{border-top:0}
+.vyora-notif-text b{display:block;font-size:13px;margin-bottom:4px;color:#e8e4ea}
+.vyora-notif-text p{margin:0;font-size:12.5px;line-height:1.55;color:rgba(232,228,234,.78)}
+.vyora-notif-tag{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ef233c;margin-bottom:4px}
+.vyora-notif-actions{display:flex;flex-wrap:wrap;gap:6px}
+.vyora-notif-actions button{
+  all:unset;cursor:pointer;font-size:11px;font-weight:700;padding:6px 10px;
+  border:1px solid rgba(255,255,255,.18);border-radius:999px;color:#e8e4ea;background:rgba(255,255,255,.04)
+}
+.vyora-notif-actions button:hover{border-color:rgba(255,255,255,.35)}
+.vyora-notif-actions button.is-done{border-color:rgba(139,195,74,.55);color:#c5e1a5}
+.vyora-notif-actions button.is-later{border-color:rgba(239,35,60,.55);color:#ff8a9a}
+.vyora-notif-snooze{display:flex;flex-wrap:wrap;gap:4px;width:100%;margin-top:2px}
+.vyora-notif-snooze button{
+  all:unset;cursor:pointer;font-size:10px;font-weight:700;padding:4px 8px;
+  border:1px dashed rgba(255,255,255,.22);border-radius:999px;color:rgba(232,228,234,.85)
+}
+.vyora-notif-snooze button:hover{border-color:#ef233c;color:#fff}
+.vyora-notif-item.kind-medication{border-left:3px solid #ef233c;padding-left:8px}
+.vyora-notif-item.kind-care{border-left:3px solid #b94166;padding-left:8px}
+.vyora-notif-item.kind-diet{border-left:3px solid #8bc34a;padding-left:8px}
+.vyora-notif-item.kind-workout{border-left:3px solid #42a5f5;padding-left:8px}
