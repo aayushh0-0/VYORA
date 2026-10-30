@@ -1609,6 +1609,74 @@ body[data-section="ovula"] .stage {
   padding: 22px;
 }
 
+.ovula-hero-copy {
+  padding-top: clamp(14px, 2.5vh, 22px);
+}
+
+.ovula-hero h1 span {
+  color: #ff6f98;
+  -webkit-text-stroke: 1px rgba(30, 2, 13, 0.75);
+  text-shadow: 0 2px 8px rgba(14, 0, 7, 0.95), 0 0 18px rgba(14, 0, 7, 0.72);
+}
+
+.ovula-plan-button,
+.ovula-new-chat {
+  min-height: 36px;
+  padding-right: 12px;
+  padding-left: 12px;
+  font-size: 12px !important;
+}
+
+.ovula-plan-button {
+  min-width: 0;
+}
+
+.ovula-new-chat {
+  gap: 7px;
+}
+
+.ovula-composer {
+  width: min(500px, 100%);
+  margin-top: 12px;
+}
+
+.ovula-orb-reserve {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: clamp(160px, 27vh, 206px);
+  place-items: center;
+  pointer-events: none;
+}
+
+.ovula-crystal-orb-slot {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: clamp(124px, 16vw, 164px);
+  height: auto;
+  margin: 0;
+  aspect-ratio: 1;
+  transform: none;
+  background: transparent;
+}
+
+.ovula-hero-description {
+  margin-top: 0;
+}
+
+.ovula-composer {
+  margin-top: 12px;
+}
+
+.ovula-home.is-chatting .ovula-orb-reserve {
+  display: none;
+}
+
+.ovula-feature-grid {
+  bottom: 12px;
+}
+
 @media (max-width: 820px) {
   body[data-section="ovula"] .stage {
     padding-bottom: 48px !important;
@@ -1656,9 +1724,9 @@ body[data-section="ovula"] .stage {
 
   .ovula-plan-button,
   .ovula-new-chat {
-    min-height: 38px;
-    padding: 0 11px;
-    font-size: 10px;
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 11px !important;
   }
 
   .ovula-hero {
@@ -1666,7 +1734,15 @@ body[data-section="ovula"] .stage {
   }
 
   .ovula-hero-copy {
-    padding-top: clamp(86px, 16vh, 116px);
+    padding-top: clamp(12px, 2vh, 18px);
+  }
+
+  .ovula-orb-reserve {
+    height: clamp(150px, 24vh, 190px);
+  }
+
+  .ovula-crystal-orb-slot {
+    width: clamp(128px, 34vw, 156px);
   }
 
   .ovula-hero-description {
@@ -1675,7 +1751,7 @@ body[data-section="ovula"] .stage {
   }
 
   .ovula-composer {
-    margin-top: 22px;
+    margin-top: 12px;
   }
 
   .ovula-feature-grid {
@@ -1718,7 +1794,15 @@ body[data-section="ovula"] .stage {
   }
 
   .ovula-hero-copy {
-    padding-top: clamp(68px, 13vh, 94px);
+    padding-top: 12px;
+  }
+
+  .ovula-orb-reserve {
+    height: clamp(145px, 22vh, 176px);
+  }
+
+  .ovula-crystal-orb-slot {
+    width: clamp(122px, 40vw, 148px);
   }
 
   .ovula-eyebrow {
@@ -1735,7 +1819,7 @@ body[data-section="ovula"] .stage {
   }
 
   .ovula-composer {
-    margin-top: 18px;
+    margin-top: 12px;
   }
 
   .ovula-prompt-row {
