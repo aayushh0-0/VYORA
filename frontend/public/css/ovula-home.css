@@ -2025,3 +2025,102 @@ body[data-section="ovula"] .stage {
     margin-top: 6px;
   }
 }
+
+.ovula-brand-icon {
+  position: relative;
+  overflow: hidden;
+}
+
+.ovula-lotus-animation {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.ovula-lotus-fallback {
+  display: none;
+}
+
+.ovula-chat-log .msg-avatar {
+  position: relative;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 156, 181, 0.3);
+  border-radius: 50%;
+  background: rgba(25, 13, 23, 0.94);
+  box-shadow: 0 0 16px rgba(245, 107, 145, 0.16);
+}
+
+.msg-avatar-lotus {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.msg-avatar-lotus-fallback {
+  display: none;
+  color: var(--ovula-soft-pink);
+  font-size: 16px;
+}
+
+.ovula-home.is-chatting .ovula-hero::before {
+  background:
+    linear-gradient(180deg, rgba(9, 6, 12, 0.55) 0%, rgba(9, 6, 12, 0.53) 48%, rgba(9, 6, 12, 0.82) 100%),
+    linear-gradient(90deg, rgba(9, 6, 12, 0.48) 0%, rgba(9, 6, 12, 0.34) 52%, rgba(9, 6, 12, 0.55) 100%);
+}
+
+.ovula-home.is-chatting .ovula-chat-log .msg-row.bot .msg-bubble {
+  border: 1px solid rgba(255, 156, 181, 0.25);
+  border-bottom-left-radius: 6px;
+  background: linear-gradient(145deg, rgba(39, 23, 37, 0.97), rgba(24, 17, 29, 0.97));
+  box-shadow: 0 12px 32px rgba(5, 2, 8, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  color: #fff7fb;
+}
+
+.ovula-home.is-chatting .ovula-chat-log .msg-row.user .msg-bubble {
+  border: 1px solid rgba(255, 193, 207, 0.28);
+  border-bottom-right-radius: 6px;
+  background: linear-gradient(135deg, #ed5c86, #c94370);
+  box-shadow: 0 8px 24px rgba(113, 24, 58, 0.32);
+  color: #fff;
+}
+
+.ovula-home.is-chatting .ovula-chat-log .msg-meta {
+  color: #f0c4d2;
+}
+
+.ovula-home.is-chatting .ovula-chat-log .msg-row.typing .msg-bubble {
+  border-color: rgba(255, 156, 181, 0.2);
+  background: rgba(39, 23, 37, 0.97);
+}
+
+.ovula-home.is-chatting .ovula-composer {
+  border-color: rgba(255, 156, 181, 0.5);
+  background: rgba(20, 13, 22, 0.97);
+  box-shadow: 0 12px 38px rgba(5, 2, 8, 0.5), 0 0 22px rgba(245, 107, 145, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ovula-home.is-chatting .ovula-prompt-row input::placeholder {
+  color: #d3b8c5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ovula-lotus-animation,
+  .msg-avatar-lotus {
+    display: none;
+  }
+
+  .ovula-lotus-fallback,
+  .msg-avatar-lotus-fallback {
+    display: inline-block;
+  }
+}

@@ -21,6 +21,13 @@ function formatChatText(text){
   h = h.replace(/\n/g, '<br>');
   return h;
 }
+function setBotAvatar(avatar, logId){
+  if (logId === 'ovulaLog') {
+    avatar.innerHTML = '<video class="msg-avatar-lotus" autoplay muted loop playsinline aria-hidden="true"><source src="/assets/ovula-lotus.mp4" type="video/mp4"></video><i class="fa-solid fa-spa msg-avatar-lotus-fallback" aria-hidden="true"></i>';
+    return;
+  }
+  avatar.innerHTML = '<img class="msg-avatar-img" src="/assets/vyora-logo.png" alt="VYORA" width="40" height="40" onerror="this.onerror=null;this.src=\'/assets/vyora-avatar.svg\'" />';
+}
 function addMsg(logId, cls, text){
   const log = document.getElementById(logId);
   if (!log) return null;
@@ -40,8 +47,7 @@ function addMsg(logId, cls, text){
   avatar.className = 'msg-avatar';
   avatar.setAttribute('aria-hidden', 'true');
   if (isBot) {
-    // Square logo mark (not the wide wordmark icon) so the circle never crops to "VYOF"
-    avatar.innerHTML = '<img class="msg-avatar-img" src="/assets/vyora-logo.png" alt="VYORA" width="40" height="40" onerror="this.onerror=null;this.src=\'/assets/vyora-avatar.svg\'" />';
+    setBotAvatar(avatar, logId);
   } else {
     avatar.innerHTML = '<img class="msg-avatar-img" src="/assets/user-avatar.svg" alt="You" width="36" height="36" />';
   }
@@ -71,11 +77,11 @@ function addTypingMsg(logId){
   const row = document.createElement('div');
   row.className = 'msg-row bot typing';
   row.setAttribute('aria-live', 'polite');
-  row.setAttribute('aria-label', 'VYORA is thinking');
+  row.setAttribute('aria-label', logId === 'ovulaLog' ? 'OVULA is thinking' : 'VYORA is thinking');
 
   const avatar = document.createElement('div');
   avatar.className = 'msg-avatar';
-  avatar.innerHTML = '<img class="msg-avatar-img" src="/assets/vyora-logo.png" alt="VYORA" width="40" height="40" onerror="this.onerror=null;this.src=\'/assets/vyora-avatar.svg\'" />';
+  setBotAvatar(avatar, logId);
 
   const col = document.createElement('div');
   col.className = 'msg-col';
@@ -112,6 +118,7 @@ function setTypingText(el, value){
   }
   if (loader) loader.hidden = true;
   el.classList.remove('typing');
+  el.removeAttribute('aria-label');
   if (bubble) bubble.classList.remove('typing-bubble');
   const log = el.closest('.chat-log') || el.parentElement;
   if (log) log.scrollTop = log.scrollHeight;

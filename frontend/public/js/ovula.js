@@ -3,6 +3,19 @@
 const {wireChat,wireMic}=window.VyoraCore;
 const ovulaHome=document.getElementById("ovula-home");
 const ovulaLog=document.getElementById("ovulaLog");
+const lotusMotionPreference=window.matchMedia?.("(prefers-reduced-motion: reduce)");
+function syncLotusMotion(){
+  const shouldReduceMotion=lotusMotionPreference?.matches??false;
+  document.querySelectorAll(".ovula-lotus-animation, .msg-avatar-lotus").forEach(video=>{
+    if(shouldReduceMotion){
+      video.pause();
+    }else if(video.paused){
+      video.play().catch(()=>{});
+    }
+  });
+}
+syncLotusMotion();
+lotusMotionPreference?.addEventListener("change",syncLotusMotion);
 function activateOvulaHome(){
   ovulaHome?.classList.add("is-assets-ready");
 }
@@ -44,6 +57,7 @@ document.getElementById("ovulaNewChat")?.addEventListener("click",()=>{
 });
 if(ovulaLog && window.MutationObserver){
   const chatObserver=new MutationObserver(()=>{
+    syncLotusMotion();
     const hasUserMessage=Boolean(ovulaLog.querySelector(".msg-row.user"));
     ovulaHome?.classList.toggle("is-chatting",hasUserMessage);
     if(hasUserMessage) ovulaLog.scrollTop=ovulaLog.scrollHeight;
