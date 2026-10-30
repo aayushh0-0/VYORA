@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="css/vyora-pro.css">
 <link rel="stylesheet" href="css/pace.css">
+<link rel="stylesheet" href="css/ovula-home.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/orb/orb.css">
@@ -942,79 +943,157 @@
     </section>
 
     <!-- OVULA -->
-    <section id="ovula" class="view">
-      <div class="section-banner section-banner-soft"><span>05</span><strong>LISTEN TO YOUR BODY</strong><em>OVULA</em></div>
-      <p class="eyebrow">Women's Health · Opt-in</p>
-      <h1 class="title">OVULA</h1>
-      <p class="sub">Cycle-aware workouts, gentle symptom support, and judgment-free guidance — never a replacement for a doctor.</p>
-
-      <div class="card" style="margin-bottom:14px;">
-        <label for="phaseSelect">Current cycle phase</label>
-        <select id="phaseSelect" style="width:100%;max-width:280px;">
-          <option value="menstrual">Menstrual</option>
-          <option value="follicular">Follicular</option>
-          <option value="ovulatory">Ovulatory</option>
-          <option value="luteal">Luteal</option>
-        </select>
-        <p id="phaseTip" style="margin-top:12px;"></p>
-      </div>
-
-      <div class="card" style="margin-bottom:14px;">
-        <h3 style="margin-top:0;">Cramp relief kit</h3>
-        <p style="margin-top:0;">Quick, general self-care options for today.</p>
-        <div class="kit-grid">
-          <div class="kit-item"><b>🔥</b>Heat pad on lower belly, 15–20 min</div>
-          <div class="kit-item"><b>🧘</b>Gentle child's pose &amp; cat-cow stretch</div>
-          <div class="kit-item"><b>💧</b>Warm water or herbal tea, sip slowly</div>
-          <div class="kit-item"><b>🛌</b>Short rest — lie on your side, knees tucked</div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom:14px;">
-        <h3 style="margin-top:0;">Today's hygiene &amp; care check-in</h3>
-        <p style="margin-top:0;">A light daily companion for your period journey — tap what you've done today.</p>
-        <div id="ovulaChecklist"></div>
-      </div>
-
-      <div class="card">
-        <div class="orb-wrap">
-          <div>
-            <div class="orb" id="orbO">
-              <div class="orb-face"><svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
-                <path d="M80,8C40,8 18,42 20,92c1,34 10,58 20,74v-64c0-48 16-72 40-72s40,24 40,72v64c10-16 19-40 20-74C142,42 120,8 80,8Z" fill="#1a181c"/>
-                <path d="M10,200 Q80,148 150,200 L150,225 L10,225 Z" fill="var(--accent)"/>
-                <ellipse cx="80" cy="100" rx="44" ry="52" fill="#E8BE9C"/>
-                <ellipse cx="42" cy="108" rx="7" ry="10" fill="#E4B594"/>
-                <ellipse cx="118" cy="108" rx="7" ry="10" fill="#E4B594"/>
-                <path d="M36,80C42,50 60,38 80,38S118,50 124,80C108,60 94,55 80,57S52,60 36,80Z" fill="#221f26"/>
-                <path class="brow l" d="M50,80Q58,74 68,78" stroke="#2b2730" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path class="brow r" d="M92,78Q102,74 110,80" stroke="#2b2730" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <g class="eye l"><path d="M50,96Q60,87 70,96Q60,105 50,96Z" fill="#fff"/><circle cx="60" cy="96" r="5.6" fill="#4a3222"/><circle cx="61.6" cy="93.8" r="1.7" fill="#fff"/><path d="M50,96Q60,86 70,96" stroke="#241f26" stroke-width="1.7" fill="none" stroke-linecap="round"/></g>
-                <g class="eye r"><path d="M90,96Q100,87 110,96Q100,105 90,96Z" fill="#fff"/><circle cx="100" cy="96" r="5.6" fill="#4a3222"/><circle cx="101.6" cy="93.8" r="1.7" fill="#fff"/><path d="M90,96Q100,86 110,96" stroke="#241f26" stroke-width="1.7" fill="none" stroke-linecap="round"/></g>
-                <path d="M80,96Q76,110 80,115Q84,112 82,109" stroke="#c99a78" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".5"/>
-                <ellipse cx="52" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
-                <ellipse cx="108" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
-                <path class="mouth mouth-closed" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
-                <ellipse class="mouth mouth-open" cx="80" cy="136" rx="14" ry="8" fill="#8b3a4a" opacity="0"/>
-              </svg></div>
-              <div class="wave" id="orbOWave">👋</div>
+    <section id="ovula" class="view ovula-view" aria-label="OVULA wellness dashboard">
+      <div class="ovula-home" id="ovula-home">
+        <div class="ovula-workspace">
+          <header class="ovula-topbar">
+            <div class="ovula-wordmark">
+              <span class="ovula-brand-icon" aria-hidden="true"><i class="fa-solid fa-spa"></i></span>
+              <span>OVULA</span><small>WELLNESS COPILOT</small>
             </div>
-            <div class="voicebar"><div class="eq"><i></i><i></i><i></i><i></i><i></i></div><p class="orb-status" id="orbOStatus">Ready</p></div>
-          </div>
-          <div><h3 style="margin:0 0 4px;">Talk to OVULA</h3><p style="margin:0;">Ask about cramps, energy, or hygiene — general support only.</p></div>
-        </div>
-        <div class="chat">
-          <div class="chat-log" id="ovulaLog">
-            <div class="msg bot">Hi, I'm OVULA. Tell me what you're feeling and I'll share some general self-care ideas.</div>
-          </div>
-          <div class="chat-row">
-            <button class="mic" id="ovulaMic" title="Voice input">🎙</button>
-            <input id="ovulaInput" placeholder="e.g. bad cramps today…" />
-            <button class="btn" id="ovulaSend">Send</button>
+            <div class="ovula-header-controls">
+              <span class="ovula-online"><i aria-hidden="true"></i>ONLINE</span>
+              <button class="ovula-plan-button" type="button" data-ovula-tools>Cycle &amp; care</button>
+              <button class="ovula-new-chat" id="ovulaNewChat" type="button" title="Start a new chat">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> New chat
+              </button>
+            </div>
+          </header>
+
+          <div class="ovula-main">
+            <section class="ovula-hero" aria-labelledby="ovula-hero-title">
+              <!-- Future crystal component mounts here. The empty slot stays transparent and isolated from adjacent controls. -->
+              <div id="ovula-crystal-orb-slot" class="ovula-crystal-orb-slot" aria-hidden="true"></div>
+              <div class="ovula-chat-log" id="ovulaLog" aria-live="polite" aria-label="Conversation with OVULA">
+                <div class="msg bot">Hi, I'm OVULA. Tell me what you're feeling and I'll share some general self-care ideas.</div>
+              </div>
+              <div class="ovula-hero-copy">
+                <p class="ovula-eyebrow">YOUR WELLNESS, AT YOUR PACE</p>
+                <h1 id="ovula-hero-title">Feel more <span>in tune.</span></h1>
+                <p class="ovula-hero-description">A thoughtful companion for your cycle, comfort, movement, and everyday wellbeing.</p>
+
+                <div class="ovula-composer" role="group" aria-label="Ask OVULA">
+                  <div class="ovula-prompt-row">
+                    <label class="ovula-sr-only" for="ovulaInput">Ask Ovula anything</label>
+                    <input id="ovulaInput" type="text" placeholder="Ask Ovula anything..." autocomplete="off">
+                    <button class="ovula-mic-button" id="ovulaMic" type="button" title="Voice input" aria-label="Use voice input">
+                      <i class="fa-solid fa-microphone" aria-hidden="true"></i>
+                    </button>
+                    <button class="ovula-send-button" id="ovulaSend" type="button" aria-label="Send message">
+                      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="ovula-quick-actions" aria-label="Suggested actions">
+                  <button type="button" data-ovula-tools><i class="fa-regular fa-calendar" aria-hidden="true"></i>Cycle &amp; care</button>
+                  <button type="button" data-ovula-prompt="Can you suggest gentle movement that may feel comfortable today?"><i class="fa-solid fa-person-walking" aria-hidden="true"></i>Gentle movement</button>
+                  <button type="button" data-ovula-prompt="Can you suggest nourishing meal ideas for how I'm feeling today?"><i class="fa-solid fa-bowl-food" aria-hidden="true"></i>Nourishing ideas</button>
+                  <button type="button" data-ovula-prompt="I could use a little mood support."><i class="fa-regular fa-heart" aria-hidden="true"></i>Mood support</button>
+                </div>
+              </div>
+
+              <div class="ovula-feature-grid" aria-label="Explore wellness features">
+                <button class="ovula-feature-card" type="button" data-ovula-tools>
+                  <span class="ovula-feature-icon"><i class="fa-solid fa-droplet" aria-hidden="true"></i></span>
+                  <span class="ovula-feature-copy"><strong>Cycle Tracking</strong><small>Understand your body<br>at every stage</small></span>
+                  <span class="ovula-feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+                <button class="ovula-feature-card" type="button" data-ovula-prompt="Can you suggest a gentle workout based on how I'm feeling today?">
+                  <span class="ovula-feature-icon"><i class="fa-solid fa-dumbbell" aria-hidden="true"></i></span>
+                  <span class="ovula-feature-copy"><strong>Fitness for You</strong><small>Workouts designed<br>for your goals</small></span>
+                  <span class="ovula-feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+                <button class="ovula-feature-card" type="button" data-ovula-prompt="Can you share nourishing meal ideas that may support my energy today?">
+                  <span class="ovula-feature-icon"><i class="fa-solid fa-bowl-food" aria-hidden="true"></i></span>
+                  <span class="ovula-feature-copy"><strong>Nutrition Guidance</strong><small>Personalised meal<br>suggestions</small></span>
+                  <span class="ovula-feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+                <button class="ovula-feature-card" type="button" data-ovula-prompt="I could use a little mood support.">
+                  <span class="ovula-feature-icon"><i class="fa-solid fa-spa" aria-hidden="true"></i></span>
+                  <span class="ovula-feature-copy"><strong>Mental Well-being</strong><small>Feel calmer, stronger<br>every day</small></span>
+                  <span class="ovula-feature-arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+              </div>
+            </section>
+
+            <dialog class="ovula-tools-dialog" id="ovulaToolsDialog" aria-labelledby="ovula-tools-title">
+              <div class="ovula-tools-header">
+                <h2 id="ovula-tools-title">Cycle &amp; everyday care</h2>
+                <button class="ovula-tools-close" type="button" aria-label="Close cycle and care panel" data-ovula-tools-close>
+                  <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+              </div>
+              <section class="ovula-details" aria-label="Cycle and daily wellness">
+              <div class="ovula-details-grid">
+                <article class="ovula-panel" id="ovula-cycle">
+                  <div class="ovula-panel-heading">
+                    <span class="ovula-panel-icon"><i class="fa-regular fa-calendar" aria-hidden="true"></i></span>
+                    <div><h2>Cycle tracking</h2><p>Choose your current phase for optional, cycle-aware guidance.</p></div>
+                  </div>
+                  <label class="ovula-field-label" for="phaseSelect">Current cycle phase</label>
+                  <select id="phaseSelect">
+                    <option value="menstrual">Menstrual</option>
+                    <option value="follicular">Follicular</option>
+                    <option value="ovulatory">Ovulatory</option>
+                    <option value="luteal">Luteal</option>
+                  </select>
+                  <p id="phaseTip" class="ovula-phase-tip" aria-live="polite"></p>
+                </article>
+
+                <article class="ovula-panel" id="ovula-wellness">
+                  <div class="ovula-panel-heading">
+                    <span class="ovula-panel-icon"><i class="fa-regular fa-heart" aria-hidden="true"></i></span>
+                    <div><h2>Daily care</h2><p>Small, optional ways to support your comfort today.</p></div>
+                  </div>
+                  <h3>Cramp relief kit</h3>
+                  <div class="ovula-kit-grid">
+                    <div><i class="fa-solid fa-temperature-half" aria-hidden="true"></i><span>Heat pad on lower belly, 15-20 min</span></div>
+                    <div><i class="fa-solid fa-person-yoga" aria-hidden="true"></i><span>Gentle child's pose and cat-cow stretch</span></div>
+                    <div><i class="fa-solid fa-glass-water" aria-hidden="true"></i><span>Warm water or herbal tea, sipped slowly</span></div>
+                    <div><i class="fa-solid fa-bed" aria-hidden="true"></i><span>Rest on your side with knees tucked</span></div>
+                  </div>
+                  <h3 class="ovula-checkin-title">Today's hygiene and care check-in</h3>
+                  <p>Tap the items you've completed today.</p>
+                  <div id="ovulaChecklist"></div>
+                </article>
+              </div>
+
+              <section class="ovula-assistant-panel" id="ovula-chat" aria-labelledby="ovula-chat-title">
+                <div class="ovula-assistant-orb">
+                  <div class="orb" id="orbO" aria-hidden="true">
+                    <div class="orb-face"><svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M80,8C40,8 18,42 20,92c1,34 10,58 20,74v-64c0-48 16-72 40-72s40,24 40,72v64c10-16 19-40 20-74C142,42 120,8 80,8Z" fill="#1a181c"/>
+                      <path d="M10,200 Q80,148 150,200 L150,225 L10,225 Z" fill="var(--accent)"/>
+                      <ellipse cx="80" cy="100" rx="44" ry="52" fill="#E8BE9C"/>
+                      <ellipse cx="42" cy="108" rx="7" ry="10" fill="#E4B594"/>
+                      <ellipse cx="118" cy="108" rx="7" ry="10" fill="#E4B594"/>
+                      <path d="M36,80C42,50 60,38 80,38S118,50 124,80C108,60 94,55 80,57S52,60 36,80Z" fill="#221f26"/>
+                      <path class="brow l" d="M50,80Q58,74 68,78" stroke="#2b2730" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <path class="brow r" d="M92,78Q102,74 110,80" stroke="#2b2730" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <g class="eye l"><path d="M50,96Q60,87 70,96Q60,105 50,96Z" fill="#fff"/><circle cx="60" cy="96" r="5.6" fill="#4a3222"/><circle cx="61.6" cy="93.8" r="1.7" fill="#fff"/><path d="M50,96Q60,86 70,96" stroke="#241f26" stroke-width="1.7" fill="none" stroke-linecap="round"/></g>
+                      <g class="eye r"><path d="M90,96Q100,87 110,96Q100,105 90,96Z" fill="#fff"/><circle cx="100" cy="96" r="5.6" fill="#4a3222"/><circle cx="101.6" cy="93.8" r="1.7" fill="#fff"/><path d="M90,96Q100,86 110,96" stroke="#241f26" stroke-width="1.7" fill="none" stroke-linecap="round"/></g>
+                      <path d="M80,96Q76,110 80,115Q84,112 82,109" stroke="#c99a78" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".5"/>
+                      <ellipse cx="52" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
+                      <ellipse cx="108" cy="118" rx="8" ry="5" fill="#e39a8a" opacity=".3"/>
+                      <path class="mouth mouth-closed" d="M64,132Q80,137 96,132Q80,142 64,132Z" fill="#c76c81"/>
+                      <ellipse class="mouth mouth-open" cx="80" cy="136" rx="14" ry="8" fill="#8b3a4a" opacity="0"/>
+                    </svg></div>
+                    <div class="wave" id="orbOWave" aria-hidden="true">👋</div>
+                  </div>
+                  <div class="voicebar"><div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><p class="orb-status" id="orbOStatus" role="status">Ready</p></div>
+                </div>
+                <div>
+                  <h2 id="ovula-chat-title">Talk to OVULA</h2>
+                  <p>Ask about cramps, energy, or hygiene for general support.</p>
+                  <p class="ovula-medical-note">OVULA offers general self-care information. It does not diagnose conditions or replace a clinician. Seek medical care for severe or unusual symptoms.</p>
+                </div>
+                </section>
+              </dialog>
+            </section>
           </div>
         </div>
       </div>
-      <p class="bottom-note">OVULA gives general self-care information only — it does not diagnose conditions. Severe or unusual symptoms always get a "see a doctor" response.</p>
     </section>
 
     <!-- BUSINESS -->
