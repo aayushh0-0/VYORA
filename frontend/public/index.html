@@ -131,6 +131,10 @@
           <button class="btn hero-cta" data-target="workout">EXPLORE TRAINING ↗</button>
           <span class="hero-index">VYORA™ / 2026</span>
         </div>
+        <div class="hero-auth" role="group" aria-label="Account options">
+          <button type="button" class="btn ghost hero-auth-btn hero-auth-login" aria-disabled="true" title="Coming soon">LOGIN / SIGN UP</button>
+          <button type="button" class="btn hero-cta hero-auth-btn hero-auth-guest" id="heroGuestBtn">CONTINUE AS GUEST ↓</button>
+        </div>
       </header>
       <div class="editorial-divider"><span>AI-POWERED FITNESS COPILOT</span><span>REAL-TIME · PERSONAL · HUMAN</span></div>
       <div class="deck">
@@ -2023,6 +2027,15 @@
 <script src="js/account.js"></script>
 <script src="js/vyora-pro.js"></script>
 <script src="js/notifications.js"></script>
+<script>
+document.getElementById('heroGuestBtn')?.addEventListener('click', function () {
+  var card = document.getElementById('profileCard');
+  if (!card) return;
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(function () { document.getElementById('pHeight')?.focus({ preventScroll: true }); }, 450);
+});
+document.querySelector('.hero-auth-login')?.addEventListener('click', function (e) { e.preventDefault(); });
+</script>
 <script src="js/interactions.js"></script>
 <script type="module" src="js/CrystalizedBall.js"></script>
 </html>

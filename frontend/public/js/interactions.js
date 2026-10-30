@@ -114,11 +114,13 @@
     document.body.classList.toggle('vyora-focus-mode');
     announce(document.body.classList.contains('vyora-focus-mode') ? 'Focus mode on. Press F to exit.' : 'Focus mode off.');
   };
-  // Dark theme only — light mode removed
+    // Dark theme only
   const toggleTheme = () => {
+    document.documentElement.classList.remove('vyora-light');
     document.documentElement.classList.add('vyora-dark');
     try { localStorage.setItem('vyora-ui-theme', 'dark'); } catch {}
   };
+  document.documentElement.classList.remove('vyora-light');
   document.documentElement.classList.add('vyora-dark');
   try { localStorage.setItem('vyora-ui-theme', 'dark'); } catch {}
 
