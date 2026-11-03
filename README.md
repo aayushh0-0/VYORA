@@ -1,4 +1,4 @@
-# VYORA — Voice-First AI Fitness, Nutrition & OVULA Women's Wellness Platform.
+# VYORA : Voice-First AI Fitness, Nutrition & OVULA Women's Wellness Platform.
 
 > **Version 2.0.0** · Aligned to **VYORA Product Requirements Document (PRD v2.0 — Prompts 1–20 & Appendices A–C)**  
 > **Architecture:** Node.js 20+ · Express · SQLite (`better-sqlite3`) / PostgreSQL Dual-Driver · Modular Frontend
